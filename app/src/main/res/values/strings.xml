@@ -13,4 +13,24 @@
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Google+ Login -->
+    <string name="btn_logout_from_google">Logout from Google</string>
+    <string name="btn_revoke_access">Revoke Access</string>
+
+
+    <!-- Activity... -->
+
+
+    <!-- Activity... -->
+
+
+    <!-- Activity... -->
+
+
+    <!-- Activity... -->
+
+
+    <!-- Activity... -->
+
+
 </resources>

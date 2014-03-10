@@ -20,7 +20,7 @@ public class ToolsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_tools, container, false);
         TextView textView = (TextView) rootView.findViewById(R.id.section_label);
         textView.setText("Tools");
         return rootView;

@@ -3,6 +3,7 @@ package lbs.erasmus.touristanbul;
 import android.app.Activity;
 
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -62,6 +63,14 @@ public class MainActivity extends Activity implements View.OnClickListener,
     private TextView mTxtName, mTxtEmail;
 
     /**
+     * Fragments for each section of the application.
+     */
+    private MapFragment mMapFragment;
+    private AttractionsFragment mAttractionsFragment;
+    private ToolsFragment mToolsFragment;
+    private InformationFragment mInformationFragment;
+
+    /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
@@ -89,8 +98,8 @@ public class MainActivity extends Activity implements View.OnClickListener,
         mBtnSignIn = (SignInButton) findViewById(R.id.btn_sign_in);
         mBtnSignOut = (Button) findViewById(R.id.btn_sign_out);
         mBtnRevokeAccess = (Button) findViewById(R.id.btn_revoke_access);
-        mImgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
-        mTxtName = (TextView) findViewById(R.id.txtName);
+        //mImgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
+        //mTxtName = (TextView) findViewById(R.id.txtName);
     //    mTxtEmail = (TextView) findViewById(R.id.mTxtEmail);
     //    llProfileLayout = (LinearLayout) findViewById(R.id.llProfile);
 
@@ -124,37 +133,37 @@ public class MainActivity extends Activity implements View.OnClickListener,
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // Update the main content by replacing fragments
-        FragmentManager fragmentManager = getFragmentManager();
 
-        //TODO Administrar bien los fragments, ya que así se creará uno nuevo cada vez [creo]
         switch (position + 1) {
             case 1:
-                mTitle = getString(R.string.title_map);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new MapFragment())
-                        .commit();
+                if (mMapFragment == null)
+                    mMapFragment = new MapFragment();
+                replaceFragment(mMapFragment, getString(R.string.title_map));
                 break;
             case 2:
-                mTitle = getString(R.string.title_attractions);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new AttractionsFragment())
-                        .commit();
+                if (mAttractionsFragment == null)
+                    mAttractionsFragment = new AttractionsFragment();
+                replaceFragment(mAttractionsFragment, getString(R.string.title_attractions));
                 break;
             case 3:
-                mTitle = getString(R.string.title_tools);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new ToolsFragment())
-                        .commit();
+                if (mToolsFragment == null)
+                    mToolsFragment = new ToolsFragment();
+                replaceFragment(mToolsFragment, getString(R.string.title_tools));
                 break;
             case 4:
-                mTitle = getString(R.string.title_information);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new InformationFragment())
-                        .commit();
+                if (mInformationFragment == null)
+                    mInformationFragment = new InformationFragment();
+                replaceFragment(mInformationFragment, getString(R.string.title_information));
                 break;
 
 
         }
+    }
+
+    private void replaceFragment(Fragment newFragment, CharSequence mTitle) {
+        this.mTitle = mTitle;
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, newFragment).commit();
     }
 
     public void restoreActionBar() {
@@ -377,7 +386,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
                 new LoadProfileImage(mImgProfilePic).execute(personPhotoUrl);
 
             } else {
-                Toast.makeText(getApplicationContext(),
+                Toast.makeText(this,
                         "Person information is null", Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
@@ -412,7 +421,5 @@ public class MainActivity extends Activity implements View.OnClickListener,
             bmImage.setImageBitmap(result);
         }
     }
-
-
 
 }

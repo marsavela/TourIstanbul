@@ -3,27 +3,20 @@ package lbs.erasmus.touristanbul;
 import android.app.Activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +41,6 @@ public class MainActivity extends Activity implements View.OnClickListener,
         GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, NavigationDrawerFragment.NavigationDrawerCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     private static final int RC_SIGN_IN = 0;
-    // Logcat tag
     private static final String TAG = "MainActivity";
 
     // Profile pic image size in pixels
@@ -62,16 +54,12 @@ public class MainActivity extends Activity implements View.OnClickListener,
      * from starting further intents.
      */
     private boolean mIntentInProgress;
-
     private boolean mSignInClicked;
-
     private ConnectionResult mConnectionResult;
-
-    private SignInButton btnSignIn;
-    private Button btnSignOut, btnRevokeAccess;
-    private ImageView imgProfilePic;
-    private TextView txtName, txtEmail;
-    private LinearLayout llProfileLayout;
+    private SignInButton mBtnSignIn;
+    private Button mBtnSignOut, mBtnRevokeAccess;
+    private ImageView mImgProfilePic;
+    private TextView mTxtName, mTxtEmail;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -98,18 +86,18 @@ public class MainActivity extends Activity implements View.OnClickListener,
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        btnSignIn = (SignInButton) findViewById(R.id.btn_sign_in);
-        btnSignOut = (Button) findViewById(R.id.btn_sign_out);
-        btnRevokeAccess = (Button) findViewById(R.id.btn_revoke_access);
-    //    imgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
-    //    txtName = (TextView) findViewById(R.id.txtName);
-    //    txtEmail = (TextView) findViewById(R.id.txtEmail);
+        mBtnSignIn = (SignInButton) findViewById(R.id.btn_sign_in);
+        mBtnSignOut = (Button) findViewById(R.id.btn_sign_out);
+        mBtnRevokeAccess = (Button) findViewById(R.id.btn_revoke_access);
+        mImgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
+        mTxtName = (TextView) findViewById(R.id.txtName);
+    //    mTxtEmail = (TextView) findViewById(R.id.mTxtEmail);
     //    llProfileLayout = (LinearLayout) findViewById(R.id.llProfile);
 
         // Button click listeners
-        btnSignIn.setOnClickListener(this);
-        btnSignOut.setOnClickListener(this);
-        btnRevokeAccess.setOnClickListener(this);
+        mBtnSignIn.setOnClickListener(this);
+        mBtnSignOut.setOnClickListener(this);
+        mBtnRevokeAccess.setOnClickListener(this);
 
         // Initializing google plus api client
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -119,18 +107,90 @@ public class MainActivity extends Activity implements View.OnClickListener,
 
     }
 
-
+    @Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
     }
 
+    @Override
     protected void onStop() {
         super.onStop();
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
     }
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        // Update the main content by replacing fragments
+        FragmentManager fragmentManager = getFragmentManager();
+
+        //TODO Administrar bien los fragments, ya que así se creará uno nuevo cada vez [creo]
+        switch (position + 1) {
+            case 1:
+                mTitle = getString(R.string.title_map);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new MapFragment())
+                        .commit();
+                break;
+            case 2:
+                mTitle = getString(R.string.title_attractions);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new AttractionsFragment())
+                        .commit();
+                break;
+            case 3:
+                mTitle = getString(R.string.title_tools);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new ToolsFragment())
+                        .commit();
+                break;
+            case 4:
+                mTitle = getString(R.string.title_information);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new InformationFragment())
+                        .commit();
+                break;
+
+
+        }
+    }
+
+    public void restoreActionBar() {
+        ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(mTitle);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+            // Only show items in the action bar relevant to this screen
+            // if the drawer is not showing. Otherwise, let the drawer
+            // decide what to show in the action bar.
+            getMenuInflater().inflate(R.menu.main, menu);
+            restoreActionBar();
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
     /**
      * Button on click listener
@@ -219,14 +279,14 @@ public class MainActivity extends Activity implements View.OnClickListener,
      * */
     private void updateUI(boolean isSignedIn) {
         if (isSignedIn) {
-            btnSignIn.setVisibility(View.GONE);
-            btnSignOut.setVisibility(View.VISIBLE);
-//            btnRevokeAccess.setVisibility(View.VISIBLE);
+            mBtnSignIn.setVisibility(View.GONE);
+            mBtnSignOut.setVisibility(View.VISIBLE);
+//            mBtnRevokeAccess.setVisibility(View.VISIBLE);
 //            llProfileLayout.setVisibility(View.VISIBLE);
         } else {
-            btnSignIn.setVisibility(View.VISIBLE);
-            btnSignOut.setVisibility(View.GONE);
-//            btnRevokeAccess.setVisibility(View.GONE);
+            mBtnSignIn.setVisibility(View.VISIBLE);
+            mBtnSignOut.setVisibility(View.GONE);
+//            mBtnRevokeAccess.setVisibility(View.GONE);
 //            llProfileLayout.setVisibility(View.GONE);
         }
     }
@@ -304,8 +364,8 @@ public class MainActivity extends Activity implements View.OnClickListener,
                         + personGooglePlusProfile + ", email: " + email
                         + ", Image: " + personPhotoUrl);
 
-                txtName.setText(personName);
-                txtEmail.setText(email);
+                mTxtName.setText(personName);
+                mTxtEmail.setText(email);
 
                 // by default the profile url gives 50x50 px image only
                 // we can replace the value with whatever dimension we want by
@@ -314,7 +374,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
                         personPhotoUrl.length() - 2)
                         + PROFILE_PIC_SIZE;
 
-                new LoadProfileImage(imgProfilePic).execute(personPhotoUrl);
+                new LoadProfileImage(mImgProfilePic).execute(personPhotoUrl);
 
             } else {
                 Toast.makeText(getApplicationContext(),
@@ -354,74 +414,5 @@ public class MainActivity extends Activity implements View.OnClickListener,
     }
 
 
-
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        // Update the main content by replacing fragments
-        FragmentManager fragmentManager = getFragmentManager();
-
-        //TODO Administrar bien los fragments, ya que así se creará uno nuevo cada vez [creo]
-        switch (position + 1) {
-            case 1:
-                mTitle = getString(R.string.title_map);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new MapFragment())
-                        .commit();
-                break;
-            case 2:
-                mTitle = getString(R.string.title_attractions);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new AttractionsFragment())
-                        .commit();
-                break;
-            case 3:
-                mTitle = getString(R.string.title_tools);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new ToolsFragment())
-                        .commit();
-                break;
-            case 4:
-                mTitle = getString(R.string.title_information);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new InformationFragment())
-                        .commit();
-                break;
-
-
-        }
-    }
-
-    public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
-            restoreActionBar();
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 }

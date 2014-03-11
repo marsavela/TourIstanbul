@@ -18,8 +18,8 @@
     <string name="btn_revoke_access">Revoke Access</string>
 
 
-    <!-- Activity... -->
-
+    <!-- Profile Activity -->
+    <string name="profile_picture">Profile Picture</string>
 
     <!-- Activity... -->
 

@@ -56,7 +56,7 @@ public class MapFragment extends Fragment {
         adjustMapDpi();
 
         // Show performance indicator
-        mapView.getOptions().setFPSIndicator(true);
+    //    mapView.getOptions().setFPSIndicator(true);
 
         // Increase raster tile download speed by doing 4 downloads in parallel
         mapView.getOptions().setRasterTaskPoolSize(4);

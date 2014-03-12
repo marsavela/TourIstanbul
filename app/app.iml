@@ -70,9 +70,9 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="nutiteq-3d-sdk-2.3.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-4.2.42" level="project" />
     <orderEntry type="library" exported="" name="osmdroid-android-4.1" level="project" />
+    <orderEntry type="library" exported="" name="osmbonuspack_v4.2.8" level="project" />
     <orderEntry type="library" exported="" name="slf4j-android-1.5.8" level="project" />
     <orderEntry type="library" exported="" name="support-v4-19.0.1" level="project" />
   </component>

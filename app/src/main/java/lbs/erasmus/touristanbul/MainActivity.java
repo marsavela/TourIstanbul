@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ import com.google.android.gms.plus.model.people.Person;
 
 import java.io.InputStream;
 
+import lbs.erasmus.touristanbul.domain.User;
 import lbs.erasmus.touristanbul.fragments.AttractionsFragment;
 import lbs.erasmus.touristanbul.fragments.InformationFragment;
 import lbs.erasmus.touristanbul.fragments.MapFragment;
@@ -61,6 +63,8 @@ public class MainActivity extends Activity implements View.OnClickListener,
     private Button mBtnSignOut, mBtnRevokeAccess;
     private ImageView mImgProfilePic;
     private TextView mTxtName, mTxtEmail;
+    private String mPersonName;
+    private User mUser;
 
     /**
      * Fragments for each section of the application.
@@ -79,7 +83,10 @@ public class MainActivity extends Activity implements View.OnClickListener,
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
 
+
+    private ListView mListView;
     private CharSequence mTitle;
+    private Boolean mUserIsSignedIn=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,14 +101,11 @@ public class MainActivity extends Activity implements View.OnClickListener,
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        mListView = (ListView) findViewById(R.id.list_layout);
 
         mBtnSignIn = (SignInButton) findViewById(R.id.btn_sign_in);
         mBtnSignOut = (Button) findViewById(R.id.btn_sign_out);
         mBtnRevokeAccess = (Button) findViewById(R.id.btn_revoke_access);
-        //mImgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
-        //mTxtName = (TextView) findViewById(R.id.txtName);
-    //    mTxtEmail = (TextView) findViewById(R.id.mTxtEmail);
-    //    llProfileLayout = (LinearLayout) findViewById(R.id.llProfile);
 
         // Button click listeners
         mBtnSignIn.setOnClickListener(this);
@@ -155,7 +159,13 @@ public class MainActivity extends Activity implements View.OnClickListener,
                     mInformationFragment = new InformationFragment();
                 replaceFragment(mInformationFragment, getString(R.string.title_information));
                 break;
-
+            case 5:
+                Intent i = new Intent(this, ProfileActivity.class);
+                i.putExtra("photo", mUser.getmPhoto());
+                i.putExtra("name", mUser.getmName());
+                i.putExtra("email", mUser.getmEmail());
+                startActivity(i);
+                break;
 
         }
     }
@@ -198,7 +208,6 @@ public class MainActivity extends Activity implements View.OnClickListener,
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     /**
@@ -267,7 +276,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
         // Get user's information
         getProfileInformation();
 
-        // Update the UI after signin
+        // Update the UI after signing in
         updateUI(true);
 
     }
@@ -292,11 +301,13 @@ public class MainActivity extends Activity implements View.OnClickListener,
             mBtnSignOut.setVisibility(View.VISIBLE);
 //            mBtnRevokeAccess.setVisibility(View.VISIBLE);
 //            llProfileLayout.setVisibility(View.VISIBLE);
+            mListView.getChildAt(4).setVisibility(View.VISIBLE);
         } else {
             mBtnSignIn.setVisibility(View.VISIBLE);
             mBtnSignOut.setVisibility(View.GONE);
 //            mBtnRevokeAccess.setVisibility(View.GONE);
 //            llProfileLayout.setVisibility(View.GONE);
+            mListView.getChildAt(4).setVisibility(View.GONE);
         }
     }
 
@@ -361,20 +372,18 @@ public class MainActivity extends Activity implements View.OnClickListener,
      * */
     private void getProfileInformation() {
         try {
+
             if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
                 Person currentPerson = Plus.PeopleApi
                         .getCurrentPerson(mGoogleApiClient);
-                String personName = currentPerson.getDisplayName();
+                mPersonName = currentPerson.getDisplayName();
                 String personPhotoUrl = currentPerson.getImage().getUrl();
                 String personGooglePlusProfile = currentPerson.getUrl();
                 String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
 
-                Log.e(TAG, "Name: " + personName + ", plusProfile: "
+                Log.e(TAG, "Name: " + mPersonName + ", plusProfile: "
                         + personGooglePlusProfile + ", email: " + email
                         + ", Image: " + personPhotoUrl);
-
-                mTxtName.setText(personName);
-                mTxtEmail.setText(email);
 
                 // by default the profile url gives 50x50 px image only
                 // we can replace the value with whatever dimension we want by
@@ -383,7 +392,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
                         personPhotoUrl.length() - 2)
                         + PROFILE_PIC_SIZE;
 
-                new LoadProfileImage(mImgProfilePic).execute(personPhotoUrl);
+                mUser = new User(email, mPersonName, personPhotoUrl, personGooglePlusProfile);
 
             } else {
                 Toast.makeText(this,
@@ -391,34 +400,6 @@ public class MainActivity extends Activity implements View.OnClickListener,
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * Background Async task to load user profile picture from url
-     * */
-    private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public LoadProfileImage(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
         }
     }
 

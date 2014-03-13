@@ -14,7 +14,14 @@
         android:dividerHeight="0dp"
         android:background="#cccc" />
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_above="@+id/linear_layout" />
+
     <LinearLayout
+        android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -62,8 +69,6 @@
             android:layout_height="wrap_content"
             android:text="@string/btn_revoke_access"
             android:visibility="gone" />
-
-        
 
     </LinearLayout>
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package lbs.erasmus.touristanbul;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,7 +11,12 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+
+import lbs.erasmus.touristanbul.domain.User;
 
 /**
  * Created by patmonsi on 11/03/14.
@@ -26,50 +32,25 @@ public class ProfileActivity extends Activity{
         TextView mTxtName = (TextView) findViewById(R.id.txtName);
         TextView mTxtEmail = (TextView) findViewById(R.id.txtEmail);
         ImageView mImgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
-        Intent i = getIntent();
-        Bundle b = i.getExtras();
 
-        String personPhotoUrl="";
+        User mUser = getIntent().getExtras().getParcelable("User");
 
-        if(b!=null)
-        {
-            String j =(String) b.get("name");
-            mTxtName.setText(j);
-            j=(String) b.get("email");
-            mTxtEmail.setText(j);
-            personPhotoUrl =(String) b.get("photo");
+        mTxtName.setText(mUser.getmName());
+        mTxtEmail.setText(mUser.getmEmail());
+        mImgProfilePic.setImageBitmap(getImageBitmap(this, "profile_photo"));
 
-        }
-
-        new LoadProfileImage(mImgProfilePic).execute(personPhotoUrl);
     }
 
-
-    /**
-     * Background Async task to load user profile picture from url
-     * */
-    private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public LoadProfileImage(ImageView bmImage) {
-            this.bmImage = bmImage;
+    public Bitmap getImageBitmap(Context context,String name){
+        try{
+            FileInputStream fis = context.openFileInput(name);
+            Bitmap b = BitmapFactory.decodeStream(fis);
+            fis.close();
+            return b;
         }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
+        catch(Exception e){
         }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
+        return null;
     }
+
 }

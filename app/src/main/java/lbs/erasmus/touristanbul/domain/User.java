@@ -1,30 +1,34 @@
 package lbs.erasmus.touristanbul.domain;
 
+import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by patmonsi on 13/03/14.
  */
-public class User {
+public class User implements Parcelable {
 
     private String mEmail;
     private String mName;
-    private String mPhoto;
+    private String mPhotoUrl;
     private String mPlusProfile;
-
+    private Bitmap mPhoto;
 
     public User(String mEmail, String mName, String mPhoto, String mPlusProfile) {
         super();
         this.mEmail = mEmail;
         this.mName = mName;
-        this.mPhoto = mPhoto;
+        this.mPhotoUrl = mPhoto;
         this.mPlusProfile = mPlusProfile;
     }
 
-    public User(String mName, String mPhoto, String mPlusProfile) {
-        super();
-        this.mEmail = mEmail;
-        this.mName = mName;
+    public Bitmap getmPhoto() {
+        return mPhoto;
+    }
+
+    public void setmPhoto(Bitmap mPhoto) {
         this.mPhoto = mPhoto;
-        this.mPlusProfile = mPlusProfile;
     }
 
     public String getmPlusProfile() {
@@ -51,15 +55,31 @@ public class User {
         this.mName = mName;
     }
 
-    public String getmPhoto() {
-        return mPhoto;
+    public static final Parcelable.Creator<User> CREATOR
+            = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    private User(Parcel in) {
+        mEmail = in.readString();
+        mName = in.readString();
+        mPhoto = in.readParcelable(Bitmap.class.getClassLoader());
     }
 
-    public void setmPhoto(String mPhoto) {
-        this.mPhoto = mPhoto;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mEmail);
+        dest.writeString(mName);
+        dest.writeParcelable(mPhoto, flags);
     }
-    /*    public String getProfileUrl() {
-        return this.googlePublicProfilePhotoUrl.split("\\?sz=")[0] + "?sz=100";
-    }*/
 
+    public int describeContents() {
+        return 0;
+    }
 }

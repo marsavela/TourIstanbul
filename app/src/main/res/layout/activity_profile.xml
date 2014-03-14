@@ -36,5 +36,4 @@
         android:layout_weight="0.3"
         android:layout_below="@id/txtName"/>
 
-
 </RelativeLayout>

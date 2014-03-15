@@ -45,8 +45,11 @@
         <!-- Reference to Google Play services version -->
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-
+        <provider
+            android:name="lbs.erasmus.touristanbul.AssetProvider"
+            android:authorities="lbs.erasmus.touristanbul"
+            android:grantUriPermissions="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

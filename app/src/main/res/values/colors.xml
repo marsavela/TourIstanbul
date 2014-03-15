@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- Gradient start color of the overlay on the attraction image -->
+    <color name="overlay_bg_color">#CC000000</color>
+
+    <!-- Background color of the app -->
+    <color name="bg_color">#F8BBD0</color>
+
+    <!-- Pressed state color for an attraction -->
+    <color name="touch_overlay_bg_color">#33999999</color>
+</resources>

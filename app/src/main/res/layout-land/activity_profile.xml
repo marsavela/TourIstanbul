@@ -13,8 +13,8 @@
         android:src="@drawable/default_avatar"
         android:layout_weight="0.3"
         android:layout_centerInParent="true"
-        android:layout_alignParentTop="true"
-        android:paddingBottom="20dp"/>
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="20dp"/>
 
     <TextView
         android:layout_width="fill_parent"
@@ -24,8 +24,9 @@
         android:gravity="center"
         android:textSize="25sp"
         android:layout_weight="0.3"
-        android:layout_below="@id/imgProfilePic"
-        android:paddingBottom="20dp"/>
+        android:layout_toRightOf="@id/imgProfilePic"
+        android:paddingBottom="20dp"
+        android:paddingTop="60dp"/>
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -34,15 +35,19 @@
         android:gravity="center"
         android:textSize="25sp"
         android:layout_weight="0.3"
+        android:paddingBottom="20dp"
+        android:layout_toRightOf="@id/imgProfilePic"
         android:layout_below="@id/txtName"/>
-
     <Button
         android:id="@+id/btn_sign_out"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/btn_logout_from_google"
         android:visibility="visible"
+        android:layout_weight="0.3"
+        android:gravity="center"
         android:layout_marginBottom="10dp"
-        android:layout_alignParentBottom="true"/>
+        android:layout_toRightOf="@id/imgProfilePic"
+        android:layout_below="@id/txtEmail"/>
 
 </RelativeLayout>

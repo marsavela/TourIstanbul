@@ -1,8 +1,7 @@
 package lbs.erasmus.touristanbul;
 
-import android.app.Activity;
-
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -17,7 +16,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,8 +25,6 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
@@ -62,11 +58,12 @@ public class MainActivity extends Activity implements View.OnClickListener,
     private boolean mSignInClicked;
     private ConnectionResult mConnectionResult;
     private SignInButton mBtnSignIn;
-    private Button mBtnSignOut;
     private ImageView mImgProfilePic;
     private String mPersonName;
     private User mUser;
     private Bitmap mUserProfilePhoto;
+    private ImageView mImgSettings;
+    private TextView mTxtSettings;
 
     /**
      * Fragments for each section of the application.
@@ -86,7 +83,6 @@ public class MainActivity extends Activity implements View.OnClickListener,
      */
 
     private CharSequence mTitle;
-    private Boolean mUserIsSignedIn=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,15 +100,19 @@ public class MainActivity extends Activity implements View.OnClickListener,
 
         // Set up the Google+ buttons
         mBtnSignIn = (SignInButton) findViewById(R.id.btn_sign_in);
-        mBtnSignOut = (Button) findViewById(R.id.btn_sign_out);
 
         // Set up the profile
         mImgProfilePic = (ImageView) findViewById(R.id.user_profile_photo);
 
+        // Set up the settings buttons
+        mImgSettings = (ImageView) findViewById(R.id.action_settings_image);
+        mTxtSettings = (TextView) findViewById(R.id.action_settings_text);
+
         // Button click listeners
         mBtnSignIn.setOnClickListener(this);
-        mBtnSignOut.setOnClickListener(this);
         mImgProfilePic.setOnClickListener(this);
+        mImgSettings.setOnClickListener(this);
+        mTxtSettings.setOnClickListener(this);
 
         // Initializing google plus api client
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -125,7 +125,15 @@ public class MainActivity extends Activity implements View.OnClickListener,
     @Override
     protected void onStart() {
         super.onStart();
+        if(!mGoogleApiClient.isConnected())
         mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        updateUI(mGoogleApiClient.isConnected() && mGoogleApiClient!=null);
+    //    mImgProfilePic.setImageBitmap(getImageBitmap(this, "profile_photo"));
     }
 
     @Override
@@ -214,18 +222,32 @@ public class MainActivity extends Activity implements View.OnClickListener,
                 // Sign in button clicked
                 signInWithGplus();
                 break;
-            case R.id.btn_sign_out:
-                // Sign out button clicked
-                signOutFromGplus();
-                break;
             case R.id.user_profile_photo:
                 // Open Profile
-                Intent i = new Intent(this, ProfileActivity.class);
-                i.putExtra("User", mUser);
-                startActivity(i);
+                openUserProfile();
+                break;
+            case R.id.action_settings_image:
+                // Open user settings
+                openUserSettings();
+                break;
+            case R.id.action_settings_text:
+                // Open user settings
+                openUserSettings();
                 break;
         }
     }
+
+    private void openUserSettings() {
+        Intent i = new Intent(this, SettingsActivity.class);
+        startActivity(i);
+    }
+
+    private void openUserProfile() {
+        Intent i = new Intent(this, ProfileActivity.class);
+        i.putExtra("User", mUser);
+        startActivity(i);
+    }
+
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
@@ -294,11 +316,9 @@ public class MainActivity extends Activity implements View.OnClickListener,
     private void updateUI(boolean isSignedIn) {
         if (isSignedIn) {
             mBtnSignIn.setVisibility(View.GONE);
-            mBtnSignOut.setVisibility(View.VISIBLE);
             mImgProfilePic.setVisibility(View.VISIBLE);
         } else {
             mBtnSignIn.setVisibility(View.VISIBLE);
-            mBtnSignOut.setVisibility(View.GONE);
             mImgProfilePic.setVisibility(View.GONE);
         }
     }
@@ -325,37 +345,6 @@ public class MainActivity extends Activity implements View.OnClickListener,
                 mIntentInProgress = false;
                 mGoogleApiClient.connect();
             }
-        }
-    }
-
-    /**
-     * Sign-out from google
-     * */
-    private void signOutFromGplus() {
-        if (mGoogleApiClient.isConnected()) {
-            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-            mGoogleApiClient.disconnect();
-            mGoogleApiClient.connect();
-            updateUI(false);
-        }
-    }
-
-    /**
-     * Revoking access from google
-     * */
-    private void revokeGplusAccess() {
-        if (mGoogleApiClient.isConnected()) {
-            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-            Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient)
-                    .setResultCallback(new ResultCallback<Status>() {
-                        @Override
-                        public void onResult(Status arg0) {
-                            Log.e(TAG, "User access revoked!");
-                            mGoogleApiClient.connect();
-                            updateUI(false);
-                        }
-
-                    });
         }
     }
 

@@ -16,7 +16,7 @@
 
     <!-- Google+ Login -->
     <string name="btn_logout_from_google">Logout from Google</string>
-    <string name="btn_revoke_access">Revoke Access</string>
+    <string name="progress_message">Signing in to Google&#8230;</string>
 
 
     <!-- Profile Activity -->

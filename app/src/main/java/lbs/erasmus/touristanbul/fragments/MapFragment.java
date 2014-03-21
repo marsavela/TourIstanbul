@@ -3,14 +3,11 @@ package lbs.erasmus.touristanbul.fragments;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -24,6 +21,7 @@ import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.TilesOverlay;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 
@@ -36,6 +34,8 @@ public class MapFragment extends Fragment {
 
     public MapFragment() {
     }
+
+    MyLocationNewOverlay myLocationOverlay = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,6 +85,11 @@ public class MapFragment extends Fragment {
         Polyline roadOverlay = RoadManager.buildRoadOverlay(road, getActivity().getApplicationContext());
         // Add this Polyline to the overlays
         mapView.getOverlays().add(roadOverlay);
+
+        // Show users location
+        myLocationOverlay = new MyLocationNewOverlay(getActivity().getApplicationContext(), mapView);
+        mapView.getOverlays().add(myLocationOverlay);
+        myLocationOverlay.enableMyLocation();
 
         // Refresh map
         mapView.invalidate();

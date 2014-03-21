@@ -289,7 +289,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
     @Override
     public void onConnected(Bundle arg0) {
         mSignInClicked = false;
-        Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
+    //    Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
 
         // Get user's information
         getProfileInformation();

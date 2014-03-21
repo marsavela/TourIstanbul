@@ -15,14 +15,23 @@
     <string name="action_settings">Settings</string>
 
     <!-- Google+ Login -->
-    <string name="btn_logout_from_google">Logout from Google</string>
+    <string name="btn_logout_from_google">Log out from Google+</string>
     <string name="progress_message">Signing in to Google&#8230;</string>
 
 
     <!-- Profile Activity -->
     <string name="profile_picture">Profile Picture</string>
 
-    <!-- Activity... -->
+    <!-- Preferences -->
+    <string name="title_preferences">Preferences</string>
+    <string name="parents_summary">Places to go with the whole family</string>
+    <string name="backpackers_summary">Travelling light? Check this box!</string>
+    <string name="business_travelers_summary">Important places for business travelers</string>
+    <string name="museums_summary">Museums</string>
+    <string name="mosques_summary">Mosques</string>
+    <string name="restaurants_summary">Show the best restaurants of Istanbul</string>
+    <string name="malls_summary">Know where to shop!</string>
+    <string name="hospitals_summary">Hospitals, best not to need them...</string>
 
 
     <!-- Activity... -->

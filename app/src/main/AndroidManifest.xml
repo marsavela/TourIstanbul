@@ -34,6 +34,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="lbs.erasmus.touristanbul.AttractionActivity"
+            android:theme="@style/AppTheme.TranslucentActionBar"
+            android:parentActivityName="lbs.erasmus.touristanbul.MainActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lbs.erasmus.touristanbul.MainActivity" />
+        </activity>
+        <activity
             android:name="lbs.erasmus.touristanbul.ProfileActivity"
             android:label="@string/title_profile"
             android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">

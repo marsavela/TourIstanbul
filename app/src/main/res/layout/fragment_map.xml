@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="lbs.erasmus.touristanbul.fragments.MapFragment">
 
-    <org.osmdroid.views.MapView
+    <org.mapsforge.map.android.view.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
 
-</RelativeLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My location"
+        android:id="@+id/mapfragment_button"
+        android:layout_margin="10dp"
+        android:layout_gravity="right|bottom" />
+
+</FrameLayout>

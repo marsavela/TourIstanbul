@@ -3,7 +3,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fillViewport="true" >
+    android:fillViewport="true">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,24 +16,27 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingLeft="20sp"
+            android:paddingRight="20sp">
 
             <Button
                 android:id="@+id/button_history"
                 style="@style/dashboard_button"
-                android:drawableTop="@drawable/history"
+                android:drawableLeft="@drawable/history"
                 android:onClick="clicked"
-                android:text="@string/history" />
+                android:text="@string/history"
+                android:layout_marginRight="30sp"/>
 
             <Button
                 android:id="@+id/button_numbers"
                 style="@style/dashboard_button"
-                android:drawableTop="@drawable/important_numbers"
+                android:drawableLeft="@drawable/important_numbers"
                 android:onClick="clicked"
-                android:text="@string/important_numbers" />
+                android:text="@string/important_numbers"
+                android:layout_marginLeft="30sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -41,21 +44,25 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingLeft="20sp"
+            android:paddingRight="20sp">
 
             <Button
                 android:id="@+id/button_weather"
                 style="@style/dashboard_button"
-                android:drawableTop="@drawable/weather_and_climate"
+                android:drawableLeft="@drawable/weather_and_climate"
                 android:onClick="clicked"
-                android:text="@string/weather" />
+                android:text="@string/weather"
+                android:layout_marginRight="30sp"/>
 
             <Button
                 android:id="@+id/button_dos_and_donts"
                 style="@style/dashboard_button"
-                android:drawableTop="@drawable/dos_and_donts"
+                android:drawableLeft="@drawable/dos_and_donts"
                 android:onClick="clicked"
-                android:text="@string/dos_and_donts" />
+                android:text="@string/dos_and_donts"
+                android:layout_marginLeft="30sp"/>
         </LinearLayout>
 
     </LinearLayout>

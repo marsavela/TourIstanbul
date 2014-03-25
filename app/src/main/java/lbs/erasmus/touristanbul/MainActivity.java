@@ -234,6 +234,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
                 // Open user settings
                 openUserSettings();
                 break;
+
         }
     }
 

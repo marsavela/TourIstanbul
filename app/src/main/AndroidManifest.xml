@@ -24,7 +24,7 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
+        <!-- Main Activity -->
         <activity
             android:name="lbs.erasmus.touristanbul.MainActivity"
             android:label="@string/app_name">
@@ -32,6 +32,16 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <!-- Profile Activity -->
+        <activity
+            android:name="lbs.erasmus.touristanbul.AttractionActivity"
+            android:theme="@style/AppTheme.TranslucentActionBar"
+            android:parentActivityName="lbs.erasmus.touristanbul.MainActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lbs.erasmus.touristanbul.MainActivity" />
         </activity>
         <activity
             android:name="lbs.erasmus.touristanbul.ProfileActivity"
@@ -42,6 +52,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="lbs.erasmus.touristanbul.MainActivity" />
         </activity>
+        <!-- Settings Activity -->
         <activity
             android:name="lbs.erasmus.touristanbul.SettingsActivity"
             android:label="@string/title_settings"
@@ -51,6 +62,47 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="lbs.erasmus.touristanbul.MainActivity" />
         </activity>
+        <!-- History Activity -->
+        <activity
+            android:name="lbs.erasmus.touristanbul.HistoryActivity"
+            android:label="@string/history"
+            android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lbs.erasmus.touristanbul.MainActivity" />
+        </activity>
+        <!-- Important Numbers Activity -->
+        <activity
+            android:name="lbs.erasmus.touristanbul.ImportantNumbersActivity"
+            android:label="@string/important_numbers"
+            android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lbs.erasmus.touristanbul.MainActivity" />
+        </activity>
+        <!-- Weather and Climate Activity -->
+        <activity
+            android:name="lbs.erasmus.touristanbul.WeatherAndClimateActivity"
+            android:label="@string/weather"
+            android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lbs.erasmus.touristanbul.MainActivity" />
+        </activity>
+        <!-- Dos and Donts Activity -->
+        <activity
+            android:name="lbs.erasmus.touristanbul.DosAndDontsActivity"
+            android:label="@string/dos_and_donts"
+            android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lbs.erasmus.touristanbul.MainActivity" />
+        </activity>
+
         <!-- Reference to Google Play services version -->
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

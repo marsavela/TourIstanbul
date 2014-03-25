@@ -1,7 +1,7 @@
 package lbs.erasmus.touristanbul.fragments;
 
 import android.app.Fragment;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +16,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import lbs.erasmus.touristanbul.AssetProvider;
+import lbs.erasmus.touristanbul.AttractionActivity;
 import lbs.erasmus.touristanbul.R;
+import lbs.erasmus.touristanbul.domain.Attraction;
 
 /**
  * Created by SergiuDaniel on 9/03/14.
@@ -98,7 +99,10 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
 
         //TODO Hay que enlazar con la actividad correspondiente a las fichas de las atracciones
         if(attraction != null) {
-            Toast.makeText(getActivity(), attraction.mTitle, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getActivity(), attraction.mTitle, Toast.LENGTH_LONG).show();
+            Intent i = new Intent(getActivity(), AttractionActivity.class);
+            i.putExtra("Attraction", attraction);
+            startActivity(i);
         } else {
             Toast.makeText(getActivity(), "ERROR RARO :-)", Toast.LENGTH_LONG).show();
         }
@@ -159,9 +163,9 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
             Attraction attraction = getItem(position);
 
             // Bind the data
-            viewCache.mTitleView.setText(attraction.mTitle);
-            viewCache.mSubtitleView.setText(attraction.mSubtitle);
-            viewCache.mImageView.setImageURI(attraction.mImageUri);
+            viewCache.mTitleView.setText(attraction.getTitle());
+            viewCache.mSubtitleView.setText(attraction.getSubtitle());
+            viewCache.mImageView.setImageURI(attraction.getImageUri());
 
             return result;
         }
@@ -193,36 +197,6 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
             mTitleView = (TextView) view.findViewById(R.id.title);
             mSubtitleView = (TextView) view.findViewById(R.id.subtitle);
             mImageView = (ImageView) view.findViewById(R.id.image);
-        }
-    }
-
-    /**
-     * Model object for attraction.
-     */
-    private static class Attraction {
-
-        /** Title of the attraction. */
-        private final String mTitle;
-
-        /** Description of the attraction. */
-        private final String mSubtitle;
-
-        /** Content URI of the image for the attraction. */
-        private final Uri mImageUri;
-
-        /**
-         * Constructs a new {@link Attraction}.
-         *
-         * @param titleString is the title
-         * @param subtitleString is the description
-         * @param imageAssetFilePath is the file path from the application's assets folder for
-         *                           the image associated with this attraction
-         */
-        private Attraction(String titleString, String subtitleString, String imageAssetFilePath) {
-            mTitle = titleString;
-            mSubtitle = subtitleString;
-            mImageUri = Uri.parse("content://" + AssetProvider.CONTENT_URI + "/" +
-                    imageAssetFilePath);
         }
     }
 }

@@ -9,4 +9,8 @@
 
     <!-- Pressed state color for an attraction -->
     <color name="touch_overlay_bg_color">#33999999</color>
+
+    <color name="background">#dcd8dc</color>
+    <color name="buttonfocus">#f2edf2</color>
+    <color name="buttonpressed">#f2f2f2</color>
 </resources>

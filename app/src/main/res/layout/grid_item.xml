@@ -29,8 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:paddingTop="16dp"
-            android:fontFamily="sans-serif-condensed"
-            android:textAppearance="?android:textAppearanceLargeInverse"/>
+            style="@style/Header.TitleText"/>
 
         <TextView
             android:id="@+id/subtitle"
@@ -38,8 +37,7 @@
             android:layout_width="match_parent"
             android:maxLines="2"
             android:ellipsize="end"
-            android:fontFamily="sans-serif"
-            android:textAppearance="?android:textAppearanceSmallInverse"/>
+            style="@style/Header.SubTitleText"/>
 
     </LinearLayout>
 

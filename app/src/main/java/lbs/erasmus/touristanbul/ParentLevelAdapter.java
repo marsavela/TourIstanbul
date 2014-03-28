@@ -5,6 +5,7 @@ package lbs.erasmus.touristanbul;
  */
 
 import android.app.Activity;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,7 +52,7 @@ public class ParentLevelAdapter extends BaseExpandableListAdapter {
             convertView = minflater.inflate(R.layout.childrow, null);
         }
         text = (TextView) convertView.findViewById(R.id.textView1);
-        text.setText(tempChild.get(childPosition));
+        text.setText(Html.fromHtml(tempChild.get(childPosition)));
         convertView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Toast.makeText(activity, tempChild.get(childPosition), Toast.LENGTH_SHORT).show();
@@ -60,7 +61,8 @@ public class ParentLevelAdapter extends BaseExpandableListAdapter {
         // Change the icon Do\'s and Don\'ts
         ImageView imageView = (ImageView) convertView.findViewById(R.id.childImage);
         String s = tempChild.get(childPosition);
-        if (s.startsWith("Do ")) {
+
+        if (s.startsWith("<b>Do ")) {
             imageView.setImageResource(R.drawable.yes);
         } else {
             imageView.setImageResource(R.drawable.no);

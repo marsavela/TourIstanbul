@@ -185,7 +185,6 @@ public class MainActivity extends Activity implements View.OnClickListener,
         actionBar.setTitle(mTitle);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {

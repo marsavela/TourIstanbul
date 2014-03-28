@@ -5,6 +5,7 @@ package lbs.erasmus.touristanbul.domain;
  */
 
 
+import android.location.Location;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -22,6 +23,9 @@ public class Attraction implements Parcelable {
     /** Description of the attraction. */
     private final String mSubtitle;
 
+    /** Description of the attraction. */
+    private final Location mLocation;
+
     /** Content URI of the image for the attraction. */
     private final Uri mImageUri;
 
@@ -33,9 +37,10 @@ public class Attraction implements Parcelable {
      * @param imageAssetFilePath is the file path from the application's assets folder for
      *                           the image associated with this attraction
      */
-    public Attraction(String titleString, String subtitleString, String imageAssetFilePath) {
+    public Attraction(String titleString, String subtitleString, Location location, String imageAssetFilePath) {
         mTitle = titleString;
         mSubtitle = subtitleString;
+        mLocation = location;
         mImageUri = Uri.parse("content://" + AssetProvider.CONTENT_URI + "/" +
                 imageAssetFilePath);
     }
@@ -43,6 +48,7 @@ public class Attraction implements Parcelable {
     private Attraction(Parcel parcel) {
         mTitle = parcel.readString();
         mSubtitle = parcel.readString();
+        mLocation = Location.CREATOR.createFromParcel(parcel);
         mImageUri = Uri.parse(parcel.readString());
     }
 
@@ -67,6 +73,7 @@ public class Attraction implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(mTitle);
         parcel.writeString(mSubtitle);
+        mLocation.writeToParcel(parcel, i);
         parcel.writeString(mImageUri.toString());
     }
 

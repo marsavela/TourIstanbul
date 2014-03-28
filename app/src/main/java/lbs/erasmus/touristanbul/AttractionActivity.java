@@ -43,7 +43,7 @@ public class AttractionActivity extends Activity implements OnInitListener, Goog
     private ImageView mAttractionImageView;
     private Button mListenButton;
     private Button mRateButton;
-
+    //Prueba
     private TextToSpeech mTTS;
     private final static int MY_DATA_CHECK_CODE = 0;
 

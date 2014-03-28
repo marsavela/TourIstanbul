@@ -128,7 +128,7 @@ public class AttractionActivity extends Activity implements OnInitListener, Goog
 
         helper.initActionBar(this);
     }
-
+//hola otra vez
     private void rateDialog() {
         AlertDialog.Builder builderRateDialog = new AlertDialog.Builder(this);
         // Get the layout inflater

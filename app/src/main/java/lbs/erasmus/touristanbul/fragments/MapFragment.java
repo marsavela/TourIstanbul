@@ -32,7 +32,7 @@ import java.io.File;
 
 import lbs.erasmus.touristanbul.R;
 import lbs.erasmus.touristanbul.maps.Utils;
-
+//hola
 /**
  * Created by SergiuDaniel on 9/03/14.
  */

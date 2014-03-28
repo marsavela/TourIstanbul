@@ -12,6 +12,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.support.v4.app.ShareCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;

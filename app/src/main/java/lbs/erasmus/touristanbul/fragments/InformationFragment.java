@@ -19,14 +19,6 @@ import lbs.erasmus.touristanbul.WeatherAndClimateActivity;
  */
 public class InformationFragment extends Fragment implements View.OnClickListener{
 
-    /**
-     * Creating all dashboard information buttons instances
-     * */
-    private Button mHistory;
-    private Button mNumbers;
-    private Button mWeather;
-    private Button mDosAndDonts;
-
     public InformationFragment() {
     }
 
@@ -35,14 +27,16 @@ public class InformationFragment extends Fragment implements View.OnClickListene
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_information, container, false);
 
-        // Dashboard History button
-        mHistory = (Button) rootView.findViewById(R.id.button_history);
+    /**
+      Creating all dashboard information buttons instances
+      */
+        Button mHistory = (Button) rootView.findViewById(R.id.button_history);
         // Dashboard Important Phone Numbers button
-        mNumbers = (Button) rootView.findViewById(R.id.button_numbers);
+        Button mNumbers = (Button) rootView.findViewById(R.id.button_numbers);
         // Dashboard Weather button
-        mWeather = (Button) rootView.findViewById(R.id.button_weather);
+        Button mWeather = (Button) rootView.findViewById(R.id.button_weather);
         // Dashboard Do\'s and Don\'ts button
-        mDosAndDonts = (Button) rootView.findViewById(R.id.button_dos_and_donts);
+        Button mDosAndDonts = (Button) rootView.findViewById(R.id.button_dos_and_donts);
 
         mHistory.setOnClickListener(this);
         mNumbers.setOnClickListener(this);

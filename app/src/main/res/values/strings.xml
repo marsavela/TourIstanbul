@@ -18,9 +18,10 @@
     <string name="btn_logout_from_google">Log out from Google+</string>
     <string name="progress_message">Signing in to Google&#8230;</string>
 
-
     <!-- Profile Activity -->
     <string name="profile_picture">Profile Picture</string>
+    <string name="user_email">User Email</string>
+    <string name="user_name">User Name</string>
 
     <!-- Preferences -->
     <string name="title_preferences">Preferences</string>
@@ -33,10 +34,11 @@
     <string name="malls_summary">Know where to shop!</string>
     <string name="hospitals_summary">Hospitals, best not to need them...</string>
 
-
     <!-- Atraction Activity -->
-    <string name="loren_ipsum">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero. Fusce vulputate eleifend sapien. Vestibulum purus quam, scelerisque ut, mollis sed, nonummy id, metus. Nullam accumsan lorem in dui. Cras ultricies mi eu turpis hendrerit fringilla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In ac dui quis mi consectetuer lacinia. Nam pretium turpis et arcu. Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum. Sed aliquam ultrices mauris. Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris. Praesent adipiscing. Phasellus ullamcorper ipsum rutrum nunc. Nunc nonummy metus. Vestibulum volutpat pretium libero. Cras id dui. Aenean ut eros et nisl sagittis vestibulum. Nullam nulla eros, ultricies sit amet, nonummy id, imperdiet feugiat, pede. Sed lectus. Donec mollis hendrerit risus. Phasellus nec sem in justo pellentesque facilisis. Etiam imperdiet imperdiet orci. Nunc nec neque. Phasellus leo dolor, tempus non, auctor et, hendrerit quis, nisi. Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat at massa. Sed cursus turpis vitae tortor. Donec posuere vulputate arcu. Phasellus accumsan cursus velit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis. Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc, eu sollicitudin urna dolor sagittis lacus. Donec elit libero, sodales nec, volutpat a, suscipit non, turpis. Nullam sagittis. Suspendisse pulvinar, augue ac venenatis condimentum, sem libero volutpat nibh, nec pellentesque velit pede quis nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce id purus. Ut varius tincidunt libero. Phasellus dolor. Maecenas vestibulum mollis diam. Pellentesque ut neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In dui magna, posuere eget, vestibulum et, tempor auctor, justo. In ac felis quis tortor malesuada pretium. Pellentesque auctor neque nec urna. Proin sapien ipsum, porta a, auctor quis, euismod ut, mi. Aenean viverra rhoncus pede. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut non enim eleifend felis pretium feugiat. Vivamus quis mi. Phasellus a est. Phasellus magna. In hac habitasse platea dictumst. Curabitur at lacus ac velit ornare lobortis. Curabitur a felis in nunc fringilla tristique.</string>
-    
+    <string name="description">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</string>
+    <string name="rate">Rating by the users</string>
+    <string name="rate_button">Rate this place</string>
+    <string name="description_listen_button">Listen to the description</string>
     
     <!-- Information Activity -->
     <string name="history">History of Istanbul</string>
@@ -45,9 +47,43 @@
     <string name="dos_and_donts">Do\'s and Don\'ts</string>
     <string name="group_text">Group Text</string>
     <string name="child_text">Child text</string>
+    <string name="content_description">description</string>
 
+    <!-- Do\'s and Don\'ts -->
+    <string name="when_visiting_a_mosque_child1">&lt;b>Do &lt;/b>remove your shoes before going inside a mosque.Women must cover hair and dress modestly. Men should not wear shorts.</string>
+    <string name="when_visiting_a_mosque_child2">&lt;b>Don’t&lt;/b> talk loudly – it’s a place of worship. Try to avoid visiting a mosque on a Friday since it is a day of prayer.</string>
+    <string name="when_visiting_a_mosque_child3">&lt;b>Do &lt;/b>walk directly in front of someone who’s praying or, according to their belief, his prayer won’t be counted.</string>
 
-    <!-- Activity... -->
+    <string name="when_travelling_during_ramadan_child1">&lt;b>Don’t&lt;/b> offer people food, drink or even a smoke during the day. The month of Ramadan is the Islamic month of fasting, when devout Muslims refrain from eating and drinking from dawn until dusk. Show some courtesy while eating in public during the day.</string>
+    <string name="when_travelling_during_ramadan_child2">&lt;b>Do &lt;/b>be aware that it might be difficult to find food during the day in remote villages. Shop ahead.</string>
+
+    <string name="when_visiting_traditional_rural_areas_child1">&lt;b>Do &lt;/b>wear more conservative clothing outside of large cities. Shorts and short sleeves are still acceptable, though.</string>
+    <string name="when_visiting_traditional_rural_areas_child2">&lt;b>Do &lt;/b>be aware that in rural areas where people are more conservative, men and women are expected to behave very modestly when showing any form of affection toward the opposite sex.</string>
+    <string name="when_visiting_traditional_rural_areas_child3">&lt;b>Don’t&lt;/b> be offended, if you are a female travelling with a male companion, when Turkish men talk only to your companion. They are not being rude but rather protective of your honour.</string>
+    <string name="when_visiting_traditional_rural_areas_child4">&lt;b>Don’t&lt;/b>, if you are a male, talk or sit next to a single, young Turkish woman. She might feel threatened.</string>
+
+    <string name="when_interacting_with_turks_child1">&lt;b>Do &lt;/b>learn gestures of the head for “yes” and “no”, which can be very confusing. “Yes” is a downward nod of the head and no is an upward nod of the head while raising eyebrows and clicking the tongue. Shaking your head might not be understood as “no”. Try to learn the Turkish words evet (yes) and hayir (no).</string>
+    <string name="when_interacting_with_turks_child2">&lt;b>Don’t&lt;/b> make the “OK” sign with your thumb and forefinger. It’s considered obscene in Turkey.</string>
+
+    <string name="when_talking_to_turks_child1">&lt;b>Do &lt;/b>be polite. Turkish customs place great emphasis on manners and politeness. It might come in handy to memorize some phrases or at least the words tesekkür ederim (thank you), lütfen (please) and pardon (excuse me).</string>
+    <string name="when_talking_to_turks_child2">&lt;b>Don’t&lt;/b> berate Kemal Atatürk. Turkish people have a deep respect for the Founding Father of the Turkish Republic, and they wouldn’t tolerate even a harmless joke about him, much less any form of derogatory discussion about his achievements.</string>
+
+    <string name="when_eating_in_a_restaurant_child1">&lt;b>Do &lt;/b>tolerate that abstinence from alcohol is greatly encouraged in Turkey as in many other Muslim countries. Although some Turks consume an occasional glass of wine – being drunk is considered a disgrace.</string>
+    <string name="when_eating_in_a_restaurant_child2">&lt;b>Don’t&lt;/b> blow your nose or pick your teeth while sitting in a restaurant, cafe or bar. Turkish people find this just as impolite as burping openly. Go to the bathroom if you have to blow your nose or if something is stuck between your teeth.</string>
+    <string name="when_eating_in_a_restaurant_child3">&lt;b>Do &lt;/b>be aware that smoking while eating is common and you shouldn’t request your dining partners to stop.</string>
+    <string name="when_eating_in_a_restaurant_child4">&lt;b>Don’t&lt;/b> attempt to split the bill – it’s not traditionally done in Turkey. Pay for the whole meal if you initiated the invitation. If someone else pays, be sure to invite that person out to a meal in return before you leave Turkey.</string>
+
+    <string name="when_invited_to_someones_home_child1">&lt;b>Do &lt;/b>take off your shoes before entering a home.</string>
+    <string name="when_invited_to_someones_home_child2">&lt;b>Do &lt;/b>bring a modest gift. Keep in mind that many Muslims adhere to an abstinent lifestyle – a bottle of alcohol is thus not an ideal gift. Giving money is considered rude.</string>
+    <string name="when_invited_to_someones_home_child3">&lt;b>Don’t&lt;/b> show the bottom of your feet to anyone when sitting down. Since it is quite common to sit on cushions or carpets on the floor, try to sit cross-legged or with your legs to one side.</string>
+    <string name="when_invited_to_someones_home_child4">&lt;b>Do &lt;/b>finish your plate. If you leave food on your plate, it is seen as a sign that you didn’t like the dish and risks offending your host.</string>
+
+    <string name="when_shopping_at_a_bazaar_child1">&lt;b>Do &lt;/b>bargain. It’s regarded as a polite gesture and a form of dialogue to negotiate the price before buying. But:</string>
+    <string name="when_shopping_at_a_bazaar_child2">&lt;b>Don’t&lt;/b> start to bargain if you’re not willing to buy the product in question. If the merchant gives you a price and you tell him yours in return, you have automatically entered into a business transaction.</string>
+    <string name="when_shopping_at_a_bazaar_child3">&lt;b>Don’t&lt;/b> buy stones or fossils. They are considered cultural artefacts and it’s illegal to export them. You could be forced to pay a fine or even end up in jail if caught going through customs with stones or fossils in your luggage.</string>
+
+    <string name="when_taking_photos_child1">&lt;b>Don’t&lt;/b> take pictures of people without asking permission. Older people, in particular, are afraid of the camera and consider it “the evil eye”.</string>
+    <string name="when_taking_photos_child2">&lt;b>Don’t&lt;/b> take pictures of any woman wearing a veil, people praying, or any kind of military facility.</string>
 
 
     <!-- Activity... -->

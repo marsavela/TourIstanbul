@@ -2,6 +2,7 @@ package lbs.erasmus.touristanbul.fragments;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,30 +55,30 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
         // You can add a title, subtitle, and a photo (in the assets directory).
         List<Attraction> attractions = new ArrayList<Attraction>();
         attractions.add(new Attraction("Topkapi Palace" /* title */,
-                "Take a stroll in the flower garden" /* subtitle */, "topkapi.jpg" /* image */));
+                "Take a stroll in the flower garden" /* subtitle */, new Location("asd"), "topkapi.jpg" /* image */));
         attractions.add(new Attraction("Süleymaniye Mosque",
                 "Locals come here to eat kuru fasuliye, the Turkish take on baked beans, in a street" +
-                        " once haunted by opium addicts.", "suleymaniye.jpg"
+                        " once haunted by opium addicts.", new Location("asd"), "suleymaniye.jpg"
         ));
         attractions.add(new Attraction("Aya Sofya",
-                "Drive out to the vista point and watch the sunrise at 6am", "sophia.jpg"));
+                "Drive out to the vista point and watch the sunrise at 6am", new Location("asd"), "sophia.jpg"));
         attractions.add(new Attraction("Turkish and Islamic Arts Museum",
                 "Don't leave without trying a thick black Turkish coffee in the pretty cafe in the" +
-                        " grounds.", "islamicmuseum.jpg"
+                        " grounds.", new Location("asd"), "islamicmuseum.jpg"
         ));
         attractions.add(new Attraction("Galata Tower",
-                "Watery Istanbul is a city that cries out to be viewed from on high", "galata.jpg"));
+                "Watery Istanbul is a city that cries out to be viewed from on high", new Location("asd"), "galata.jpg"));
         attractions.add(new Attraction("Basilica Cistern",
-                "Your favorite meal cooked by yours truly", "cistern.jpg"));
+                "Your favorite meal cooked by yours truly", new Location("asd"), "cistern.jpg"));
         attractions.add(new Attraction("Chora Church",
-                "Like Aya Sofya, it has made the journey from Byzantine church to Ottoman mosque.", "chora.jpg"));
+                "Like Aya Sofya, it has made the journey from Byzantine church to Ottoman mosque.", new Location("asd"), "chora.jpg"));
         attractions.add(new Attraction("Blue Mosque",
-                "One of only a handful of mosques in the world to boast six minarets.", "bluemosque.jpg"));
+                "One of only a handful of mosques in the world to boast six minarets.", new Location("asd"), "bluemosque.jpg"));
         attractions.add(new Attraction("Ayasofya Hürrem Sultan Hamam",
-                "Think acres of marble, the sound of running water echoing around stupendous domes", "ayasofya.jpg"));
+                "Think acres of marble, the sound of running water echoing around stupendous domes", new Location("asd"), "ayasofya.jpg"));
         attractions.add(new Attraction("Istanbul Archaeology Museums",
                 "Walk to Istanbul's three-in-one equivalent of the British Museum via the grounds " +
-                        "of Topkapi Palace.", "archeology.jpg"
+                        "of Topkapi Palace.", new Location("asd"), "archeology.jpg"
         ));
         return attractions;
     }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="30dp">
@@ -11,29 +12,27 @@
         android:id="@+id/imgProfilePic"
         android:layout_gravity="center"
         android:src="@drawable/default_avatar"
-        android:layout_weight="0.3"
         android:layout_centerInParent="true"
         android:layout_alignParentTop="true"
-        android:paddingBottom="20dp"/>
+        android:paddingBottom="20dp"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="User Name"
+        android:text="@string/user_name"
         android:id="@+id/txtName"
         android:gravity="center"
         android:textSize="25sp"
-        android:layout_weight="0.3"
         android:layout_below="@id/imgProfilePic"
         android:paddingBottom="20dp"/>
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="User Email"
+        android:text="@string/user_email"
         android:id="@+id/txtEmail"
         android:gravity="center"
         android:textSize="25sp"
-        android:layout_weight="0.3"
         android:layout_below="@id/txtName"/>
 
     <Button

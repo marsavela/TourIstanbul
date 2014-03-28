@@ -25,16 +25,21 @@
 
     <!-- Preferences -->
     <string name="title_preferences">Preferences</string>
+    <string name="interest_title">INTERESTS (PROBABLY OUT)</string>
     <string name="parents_summary">Places to go with the whole family</string>
     <string name="backpackers_summary">Travelling light? Check this box!</string>
     <string name="business_travelers_summary">Important places for business travelers</string>
+    <string name="attractions_title">ATTRACTIONS</string>
     <string name="museums_summary">Museums</string>
     <string name="mosques_summary">Mosques</string>
     <string name="restaurants_summary">Show the best restaurants of Istanbul</string>
     <string name="malls_summary">Know where to shop!</string>
-    <string name="hospitals_summary">Hospitals, best not to need them...</string>
+    <string name="hospitals_summary">Hospitals, best not to need them…</string>
+    <string name="airports_summary">Airports</string>
+    <string name="hotels_summary">Know where to spend the night</string>
+    <string name="wifi_spots_summary">WIFI Spots</string>
 
-    <!-- Atraction Activity -->
+    <!-- Attraction Activity -->
     <string name="description">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</string>
     <string name="rate">Rating by the users</string>
     <string name="rate_button">Rate this place</string>
@@ -84,6 +89,8 @@
 
     <string name="when_taking_photos_child1">&lt;b>Don’t&lt;/b> take pictures of people without asking permission. Older people, in particular, are afraid of the camera and consider it “the evil eye”.</string>
     <string name="when_taking_photos_child2">&lt;b>Don’t&lt;/b> take pictures of any woman wearing a veil, people praying, or any kind of military facility.</string>
+    <string name="my_location">My location</string>
+    <string name="rating_text">2.5</string>
 
 
     <!-- Activity... -->

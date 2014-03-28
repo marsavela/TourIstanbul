@@ -2,23 +2,27 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="MEASURE UNITS">
-        <ListPreference android:title="Distance Units"
+        <ListPreference
+            android:title="Distance Units"
             android:key="distance_units"
-            android:summary="Select the distance unit" android:entries="@array/distance_units"
+            android:summary="Select the distance unit"
+            android:entries="@array/distance_units"
             android:entryValues="@array/distance_units_values"
             android:defaultValue="3" />
-        <ListPreference android:title="Temperature Scale"
+        <ListPreference
+            android:title="Temperature Scale"
             android:key="temperature_scale"
-            android:summary="Select the temperature scale" android:entries="@array/temperature_scale"
+            android:summary="Select the temperature scale"
+            android:entries="@array/temperature_scale"
             android:entryValues="@array/temperature_scale_values"
             android:defaultValue="2" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="INTERESTS">
+    <PreferenceCategory android:title="@string/interest_title">
         <CheckBoxPreference
             android:key="interest1"
             android:title="Parents"
             android:summary="@string/parents_summary"
-            android:defaultValue="true"/>
+            android:defaultValue="true" />
         <CheckBoxPreference
             android:key="interest2"
             android:title="Backpackers"
@@ -30,22 +34,22 @@
             android:summary="@string/business_travelers_summary"
             android:defaultValue="true" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="ATTRACTIONS">
+    <PreferenceCategory android:title="@string/attractions_title">
         <CheckBoxPreference
             android:key="interest1"
-            android:title="Museums"
-            android:summary="@string/museums_summary"
-            android:defaultValue="false"/>
+            android:title="Airports"
+            android:summary="@string/airports_summary"
+            android:defaultValue="false" />
         <CheckBoxPreference
             android:key="interest2"
-            android:title="Mosques"
-            android:summary="@string/mosques_summary"
-            android:defaultValue="true" />
+            android:title="Hospitals"
+            android:summary="@string/hospitals_summary"
+            android:defaultValue="false" />
         <CheckBoxPreference
             android:key="interest3"
-            android:title="Restaurants"
-            android:summary="@string/restaurants_summary"
-            android:defaultValue="true" />
+            android:title="Hotels"
+            android:summary="@string/hotels_summary"
+            android:defaultValue="false" />
         <CheckBoxPreference
             android:key="interest4"
             android:title="Malls"
@@ -53,9 +57,25 @@
             android:defaultValue="true" />
         <CheckBoxPreference
             android:key="interest5"
-            android:title="Hospitals"
-            android:summary="@string/hospitals_summary"
+            android:title="Mosques"
+            android:summary="@string/mosques_summary"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:key="interest6"
+            android:title="Museums"
+            android:summary="@string/museums_summary"
             android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="interest7"
+            android:title="Restaurants"
+            android:summary="@string/restaurants_summary"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:key="interest8"
+            android:title="WIFI Spots"
+            android:summary="@string/wifi_spots_summary"
+            android:defaultValue="false" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

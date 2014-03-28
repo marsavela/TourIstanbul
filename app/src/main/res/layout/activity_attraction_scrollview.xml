@@ -21,8 +21,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50dp"
-            android:text="2.5" />
+            android:textSize="50sp"
+            android:text="@string/rating_text" />
 
         <Button
             android:layout_width="wrap_content"

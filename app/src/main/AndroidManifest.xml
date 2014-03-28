@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="lbs.erasmus.touristanbul">
 
     <!-- Used by the app for maps -->
@@ -110,7 +111,8 @@
             android:name="lbs.erasmus.touristanbul.AssetProvider"
             android:authorities="lbs.erasmus.touristanbul"
             android:grantUriPermissions="true"
-            android:exported="true"/>
+            android:exported="true"
+            tools:ignore="ExportedContentProvider" />
     </application>
 
 </manifest>

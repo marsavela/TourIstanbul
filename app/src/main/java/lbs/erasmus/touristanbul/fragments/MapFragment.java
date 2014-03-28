@@ -1,7 +1,6 @@
 package lbs.erasmus.touristanbul.fragments;
 
 import android.app.Fragment;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
@@ -10,18 +9,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ToggleButton;
 
 import org.mapsforge.core.graphics.Bitmap;
 import org.mapsforge.core.model.LatLong;
 import org.mapsforge.core.model.MapPosition;
-import org.mapsforge.map.android.AndroidPreferences;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.android.layer.MyLocationOverlay;
-
 import org.mapsforge.map.android.view.MapView;
 import org.mapsforge.map.layer.LayerManager;
-import org.mapsforge.map.layer.Layers;
 import org.mapsforge.map.layer.cache.TileCache;
 import org.mapsforge.map.layer.download.TileDownloadLayer;
 import org.mapsforge.map.layer.download.tilesource.OpenStreetMapMapnik;
@@ -32,7 +27,7 @@ import java.io.File;
 
 import lbs.erasmus.touristanbul.R;
 import lbs.erasmus.touristanbul.maps.Utils;
-//hola
+
 /**
  * Created by SergiuDaniel on 9/03/14.
  */
@@ -48,7 +43,9 @@ public class MapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
         // Adding the map
-        mMapView = (MapView) rootView.findViewById(R.id.mapView);
+        if (rootView != null) {
+            mMapView = (MapView) rootView.findViewById(R.id.mapView);
+        }
 
         // Load last map position
         //SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getPersistableId(), Context.MODE_PRIVATE);

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="20sp"
+            android:paddingRight="20sp">
+
+            <Button
+                android:id="@+id/button_history"
+                style="@style/dashboard_button"
+                android:drawableLeft="@drawable/history"
+                android:onClick="clicked"
+                android:text="@string/history"
+                android:layout_marginRight="30sp"/>
+
+            <Button
+                android:id="@+id/button_numbers"
+                style="@style/dashboard_button"
+                android:drawableLeft="@drawable/important_numbers"
+                android:onClick="clicked"
+                android:text="@string/important_numbers"
+                android:layout_marginLeft="30sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="20sp"
+            android:paddingRight="20sp">
+
+            <Button
+                android:id="@+id/button_weather"
+                style="@style/dashboard_button"
+                android:drawableLeft="@drawable/weather_and_climate"
+                android:onClick="clicked"
+                android:text="@string/weather"
+                android:layout_marginRight="30sp"/>
+
+            <Button
+                android:id="@+id/button_dos_and_donts"
+                style="@style/dashboard_button"
+                android:drawableLeft="@drawable/dos_and_donts"
+                android:onClick="clicked"
+                android:text="@string/dos_and_donts"
+                android:layout_marginLeft="30sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView><!-- From: file:/Users/sergiu/AndroidStudioProjects/TourIstanbul/app/src/main/res/layout-land/fragment_information.xml -->

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Layout for the main activity. -->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AttractionsFragment"
+    tools:ignore="MergeRootFrame" >
+
+    <GridView
+        android:id="@+id/grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="@integer/num_columns"/>
+
+</FrameLayout><!-- From: file:/Users/sergiu/AndroidStudioProjects/TourIstanbul/app/src/main/res/layout/fragment_attractions.xml -->

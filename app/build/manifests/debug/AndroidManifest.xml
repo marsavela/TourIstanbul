@@ -1,0 +1,67 @@
+<!-- From: file:/Users/sergiu/AndroidStudioProjects/TourIstanbul/app/src/main/AndroidManifest.xml --><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="lbs.erasmus.touristanbul">
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="19"/>
+
+    <!-- Used by the app for maps -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- To retrieve the account mName (mEmail) as part of sign-in: -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <!-- To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user.
+    This disconnect option is required to comply with the Google+ Sign-In developer policies: -->
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+
+    <application android:allowBackup="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:theme="@style/AppTheme">
+
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
+        <!-- Main Activity -->
+        <activity android:label="@string/app_name" android:name="lbs.erasmus.touristanbul.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <!-- Profile Activity -->
+        <activity android:name="lbs.erasmus.touristanbul.AttractionActivity" android:parentActivityName="lbs.erasmus.touristanbul.MainActivity" android:theme="@style/AppTheme.TranslucentActionBar">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="lbs.erasmus.touristanbul.MainActivity"/>
+        </activity>
+        <activity android:label="@string/title_profile" android:name="lbs.erasmus.touristanbul.ProfileActivity" android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="lbs.erasmus.touristanbul.MainActivity"/>
+        </activity>
+        <!-- Settings Activity -->
+        <activity android:label="@string/title_settings" android:name="lbs.erasmus.touristanbul.SettingsActivity" android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="lbs.erasmus.touristanbul.MainActivity"/>
+        </activity>
+        <!-- History Activity -->
+        <activity android:label="@string/history" android:name="lbs.erasmus.touristanbul.HistoryActivity" android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="lbs.erasmus.touristanbul.MainActivity"/>
+        </activity>
+        <!-- Important Numbers Activity -->
+        <activity android:label="@string/important_numbers" android:name="lbs.erasmus.touristanbul.ImportantNumbersActivity" android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="lbs.erasmus.touristanbul.MainActivity"/>
+        </activity>
+        <!-- Weather and Climate Activity -->
+        <activity android:label="@string/weather" android:name="lbs.erasmus.touristanbul.WeatherAndClimateActivity" android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="lbs.erasmus.touristanbul.MainActivity"/>
+        </activity>
+        <!-- Dos and Donts Activity -->
+        <activity android:label="@string/dos_and_donts" android:name="lbs.erasmus.touristanbul.DosAndDontsActivity" android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="lbs.erasmus.touristanbul.MainActivity"/>
+        </activity>
+
+        <!-- Reference to Google Play services version -->
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
+        <provider android:authorities="lbs.erasmus.touristanbul" android:exported="true" android:grantUriPermissions="true" android:name="lbs.erasmus.touristanbul.AssetProvider"/>
+    </application>
+
+</manifest>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!-- Touch layer for when an attraction is pressed. -->
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true"
-        android:drawable="@color/touch_overlay_bg_color"/>
-    <item android:drawable="@android:color/transparent" />
-</selector>
-<!-- From: file:/Users/sergiu/AndroidStudioProjects/TourIstanbul/app/src/main/res/drawable/touch_layer_bg.xml -->

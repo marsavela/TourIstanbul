@@ -113,6 +113,12 @@ public class NavigationDrawerFragment extends Fragment {
         return rootView;
     }
 
+    public void closeDrawer(){
+        if(mDrawerLayout!=null) {
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        }
+    }
+
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }

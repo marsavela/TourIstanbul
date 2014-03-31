@@ -241,12 +241,14 @@ public class MainActivity extends Activity implements View.OnClickListener,
     private void openUserSettings() {
         Intent i = new Intent(this, SettingsActivity.class);
         startActivity(i);
+        mNavigationDrawerFragment.closeDrawer();
     }
 
     private void openUserProfile() {
         Intent i = new Intent(this, ProfileActivity.class);
         i.putExtra("User", mUser);
         startActivity(i);
+        mNavigationDrawerFragment.closeDrawer();
     }
 
 

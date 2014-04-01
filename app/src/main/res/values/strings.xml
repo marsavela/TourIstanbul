@@ -96,4 +96,11 @@
     <!-- Activity... -->
 
 
+    <!-- MapFragment -->
+    <string name="mapfragment_advice_title">Connection problem</string>
+    <string name="mapfragment_advice_text">You are not connected to the Internet, can not download the map</string>
+    <string name="mapfragment_downloading_title">Downloading map</string>
+    <string name="mapfragment_downloading_text">Downloading in progress…</string>
+
+
 </resources>

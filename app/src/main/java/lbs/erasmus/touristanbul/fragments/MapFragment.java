@@ -1,9 +1,17 @@
 package lbs.erasmus.touristanbul.fragments;
 
+import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,17 +21,23 @@ import android.widget.Button;
 import org.mapsforge.core.graphics.Bitmap;
 import org.mapsforge.core.model.LatLong;
 import org.mapsforge.core.model.MapPosition;
+import org.mapsforge.map.android.AndroidPreferences;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.android.layer.MyLocationOverlay;
+
 import org.mapsforge.map.android.view.MapView;
 import org.mapsforge.map.layer.LayerManager;
 import org.mapsforge.map.layer.cache.TileCache;
-import org.mapsforge.map.layer.download.TileDownloadLayer;
-import org.mapsforge.map.layer.download.tilesource.OpenStreetMapMapnik;
 import org.mapsforge.map.model.MapViewPosition;
 import org.mapsforge.map.model.common.PreferencesFacade;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 import lbs.erasmus.touristanbul.R;
 import lbs.erasmus.touristanbul.maps.Utils;
@@ -33,34 +47,79 @@ import lbs.erasmus.touristanbul.maps.Utils;
  */
 public class MapFragment extends Fragment {
 
+    private final static String MAP_URL = "https://googledrive.com/host/0B-6BYv2-6JpCamxRMG9NLTZmd1E/istanbul.map";
+    private final static String MAP_FOLDER = "touristanbul/";
+    private final static String FILENAME = "istanbul.map";
+
     private MapView mMapView;
     protected PreferencesFacade mPreferencesFacade;
     protected TileCache mTileCache;
 
     private MyLocationOverlay mMyLocationOverlay;
 
+    private FileMapDownloader mFileMapDownloader;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
         // Adding the map
-        if (rootView != null) {
-            mMapView = (MapView) rootView.findViewById(R.id.mapView);
-        }
+        mMapView = (MapView) rootView.findViewById(R.id.mapView);
 
         // Load last map position
-        //SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getPersistableId(), Context.MODE_PRIVATE);
-        //mPreferencesFacade = new AndroidPreferences(sharedPreferences);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getPersistableId(), Context.MODE_PRIVATE);
+        mPreferencesFacade = new AndroidPreferences(sharedPreferences);
 
-        initialize();
+        // Add buttons functionality
 
-        Button button = (Button) rootView.findViewById(R.id.mapfragment_button);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button buttonIn = (Button) rootView.findViewById(R.id.mapfragment_button_zoomIn);
+        buttonIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //shows user current location
+                mMapView.getModel().mapViewPosition.zoomIn();
+            }
+        });
+
+        Button buttonOut = (Button) rootView.findViewById(R.id.mapfragment_button_zoomOut);
+        buttonOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //shows user current location
+                mMapView.getModel().mapViewPosition.zoomOut();
+            }
+        });
+
+        Button buttonLocation = (Button) rootView.findViewById(R.id.mapfragment_button_location);
+        buttonLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //shows user current location
                 showCurrentPosition();
             }
         });
+
+        mFileMapDownloader = null;
+        File mapFile = getMapFile();
+        if (!mapFile.exists() && Utils.checkWifiConection(getActivity())) {
+            mFileMapDownloader = new FileMapDownloader();
+            mFileMapDownloader.execute();
+        } else if (!Utils.checkWifiConection(getActivity())) {
+            AlertDialog.Builder alertDialog;
+            alertDialog = new AlertDialog.Builder(getActivity());
+            alertDialog.setTitle(getResources().getString(R.string.mapfragment_advice_title));
+            alertDialog.setMessage(getResources().getString(R.string.mapfragment_advice_text));
+            alertDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            alertDialog.show();
+
+            if (mMapView != null) {
+                mMapView.destroy();
+            }
+        }
 
         return rootView;
     }
@@ -71,16 +130,37 @@ public class MapFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onResume() {
+        super.onResume();
+        if (mFileMapDownloader == null || mFileMapDownloader.getStatus() == AsyncTask.Status.FINISHED) {
+            initialize();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         // Save current map position
-        //mMapView.getModel().save(mPreferencesFacade);
-        //mPreferencesFacade.save();
+        mMapView.getModel().save(mPreferencesFacade);
+        mPreferencesFacade.save();
+
+        if (mMapView != null) {
+            mMapView.destroy();
+        }
+
+        if (mFileMapDownloader != null && mFileMapDownloader.getStatus() == AsyncTask.Status.RUNNING) {
+            mFileMapDownloader.cancel(true);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public final void onDestroy() {
+        super.onDestroy();
     }
 
 
@@ -122,7 +202,7 @@ public class MapFragment extends Fragment {
      */
     protected String getMapFileName() {
         //TODO: download istanbul map to a SD folder
-        return "valenciamaps/spain.map";
+        return MAP_FOLDER + FILENAME;
     }
 
     /**
@@ -141,13 +221,14 @@ public class MapFragment extends Fragment {
         MapViewPosition mapViewPosition = initializePosition(mMapView.getModel().mapViewPosition);
 
         //TODO: Change online maps for offline maps, add a download map dialog
-        //addLayers(mMapView.getLayerManager(), mTileCache, mapViewPosition); // Offline map
+        addLayers(mMapView.getLayerManager(), mTileCache, mapViewPosition); // Offline map
 
+        /*
         TileDownloadLayer downloadLayer = new TileDownloadLayer(mTileCache, mapViewPosition, OpenStreetMapMapnik.INSTANCE,
                 AndroidGraphicFactory.INSTANCE);
         downloadLayer.start();
         mMapView.getLayerManager().getLayers().add(downloadLayer);
-
+        */
     }
 
     /**
@@ -156,9 +237,15 @@ public class MapFragment extends Fragment {
      * @param mapView
      */
     protected void initializeMapView(MapView mapView, PreferencesFacade preferences) {
-        //mapView.getModel().init(preferences);
+        mapView.getModel().init(preferences);
         mapView.setClickable(true);
         mapView.getMapScaleBar().setVisible(true);
+
+        //mMapView.getLayerManager().getLayers().add(new TileGridLayer(AndroidGraphicFactory.INSTANCE));
+        //mMapView.getLayerManager().getLayers().add(new TileCoordinatesLayer(AndroidGraphicFactory.INSTANCE));
+        mMapView.getFpsCounter().setVisible(true);
+
+
     }
 
     /**
@@ -195,4 +282,71 @@ public class MapFragment extends Fragment {
 
     }
 
+    class FileMapDownloader extends AsyncTask<Void,Integer,Void> {
+
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMax(100);
+            progressDialog.setProgress(0);
+            progressDialog.setMax(0);
+            progressDialog.setTitle(getResources().getString(R.string.mapfragment_downloading_title));
+            progressDialog.setMessage(getResources().getString(R.string.mapfragment_downloading_text));
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                URL url = new URL(MAP_URL);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+                int fileLength = connection.getContentLength();
+
+                File path = new File(Environment.getExternalStorageDirectory() + "/" + MAP_FOLDER);
+                if (!path.exists()) path.mkdirs();
+                File outputFile = new File(path,FILENAME);
+
+                InputStream inputStream = new BufferedInputStream(url.openStream());
+                OutputStream output = new FileOutputStream(outputFile);
+
+                byte buffer[] = new byte[1024];
+                long total = 0;
+                int count = 0;
+                while ((count = inputStream.read(buffer)) != -1) {
+                    total += count;
+                    publishProgress((int) ((total*100)/fileLength));
+                    output.write(buffer, 0, count);
+                }
+                output.flush();
+                output.close();
+                inputStream.close();
+
+            } catch (Exception e) {
+                Log.e(getClass().getName(), "Error while downloading");
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            progressDialog.setProgress(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressDialog.dismiss();
+            if(!isCancelled()){
+                initialize();
+            }
+        }
+    }
 }

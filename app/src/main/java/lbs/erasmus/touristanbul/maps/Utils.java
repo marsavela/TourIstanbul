@@ -37,6 +37,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -45,35 +47,6 @@ import android.view.View.MeasureSpec;
  * Utility functions that can be used across different mapsforge based activities
  */
 public final class Utils {
-    /**
-     * Compatibility method
-     *
-     * @param a
-     *            the current activity
-     */
-    @TargetApi(11)
-    public static void enableHome(Activity a) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // Show the Up button in the action bar.
-            a.getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
-    /**
-     * Compatibility method
-     *
-     * @param view
-     *            the view to set the background on
-     * @param background
-     *            the background
-     */
-    public static void setBackground(View view, Drawable background) {
-        if (android.os.Build.VERSION.SDK_INT >= 16) {
-            view.setBackground(background);
-        } else {
-            view.setBackgroundDrawable(background);
-        }
-    }
 
     /**
      * @param c
@@ -108,8 +81,7 @@ public final class Utils {
     }
 
     /**
-     * @param c
-     *            the Android context
+     * @param c the Android context
      * @return a new cache
      */
     public static TileCache createTileCache(Context c, String id) {
@@ -128,7 +100,7 @@ public final class Utils {
         return tileRendererLayer;
     }
 
-    static Bitmap viewToBitmap(Context c, View view) {
+    public static Bitmap viewToBitmap(Context c, View view) {
         view.measure(MeasureSpec.getSize(view.getMeasuredWidth()), MeasureSpec.getSize(view.getMeasuredHeight()));
         view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
         view.setDrawingCacheEnabled(true);
@@ -141,4 +113,18 @@ public final class Utils {
     private Utils() {
         throw new IllegalStateException();
     }
+
+    public static boolean checkWifiConection(Context context) {
+        ConnectivityManager conectManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (conectManager != null) {
+            NetworkInfo wifiConection = conectManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (wifiConection != null
+                    && wifiConection.isAvailable()
+                    && wifiConection.getDetailedState() == NetworkInfo.DetailedState.CONNECTED) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

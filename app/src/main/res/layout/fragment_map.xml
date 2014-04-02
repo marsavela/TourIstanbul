@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="lbs.erasmus.touristanbul.fragments.MapFragment">
 
-    <org.mapsforge.map.android.view.MapView
+    <org.mapsforge.android.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -21,22 +21,6 @@
         <Button
             android:layout_width="@dimen/map_button_size"
             android:layout_height="@dimen/map_button_size"
-            android:layout_margin="0dp"
-            android:padding="0dp"
-            android:id="@+id/mapfragment_button_zoomIn"
-            android:drawableTop="@drawable/ic_zoom_in"/>
-        <Button
-            android:layout_width="@dimen/map_button_size"
-            android:layout_height="@dimen/map_button_size"
-            android:padding="0dp"
-            android:layout_marginTop="8dp"
-            android:id="@+id/mapfragment_button_zoomOut"
-            android:drawableTop="@android:drawable/btn_minus"/>
-
-        <Button
-            android:layout_width="@dimen/map_button_size"
-            android:layout_height="@dimen/map_button_size"
-            android:padding="0dp"
             android:id="@+id/mapfragment_button_location"
             android:drawableTop="@drawable/ic_access_location"/>
 

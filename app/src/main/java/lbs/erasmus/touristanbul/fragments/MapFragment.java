@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -21,10 +22,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ToggleButton;
 
+import com.graphhopper.GHRequest;
+import com.graphhopper.GHResponse;
 import com.graphhopper.GraphHopper;
+import com.graphhopper.GraphHopperAPI;
+import com.graphhopper.routing.Path;
+import com.graphhopper.util.Downloader;
+import com.graphhopper.util.Helper;
+import com.graphhopper.util.ProgressListener;
+import com.graphhopper.util.StopWatch;
 
 import org.mapsforge.android.maps.MapView;
 import org.mapsforge.android.maps.MapViewPosition;
+import org.mapsforge.android.maps.overlay.ListOverlay;
 import org.mapsforge.android.maps.overlay.Marker;
 import org.mapsforge.android.maps.overlay.MyLocationOverlay;
 import org.mapsforge.core.model.GeoPoint;
@@ -41,6 +51,8 @@ import java.util.List;
 
 import lbs.erasmus.touristanbul.R;
 import lbs.erasmus.touristanbul.domain.Attraction;
+import lbs.erasmus.touristanbul.maps.AndroidHelper;
+import lbs.erasmus.touristanbul.maps.GHAsyncTask;
 import lbs.erasmus.touristanbul.maps.Utils;
 
 /**
@@ -48,9 +60,12 @@ import lbs.erasmus.touristanbul.maps.Utils;
  */
 public class MapFragment extends Fragment {
 
-    private static final String MAP_URL = "https://googledrive.com/host/0B-6BYv2-6JpCamxRMG9NLTZmd1E/istanbul.map";
-    private static final String MAP_FOLDER = "touristanbul/";
-    private static final String FILENAME = "istanbul.map";
+    private static final String DOWNLOAD_URL = "https://googledrive.com/host/0B-6BYv2-6JpCamxRMG9NLTZmd1E/istanbul.ghz";
+    //private static final String MAP_URL = "https://googledrive.com/host/0B-6BYv2-6JpCamxRMG9NLTZmd1E/istanbul.map";
+    private static final String APP_FOLDER = "touristanbul";
+    private static final String AREA_NAME ="istanbul";
+    private static final String MAP_FILENAME = "istanbul.map";
+    private static final String ZIP_FILENAME = "istanbul.ghz";
 
     private static final String INTENT_BROADCAST_POSITION = "broadcast_gps";
 
@@ -65,8 +80,12 @@ public class MapFragment extends Fragment {
     private FileMapDownloader mFileMapDownloader;
 
     private MapView mMapView;
+    private ListOverlay pathOverlay;
     private MyLocationOverlay mMyLocationOverlay;
-    private ToggleButton mSnapToLocation;
+
+    private GraphHopperAPI mHopper;
+    private volatile boolean shortestPathRunning = false;
+    private volatile boolean prepareInProgress = true;
 
     List<Attraction> attractionList;
 
@@ -82,7 +101,8 @@ public class MapFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //shows user current location
-                showCurrentPosition();
+                //showCurrentPosition();
+                calculateRoute(new GeoPoint(40.983934, 28.820443), new GeoPoint(40.973210, 29.151750));
             }
         });
 
@@ -93,19 +113,10 @@ public class MapFragment extends Fragment {
             mFileMapDownloader = new FileMapDownloader();
             mFileMapDownloader.execute();
         } else if (!Utils.checkWifiConection(getActivity())) {
-            AlertDialog.Builder alertDialog;
-            alertDialog = new AlertDialog.Builder(getActivity());
-            alertDialog.setTitle(getResources().getString(R.string.mapfragment_advice_title));
-            alertDialog.setMessage(getResources().getString(R.string.mapfragment_advice_text));
-            alertDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
-            alertDialog.show();
+            Utils.showSimpleDialog(getActivity(),
+                    R.string.mapfragment_advice_title,
+                    R.string.mapfragment_advice_text);
         }
-
 
         return rootView;
     }
@@ -155,12 +166,17 @@ public class MapFragment extends Fragment {
     }
 
     private File getMapFile() {
-        return new File(Environment.getExternalStorageDirectory(), getMapFileName());
+        return new File(getMapFileName());
     }
 
     private String getMapFileName() {
         //TODO: download istanbul map to a SD folder
-        return MAP_FOLDER + FILENAME;
+        return getLocalFolder() + "-gh/" + MAP_FILENAME;
+    }
+
+    private String getLocalFolder() {
+        //TODO: download istanbul map to a SD folder
+        return Environment.getExternalStorageDirectory() + "/" + APP_FOLDER + "/" + AREA_NAME;
     }
 
     /**
@@ -173,8 +189,12 @@ public class MapFragment extends Fragment {
         mapView.getMapScaleBar().setShowMapScaleBar(true);
         mapView.setBuiltInZoomControls(false);
         //mapView.getFpsCounter().setFpsCounter(true);
-
         mapView.setMapFile(getMapFile());
+
+        pathOverlay = new ListOverlay();
+        mapView.getOverlays().add(pathOverlay);
+
+        loadGraphStorage();
 
         restoreMapView(mapView);
     }
@@ -250,11 +270,84 @@ public class MapFragment extends Fragment {
 
     }
 
+    private void calculateRoute(GeoPoint startPoint, GeoPoint endPoint) {
+        pathOverlay.getOverlayItems().clear();
+
+        Marker startMarker = Utils.createMarker(getActivity(), startPoint, R.drawable.flag_green);
+        pathOverlay.getOverlayItems().add(startMarker);
+
+        Marker endMarker = Utils.createMarker(getActivity(), endPoint, R.drawable.flag_red);
+        pathOverlay.getOverlayItems().add(endMarker);
+        mMapView.redraw();
+
+        calcPath(startPoint, endPoint);
+
+    }
+
+    private void loadGraphStorage() {
+        new GHAsyncTask<Void, Void, Path>()
+        {
+            protected Path saveDoInBackground( Void... v ) throws Exception
+            {
+                GraphHopper tmpHopp = new GraphHopper().forMobile();
+                tmpHopp.setCHShortcuts("fastest");
+                tmpHopp.load(getLocalFolder()+"-gh");
+                mHopper = tmpHopp;
+                return null;
+            }
+
+            protected void onPostExecute( Path o )
+            {
+                if (hasError()) {
+                    Log.e(getClass().getName(),"An error happend while creating graph:" + getErrorMessage());
+                } else {
+                    Log.v(getClass().getName(), "Finished loading graph. Touch to route.");
+                }
+
+                prepareInProgress = false;
+            }
+        }.execute();
+    }
+
+    private void calcPath( final GeoPoint fromPoint, final GeoPoint toPoint) {
+        new AsyncTask<Void, Void, GHResponse>() {
+            float time;
+
+            protected GHResponse doInBackground( Void... v ) {
+                double fromLat = fromPoint.latitude;
+                double fromLon = fromPoint.longitude;
+                double toLat = toPoint.latitude;
+                double toLon = toPoint.longitude;
+
+                StopWatch sw = new StopWatch().start();
+                GHRequest req = new GHRequest(fromLat, fromLon, toLat, toLon);
+                req.setAlgorithm("dijkstrabi");
+                req.putHint("instructions", false);
+
+                GHResponse resp = mHopper.route(req);
+                time = sw.stop().getSeconds();
+                return resp;
+            }
+
+            protected void onPostExecute( GHResponse resp ) {
+                if (!resp.hasErrors()) {
+                    //Utils.showRouteInfo(getActivity(), resp, time);
+                    pathOverlay.getOverlayItems().add(Utils.createPolyline(resp));
+                    mMapView.redraw();
+                } else {
+                    Utils.showSimpleDialog(getActivity(),
+                            R.string.mapfragment_advice_title,
+                            R.string.mapfragment_advice_text);
+                }
+                shortestPathRunning = false;
+            }
+        }.execute();
+    }
 
     /**
      * Create a thread that downloads the map file and shows a dialog with the progress
      */
-    private class FileMapDownloader extends AsyncTask<Void,Integer,Void> {
+    private class FileMapDownloader extends AsyncTask<Void,Integer,File> {
 
         ProgressDialog progressDialog;
 
@@ -266,25 +359,34 @@ public class MapFragment extends Fragment {
             progressDialog.setProgress(0);
             progressDialog.setMax(0);
             progressDialog.setTitle(getResources().getString(R.string.mapfragment_downloading_title));
-            progressDialog.setMessage(getResources().getString(R.string.mapfragment_downloading_text));
+            progressDialog.setMessage(getResources().getString(R.string.mapfragment_downloading_text_download));
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setCancelable(false);
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
+
+//            int orientation = getActivity().getRequestedOrientation();
+//            getActivity().setRequestedOrientation(orientation);
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected File doInBackground(Void... voids) {
+            File outputFile = null;
+            Log.d(getClass().getName(),"Starting download");
             try {
-                URL url = new URL(MAP_URL);
+                URL url = new URL(DOWNLOAD_URL);
                 URLConnection connection = url.openConnection();
                 connection.connect();
                 int fileLength = connection.getContentLength();
 
+                String localfolder = getLocalFolder() + "-gh";
+
                 // Check if the folder exists
-                File path = new File(Environment.getExternalStorageDirectory() + "/" + MAP_FOLDER);
+                File path = new File(localfolder);
                 if (!path.exists()) path.mkdirs();
-                File outputFile = new File(path,FILENAME);
+
+                outputFile = new File(path,ZIP_FILENAME);
+                if (outputFile.exists()) outputFile.delete();
 
                 InputStream inputStream = new BufferedInputStream(url.openStream());
                 OutputStream output = new FileOutputStream(outputFile);
@@ -302,25 +404,40 @@ public class MapFragment extends Fragment {
                 output.close();
                 inputStream.close();
 
+                Log.d(getClass().getName(),"File downloaded");
+
+                Utils.unzipFile(localfolder,ZIP_FILENAME);
+
+                Log.d(getClass().getName(),"File uncompressed");
+
             } catch (Exception e) {
-                Log.e(getClass().getName(), "Error while downloading");
+                Log.e(getClass().getName(), "Error while downloading: " + e);
             }
-            return null;
+            return outputFile;
         }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
             progressDialog.setProgress(values[0]);
+            if(values[0]==100) {
+                progressDialog.setMessage(getResources().getString(R.string.mapfragment_downloading_text_decompressing));
+            }
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(File outputFile) {
+            super.onPostExecute(outputFile);
             progressDialog.dismiss();
             if(!isCancelled()){
                 initializeMapView(mMapView);
             }
+
+            if (outputFile.exists()) outputFile.delete();
+
+            Log.d(getClass().getName(),"Changin orientation");
+            //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            Log.d(getClass().getName(),"End");
         }
     }
 }

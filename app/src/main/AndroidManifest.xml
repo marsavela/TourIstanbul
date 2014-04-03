@@ -73,6 +73,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="lbs.erasmus.touristanbul.MainActivity" />
         </activity>
+        <!-- CurrencyConverter Activity -->
+        <activity
+            android:name="lbs.erasmus.touristanbul.CurrencyConverterActivity"
+            android:label="@string/currency_converter"
+            android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lbs.erasmus.touristanbul.MainActivity" />
+        </activity>
         <!-- Important Numbers Activity -->
         <activity
             android:name="lbs.erasmus.touristanbul.ImportantNumbersActivity"

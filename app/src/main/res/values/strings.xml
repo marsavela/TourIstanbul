@@ -105,6 +105,23 @@
 
     <!-- Activity... -->
 
+    <!-- Activity Currency Converter -->
+    <string name="turkeyLira">TRY-Turkey Lira</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="converter">Converter</string>
+    <string name="tabLayout">tabLayout</string>
+    <string name="changeCurrency">Switch From To</string>
+    <string-array name="currency_array">
+        <item>Euro-EUR</item>
+        <item>U.S. Dollar-USD</item>
+        <item>Swedish Krona-SEK</item>
+        <item>Norwegian Krone-NOK</item>
+        <item>Japanese Yen-JPY</item>
+        <item>Chinese Yuan-CNY</item>
+    </string-array>
+
+
 
     <!-- MapFragment -->
     <string name="mapfragment_advice_title">Connection problem</string>

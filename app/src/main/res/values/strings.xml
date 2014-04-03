@@ -54,6 +54,15 @@
     <string name="child_text">Child text</string>
     <string name="content_description">description</string>
 
+    <!-- Tools Activity -->
+    <string name="currency_converter">Currency Converter</string>
+    <string name="translator">Translator</string>
+    <string name="phrasebook">Phrasebook</string>
+    <string name="transports">Transportation Info</string>
+
+    <!-- Phrasebook -->
+
+
     <!-- Do\'s and Don\'ts -->
     <string name="when_visiting_a_mosque_child1">&lt;b>Do &lt;/b>remove your shoes before going inside a mosque.Women must cover hair and dress modestly. Men should not wear shorts.</string>
     <string name="when_visiting_a_mosque_child2">&lt;b>Don’t&lt;/b> talk loudly – it’s a place of worship. Try to avoid visiting a mosque on a Friday since it is a day of prayer.</string>

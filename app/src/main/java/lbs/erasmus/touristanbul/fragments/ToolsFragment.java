@@ -1,20 +1,18 @@
 package lbs.erasmus.touristanbul.fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.content.Intent;
 import android.widget.Button;
 
 import lbs.erasmus.touristanbul.CurrencyConverterActivity;
+import lbs.erasmus.touristanbul.PhrasebookActivity;
+import lbs.erasmus.touristanbul.R;
 import lbs.erasmus.touristanbul.TranslatorActivity;
 import lbs.erasmus.touristanbul.TransportsActivity;
-import lbs.erasmus.touristanbul.PhrasebookActivity;
-
-import lbs.erasmus.touristanbul.R;
 
 /**
  * Created by HP on 9/03/14.
@@ -81,12 +79,12 @@ public class ToolsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void openPhrasebook() {
-        Intent i = new Intent(getActivity(), TransportsActivity.class);
+        Intent i = new Intent(getActivity(), PhrasebookActivity.class);
         startActivity(i);
     }
 
     private void openTransports() {
-        Intent i = new Intent(getActivity(), PhrasebookActivity.class);
+        Intent i = new Intent(getActivity(), TransportsActivity.class);
         startActivity(i);
     }
 }

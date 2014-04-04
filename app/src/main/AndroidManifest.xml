@@ -83,6 +83,36 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="lbs.erasmus.touristanbul.MainActivity" />
         </activity>
+        <!-- Phrasebook Activity -->
+        <activity
+            android:name="lbs.erasmus.touristanbul.PhrasebookActivity"
+            android:label="@string/phrasebook"
+            android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lbs.erasmus.touristanbul.MainActivity" />
+        </activity>
+        <!-- Translator Activity -->
+        <activity
+            android:name="lbs.erasmus.touristanbul.TranslatorActivity"
+            android:label="@string/translator"
+            android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lbs.erasmus.touristanbul.MainActivity" />
+        </activity>
+        <!-- Transports Activity -->
+        <activity
+            android:name="lbs.erasmus.touristanbul.TransportsActivity"
+            android:label="@string/transports"
+            android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lbs.erasmus.touristanbul.MainActivity" />
+        </activity>
         <!-- Important Numbers Activity -->
         <activity
             android:name="lbs.erasmus.touristanbul.ImportantNumbersActivity"

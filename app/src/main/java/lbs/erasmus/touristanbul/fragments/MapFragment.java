@@ -27,6 +27,7 @@ import com.graphhopper.GHResponse;
 import com.graphhopper.GraphHopper;
 import com.graphhopper.GraphHopperAPI;
 import com.graphhopper.routing.Path;
+import com.graphhopper.routing.util.EncodingManager;
 import com.graphhopper.util.Downloader;
 import com.graphhopper.util.Helper;
 import com.graphhopper.util.ProgressListener;
@@ -109,13 +110,15 @@ public class MapFragment extends Fragment {
         // Check if the maps file exists, if not shows a download dialog
         mFileMapDownloader = null;
         File mapFile = getMapFile();
-        if (!mapFile.exists() && Utils.checkWifiConection(getActivity())) {
-            mFileMapDownloader = new FileMapDownloader();
-            mFileMapDownloader.execute();
-        } else if (!Utils.checkWifiConection(getActivity())) {
-            Utils.showSimpleDialog(getActivity(),
-                    R.string.mapfragment_advice_title,
-                    R.string.mapfragment_advice_text);
+        if (!mapFile.exists()) {
+            if (Utils.checkWifiConection(getActivity())) {
+                mFileMapDownloader = new FileMapDownloader();
+                mFileMapDownloader.execute();
+            } else {
+                Utils.showSimpleDialog(getActivity(),
+                        R.string.mapfragment_advice_title,
+                        R.string.mapfragment_advice_text);
+            }
         }
 
         return rootView;
@@ -271,16 +274,17 @@ public class MapFragment extends Fragment {
     }
 
     private void calculateRoute(GeoPoint startPoint, GeoPoint endPoint) {
+        // Clear map marks
         pathOverlay.getOverlayItems().clear();
 
-        Marker startMarker = Utils.createMarker(getActivity(), startPoint, R.drawable.flag_green);
-        pathOverlay.getOverlayItems().add(startMarker);
-
-        Marker endMarker = Utils.createMarker(getActivity(), endPoint, R.drawable.flag_red);
-        pathOverlay.getOverlayItems().add(endMarker);
-        mMapView.redraw();
-
         calcPath(startPoint, endPoint);
+
+        Marker marker = Utils.createMarker(getActivity(), startPoint, R.drawable.flag_green);
+        pathOverlay.getOverlayItems().add(marker);
+
+        marker = Utils.createMarker(getActivity(), endPoint, R.drawable.flag_red);
+        pathOverlay.getOverlayItems().add(marker);
+        mMapView.redraw();
 
     }
 
@@ -292,6 +296,7 @@ public class MapFragment extends Fragment {
                 GraphHopper tmpHopp = new GraphHopper().forMobile();
                 tmpHopp.setCHShortcuts("fastest");
                 tmpHopp.load(getLocalFolder()+"-gh");
+                //tmpHopp.setEncodingManager(new EncodingManager("car,bike,foot"));
                 mHopper = tmpHopp;
                 return null;
             }
@@ -321,6 +326,7 @@ public class MapFragment extends Fragment {
 
                 StopWatch sw = new StopWatch().start();
                 GHRequest req = new GHRequest(fromLat, fromLon, toLat, toLon);
+                req.setVehicle("car");
                 req.setAlgorithm("dijkstrabi");
                 req.putHint("instructions", false);
 
@@ -331,13 +337,14 @@ public class MapFragment extends Fragment {
 
             protected void onPostExecute( GHResponse resp ) {
                 if (!resp.hasErrors()) {
-                    //Utils.showRouteInfo(getActivity(), resp, time);
+                    Utils.showRouteInfo(getActivity(), resp, time);
                     pathOverlay.getOverlayItems().add(Utils.createPolyline(resp));
                     mMapView.redraw();
                 } else {
                     Utils.showSimpleDialog(getActivity(),
-                            R.string.mapfragment_advice_title,
-                            R.string.mapfragment_advice_text);
+                            R.string.mapfragment_route_error_title,
+                            R.string.mapfragment_route_error_text);
+                    Log.e(getClass().getName(),resp.toString());
                 }
                 shortestPathRunning = false;
             }

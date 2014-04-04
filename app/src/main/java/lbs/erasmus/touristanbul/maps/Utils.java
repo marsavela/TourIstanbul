@@ -26,6 +26,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.TextView;
 
 import com.graphhopper.GHResponse;
@@ -100,11 +101,12 @@ public final class Utils {
         AlertDialog.Builder alertDialog;
         alertDialog = new AlertDialog.Builder(activity);
         alertDialog.setTitle(activity.getResources().getString(R.string.mapfragment_route_info_title));
-        alertDialog.setView(inflater.inflate(R.layout.fragment_map_dialog_info,null));
+        View view = inflater.inflate(R.layout.fragment_map_dialog_info, null);
+        alertDialog.setView(view);
 
-        TextView distanceText = (TextView) activity.findViewById(R.id.mapfragment_info_distance);
-        TextView timeText = (TextView) activity.findViewById(R.id.mapfragment_info_time);
-        TextView calculatedText = (TextView) activity.findViewById(R.id.mapfragment_info_calculated);
+        TextView distanceText = (TextView) view.findViewById(R.id.mapfragment_info_distance);
+        TextView timeText = (TextView) view.findViewById(R.id.mapfragment_info_time);
+        TextView calculatedText = (TextView) view.findViewById(R.id.mapfragment_info_calculated);
 
         distanceText.setText(((int) (response.getDistance() / 100) / 10f) + " Km");
         timeText.setText((response.getMillis()/60000f) + " min");

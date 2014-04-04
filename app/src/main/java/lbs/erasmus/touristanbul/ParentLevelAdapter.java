@@ -6,6 +6,7 @@ package lbs.erasmus.touristanbul;
 
 import android.app.Activity;
 import android.text.Html;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("unchecked")
 public class ParentLevelAdapter extends BaseExpandableListAdapter {
@@ -64,7 +67,21 @@ public class ParentLevelAdapter extends BaseExpandableListAdapter {
 
         if (s.startsWith("<b>Do ")) {
             imageView.setImageResource(R.drawable.yes);
-        } else {
+        } else if (s.startsWith("+") || s.startsWith("1") || s.startsWith("2")|| s.startsWith("3")|| s.startsWith("4")|| s.startsWith("5")|| s.startsWith("6")|| s.startsWith("7")|| s.startsWith("8")|| s.startsWith("9")|| s.startsWith("0") ){
+
+            imageView.setImageResource(R.drawable.phone);
+            Linkify.TransformFilter filter = new Linkify.TransformFilter() {
+                @Override
+                public String transformUrl(Matcher match, String url) {
+                    return url.replaceAll("/", "");
+                }
+            };
+
+            Pattern pattern = Pattern.compile("[0-9/]+");
+            Linkify.addLinks(text, pattern, "tel:", null, filter);
+        }
+        else
+        {
             imageView.setImageResource(R.drawable.no);
         }
         return convertView;

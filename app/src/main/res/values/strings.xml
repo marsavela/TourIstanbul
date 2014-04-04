@@ -15,6 +15,48 @@
     <string name="action_search">Search</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Important Numbers -->
+
+    <string name="important_numbers1">Medical emergency - Ambulance</string>
+    <string name="important_numbers_ambulance">112</string>
+    <string name="important_numbers2">Fire Tel.</string>
+    <string name="important_numbers_fire">110</string>
+    <string name="important_numbers3">Police Tel.</string>
+    <string name="important_numbers_police">155</string>
+    <string name="important_numbers4">Coastguard Tel.</string>
+    <string name="important_numbers_coastguard">158</string>
+    <string name="important_numbers5">Forest fires Tel. </string>
+    <string name="important_numbers_forest">177</string>
+    <string name="important_numbers6">Missing child - Women\'s helpline	Tel. </string>
+    <string name="important_numbers_missing">183</string>
+
+    <string name="important_numbers7">Chilean consulate.</string>
+    <string name="important_numbers_chilean_consulate">2122725790</string>
+
+    <string name="important_numbers8">Portuguese consulate. </string>
+    <string name="important_numbers_portuguese_consulate">2122519118</string>
+
+    <string name="important_numbers9">Brazilian consulate. </string>
+    <string name="important_numbers_brazilian_consulate">2122514735</string>
+
+    <string name="important_numbers10">Colombian consulate.</string>
+    <string name="important_numbers_colombian_consulate">2122910861</string>
+
+    <string name="important_numbers11">Costa Rican consulate.</string>
+    <string name="important_numbers_costa_rican_consulate">2125286819</string>
+
+    <string name="important_numbers12">Dominican consulate.</string>
+    <string name="important_numbers_dominican">2122483613</string>
+
+    <string name="important_numbers13">Ecuadorian consulate.</string>
+    <string name="important_numbers_ecuadorian">2123655202</string>
+
+    <string name="important_numbers14">Salvadorean consulate.</string>
+    <string name="important_numbers_salvadorean">2125674760</string>
+
+    <string name="important_numbers15">Spanish consulate. </string>
+    <string name="important_numbers_spanish_consulate">2122707410</string>
+
     <!-- Google+ Login -->
     <string name="btn_logout_from_google">Log out from Google+</string>
     <string name="progress_message">Signing in to Google&#8230;</string>

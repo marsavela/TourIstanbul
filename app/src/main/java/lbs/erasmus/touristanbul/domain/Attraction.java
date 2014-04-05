@@ -20,11 +20,32 @@ public class Attraction implements Parcelable {
     /** Title of the attraction. */
     private final String mTitle;
 
-    /** Description of the attraction. */
+    /** Short description of the attraction. */
     private final String mSubtitle;
 
     /** Description of the attraction. */
+    private final String mDescription;
+
+    /** Address of the attraction. */
+    private final String mAddress;
+
+    /** Description of the attraction. */
     private final Location mLocation;
+
+    /** Category of the attraction. */
+    private final String mCategory;
+
+    /** Interest of the attraction. */
+    private final String mInterest;
+
+    /** Rate of the attraction. */
+    private final double mRate;
+
+    /** Number of rates of the attraction. */
+    private final int mNumRates;
+
+    /** Opening times of the attraction. */
+    private final String mOpeningTimes;
 
     /** Content URI of the image for the attraction. */
     private final Uri mImageUri;
@@ -45,6 +66,39 @@ public class Attraction implements Parcelable {
                 imageAssetFilePath);
     }
 
+    /**
+     * Constructs a new {@link Attraction}.
+     *
+     * @param titleString is the title
+     * @param subtitleString is the short description
+     * @param descriptionString is the description
+     * @param addressString is the address
+     * @param location is the location
+     * @param categoryString is the category
+     * @param interestString is the interest
+     * @param ratesDouble is the interest
+     * @param numRatesInt is the interest
+     * @param openingString is the interest
+     * @param imageAssetFilePath is the file path from the application's assets folder for
+     *                           the image associated with this attraction
+     */
+    public Attraction(String titleString, String subtitleString, String descriptionString,
+                      String addressString, Location location, String categoryString,
+                      String interestString, double ratesDouble, int numRatesInt, String openingString,
+                      String imageAssetFilePath) {
+        mTitle = titleString;
+        mSubtitle = subtitleString;
+        mDescription = descriptionString;
+        mAddress = addressString;
+        mLocation = location;
+        mCategory = categoryString;
+        mInterest = interestString;
+        mRate = ratesDouble;
+        mOpeningTimes = openingString;
+        mImageUri = Uri.parse("content://" + AssetProvider.CONTENT_URI + "/" +
+                imageAssetFilePath);
+    }
+
     private Attraction(Parcel parcel) {
         mTitle = parcel.readString();
         mSubtitle = parcel.readString();
@@ -58,6 +112,34 @@ public class Attraction implements Parcelable {
 
     public String getSubtitle() {
         return mSubtitle;
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public String getAddress() {
+        return mAddress;
+    }
+
+    public String getCategory() {
+        return mCategory;
+    }
+
+    public String getInterest() {
+        return mInterest;
+    }
+
+    public double getRate() {
+        return mRate;
+    }
+
+    public int getNumRates() {
+        return mNumRates;
+    }
+
+    public String getOpeningTimes() {
+        return mOpeningTimes;
     }
 
     public Uri getImageUri() {
@@ -76,6 +158,24 @@ public class Attraction implements Parcelable {
         mLocation.writeToParcel(parcel, i);
         parcel.writeString(mImageUri.toString());
     }
+
+    /*
+    //New writeToParcel according new constructor
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(mTitle);
+        parcel.writeString(mSubtitle);
+        parcel.writeString(mDescription);
+        parcel.writeString(mAddress);
+        mLocation.writeToParcel(parcel, i);
+        parcel.writeString(mCategory);
+        parcel.writeString(mInterest);
+        parcel.writeDouble(mRate);
+        parcel.writeInt(mNumRates);
+        parcel.writeString(mOpeningTimes);
+        parcel.writeString(mImageUri.toString());
+    }
+    */
 
     public static final Creator<Attraction> CREATOR = new Creator<Attraction>() {
         @Override

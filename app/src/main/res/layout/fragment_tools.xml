@@ -29,11 +29,11 @@
                 android:text="@string/currency_converter" />
 
             <Button
-                android:id="@+id/button_translator"
+                android:id="@+id/button_transports"
                 style="@style/dashboard_button"
-                android:drawableTop="@drawable/translator"
+                android:drawableTop="@drawable/transports"
                 android:onClick="clicked"
-                android:text="@string/translator" />
+                android:text="@string/transports" />
         </LinearLayout>
 
         <LinearLayout
@@ -44,18 +44,18 @@
             android:orientation="horizontal" >
 
             <Button
+                android:id="@+id/button_translator"
+                style="@style/dashboard_button"
+                android:drawableTop="@drawable/translator"
+                android:onClick="clicked"
+                android:text="@string/translator" />
+
+            <Button
                 android:id="@+id/button_phrasebook"
                 style="@style/dashboard_button"
                 android:drawableTop="@drawable/phrasebook"
                 android:onClick="clicked"
                 android:text="@string/phrasebook" />
-
-            <Button
-                android:id="@+id/button_transports"
-                style="@style/dashboard_button"
-                android:drawableTop="@drawable/transports"
-                android:onClick="clicked"
-                android:text="@string/transports" />
         </LinearLayout>
 
     </LinearLayout>

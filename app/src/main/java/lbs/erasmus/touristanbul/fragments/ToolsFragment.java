@@ -30,19 +30,19 @@ public class ToolsFragment extends Fragment implements View.OnClickListener {
         /**
          Creating all dashboard information buttons instances
          */
-        Button mCurrencyConverter = (Button) rootView.findViewById(R.id.button_currency_converter);
         // Dashboard Currency Converter button
-        Button mTranslator = (Button) rootView.findViewById(R.id.button_translator);
-        // Dashboard Translator button
-        Button mPhrasebook = (Button) rootView.findViewById(R.id.button_phrasebook);
-        // Dashboard Phrasebook button
-        Button mTransports = (Button) rootView.findViewById(R.id.button_transports);
+        Button mCurrencyConverter = (Button) rootView.findViewById(R.id.button_currency_converter);
         // Dashboard Transports button
+        Button mTransports = (Button) rootView.findViewById(R.id.button_transports);
+        // Dashboard Translator button
+        Button mTranslator = (Button) rootView.findViewById(R.id.button_translator);
+        // Dashboard Phrasebook button
+        Button mPhrasebook = (Button) rootView.findViewById(R.id.button_phrasebook);
 
         mCurrencyConverter.setOnClickListener(this);
+        mTransports.setOnClickListener(this);
         mTranslator.setOnClickListener(this);
         mPhrasebook.setOnClickListener(this);
-        mTransports.setOnClickListener(this);
 
         return rootView;
 
@@ -57,19 +57,24 @@ public class ToolsFragment extends Fragment implements View.OnClickListener {
             case R.id.button_currency_converter:
                 openCurrencyConverter();
                 break;
+            case R.id.button_transports:
+                openTransports();
+                break;
             case R.id.button_translator:
                 openTranslator();
                 break;
             case R.id.button_phrasebook:
                 openPhrasebook();
                 break;
-            case R.id.button_transports:
-                openTransports();
-                break;
         }
     }
     private void openCurrencyConverter() {
         Intent i = new Intent(getActivity(), CurrencyConverterActivity.class);
+        startActivity(i);
+    }
+
+    private void openTransports() {
+        Intent i = new Intent(getActivity(), TransportsActivity.class);
         startActivity(i);
     }
 
@@ -83,8 +88,4 @@ public class ToolsFragment extends Fragment implements View.OnClickListener {
         startActivity(i);
     }
 
-    private void openTransports() {
-        Intent i = new Intent(getActivity(), TransportsActivity.class);
-        startActivity(i);
-    }
 }

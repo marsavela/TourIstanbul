@@ -24,7 +24,7 @@ public class Attraction implements Parcelable {
     private final String mSubtitle;
 
     /** Description of the attraction. */
-    private final Location mLocation;
+    //private final Location mLocation;
 
     /** Content URI of the image for the attraction. */
     private final Uri mImageUri;
@@ -40,7 +40,7 @@ public class Attraction implements Parcelable {
     public Attraction(String titleString, String subtitleString, Location location, String imageAssetFilePath) {
         mTitle = titleString;
         mSubtitle = subtitleString;
-        mLocation = location;
+        //mLocation = location;
         mImageUri = Uri.parse("content://" + AssetProvider.CONTENT_URI + "/" +
                 imageAssetFilePath);
     }
@@ -48,7 +48,7 @@ public class Attraction implements Parcelable {
     private Attraction(Parcel parcel) {
         mTitle = parcel.readString();
         mSubtitle = parcel.readString();
-        mLocation = Location.CREATOR.createFromParcel(parcel);
+        //mLocation = Location.CREATOR.createFromParcel(parcel);
         mImageUri = Uri.parse(parcel.readString());
     }
 
@@ -73,7 +73,7 @@ public class Attraction implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(mTitle);
         parcel.writeString(mSubtitle);
-        mLocation.writeToParcel(parcel, i);
+        //mLocation.writeToParcel(parcel, i);
         parcel.writeString(mImageUri.toString());
     }
 

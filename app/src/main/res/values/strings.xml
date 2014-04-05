@@ -16,45 +16,44 @@
     <string name="action_settings">Settings</string>
 
     <!-- Important Numbers -->
-
-    <string name="important_numbers1">Medical emergency - Ambulance</string>
+    <string name="important_numbers1">Medical emergency / Ambulance</string>
     <string name="important_numbers_ambulance">112</string>
-    <string name="important_numbers2">Fire Tel.</string>
+    <string name="important_numbers2">Fire Services</string>
     <string name="important_numbers_fire">110</string>
-    <string name="important_numbers3">Police Tel.</string>
+    <string name="important_numbers3">Police Department</string>
     <string name="important_numbers_police">155</string>
-    <string name="important_numbers4">Coastguard Tel.</string>
+    <string name="important_numbers4">Coastguard</string>
     <string name="important_numbers_coastguard">158</string>
-    <string name="important_numbers5">Forest fires Tel. </string>
+    <string name="important_numbers5">Wildland Fire Service </string>
     <string name="important_numbers_forest">177</string>
-    <string name="important_numbers6">Missing child - Women\'s helpline	Tel. </string>
+    <string name="important_numbers6">Missing child / Women\'s helpline	Tel. </string>
     <string name="important_numbers_missing">183</string>
 
-    <string name="important_numbers7">Chilean consulate.</string>
+    <string name="important_numbers7">Chilean consulate</string>
     <string name="important_numbers_chilean_consulate">2122725790</string>
 
-    <string name="important_numbers8">Portuguese consulate. </string>
+    <string name="important_numbers8">Portuguese consulate</string>
     <string name="important_numbers_portuguese_consulate">2122519118</string>
 
-    <string name="important_numbers9">Brazilian consulate. </string>
+    <string name="important_numbers9">Brazilian consulate</string>
     <string name="important_numbers_brazilian_consulate">2122514735</string>
 
-    <string name="important_numbers10">Colombian consulate.</string>
+    <string name="important_numbers10">Colombian consulate</string>
     <string name="important_numbers_colombian_consulate">2122910861</string>
 
-    <string name="important_numbers11">Costa Rican consulate.</string>
+    <string name="important_numbers11">Costa Rican consulate</string>
     <string name="important_numbers_costa_rican_consulate">2125286819</string>
 
-    <string name="important_numbers12">Dominican consulate.</string>
+    <string name="important_numbers12">Dominican consulate</string>
     <string name="important_numbers_dominican">2122483613</string>
 
-    <string name="important_numbers13">Ecuadorian consulate.</string>
+    <string name="important_numbers13">Ecuadorian consulate</string>
     <string name="important_numbers_ecuadorian">2123655202</string>
 
-    <string name="important_numbers14">Salvadorean consulate.</string>
+    <string name="important_numbers14">Salvadorean consulate</string>
     <string name="important_numbers_salvadorean">2125674760</string>
 
-    <string name="important_numbers15">Spanish consulate. </string>
+    <string name="important_numbers15">Spanish consulate</string>
     <string name="important_numbers_spanish_consulate">2122707410</string>
 
     <!-- Google+ Login -->
@@ -88,6 +87,228 @@
     <string name="rate_button">Rate this place</string>
     <string name="description_listen_button">Listen to the description</string>
     
+    <!-- Tools Activity -->
+    <string name="currency_converter">Currency Converter</string>
+    <string name="translator">Translator</string>
+    <string name="phrasebook">Phrasebook</string>
+    <string name="transports">Transportation Info</string>
+
+    <!-- Phrasebook Activity -->
+    <string name="phrasebook1_basic_greetings">Basic Greetings</string>
+    <string name="phrasebook1_basic_greetings_child1_en">&lt;b>EN &lt;/b>Hi!</string>
+    <string name="phrasebook1_basic_greetings_child1_tr">&lt;b>TR &lt;/b>&lt;i>Merhaba!&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child2_en">&lt;b>EN &lt;/b>Good morning!</string>
+    <string name="phrasebook1_basic_greetings_child2_tr">&lt;b>TR &lt;/b>&lt;i>Günaydın!&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child3_en">&lt;b>EN &lt;/b>Good evening!</string>
+    <string name="phrasebook1_basic_greetings_child3_tr">&lt;b>TR &lt;/b>&lt;i>İyi akşamlar!&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child4_en">&lt;b>EN &lt;/b>Welcome! / (to greet someone)</string>
+    <string name="phrasebook1_basic_greetings_child4_tr">&lt;b>TR &lt;/b>&lt;i>Hoş geldiniz! / (hoş bulduk!)&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child5_en">&lt;b>EN &lt;/b>How are you?</string>
+    <string name="phrasebook1_basic_greetings_child5_tr">&lt;b>TR &lt;/b>&lt;i>Nasılsın(ız)?&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child6_en">&lt;b>EN &lt;/b>I\'m fine, thanks!</string>
+    <string name="phrasebook1_basic_greetings_child6_tr">&lt;b>TR &lt;/b>&lt;i>İyiyim, teşekkür ederim!&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child7_en">&lt;b>EN &lt;/b>And you?</string>
+    <string name="phrasebook1_basic_greetings_child7_tr">&lt;b>TR &lt;/b>&lt;i>Ya siz?&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child8_en">&lt;b>EN &lt;/b>Good / So-So</string>
+    <string name="phrasebook1_basic_greetings_child8_tr">&lt;b>TR &lt;/b>&lt;i>İyi / Şöyle böyle&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child9_en">&lt;b>EN &lt;/b>Thank you (very much)!</string>
+    <string name="phrasebook1_basic_greetings_child9_tr">&lt;b>TR &lt;/b>&lt;i>(Çok) teşekkür ederim!&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child10_en">&lt;b>EN &lt;/b>You\'re welcome! (for "thank you")</string>
+    <string name="phrasebook1_basic_greetings_child10_tr">&lt;b>TR &lt;/b>&lt;i>Rica ederim!&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child11_en">&lt;b>EN &lt;/b>Hey! Friend!</string>
+    <string name="phrasebook1_basic_greetings_child11_tr">&lt;b>TR &lt;/b>&lt;i>Hey! Arkadaş!&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child12_en">&lt;b>EN &lt;/b>I missed you so much!</string>
+    <string name="phrasebook1_basic_greetings_child12_tr">&lt;b>TR &lt;/b>&lt;i>Seni (sizi) çok özledim!&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child13_en">&lt;b>EN &lt;/b>What\'s new?</string>
+    <string name="phrasebook1_basic_greetings_child13_tr">&lt;b>TR &lt;/b>&lt;i>Ne var ne yok?&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child14_en">&lt;b>EN &lt;/b>Nothing much</string>
+    <string name="phrasebook1_basic_greetings_child14_tr">&lt;b>TR &lt;/b>&lt;i>Özel bir şey yok!&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child15_en">&lt;b>EN &lt;/b>Good night!</string>
+    <string name="phrasebook1_basic_greetings_child15_tr">&lt;b>TR &lt;/b>&lt;i>İyi geceler!&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child16_en">&lt;b>EN &lt;/b>See you later!</string>
+    <string name="phrasebook1_basic_greetings_child16_tr">&lt;b>TR &lt;/b>&lt;i>Görüşürüz!&lt;/i></string>
+    <string name="phrasebook1_basic_greetings_child17_en">&lt;b>EN &lt;/b>Good bye!</string>
+    <string name="phrasebook1_basic_greetings_child17_tr">&lt;b>TR &lt;/b>&lt;i>Hoşça kal(ın)!&lt;/i></string>
+
+    <string name="phrasebook2_asking_for_help_and_directions">Asking for Help and Directions</string>
+    <string name="phrasebook2_asking_for_help_and_directions_child1_en">&lt;b>EN &lt;/b>I\'m lost</string>
+    <string name="phrasebook2_asking_for_help_and_directions_child1_tr">&lt;b>TR &lt;/b>&lt;i>Kayboldum&lt;/i></string>
+    <string name="phrasebook2_asking_for_help_and_directions_child2_en">&lt;b>EN &lt;/b>Could I help you?</string>
+    <string name="phrasebook2_asking_for_help_and_directions_child2_tr">&lt;b>TR &lt;/b>&lt;i>Yardımcı olabilir miyim?&lt;/i></string>
+    <string name="phrasebook2_asking_for_help_and_directions_child3_en">&lt;b>EN &lt;/b>Could you help me?</string>
+    <string name="phrasebook2_asking_for_help_and_directions_child3_tr">&lt;b>TR &lt;/b>&lt;i>Bana yardım edebilir misiniz?&lt;/i></string>
+    <string name="phrasebook2_asking_for_help_and_directions_child4_en">&lt;b>EN &lt;/b>Where is the (bathroom / pharmacy)?</string>
+    <string name="phrasebook2_asking_for_help_and_directions_child4_tr">&lt;b>TR &lt;/b>&lt;i>Tuvalet / eczane nerede?&lt;/i></string>
+    <string name="phrasebook2_asking_for_help_and_directions_child5_en">&lt;b>EN &lt;/b>Go straight! then turn left / right!</string>
+    <string name="phrasebook2_asking_for_help_and_directions_child5_tr">&lt;b>TR &lt;/b>&lt;i>Doğru git (gidin), sonra sola / sağa dön (dönün)&lt;/i></string>
+    <string name="phrasebook2_asking_for_help_and_directions_child6_en">&lt;b>EN &lt;/b>I\'m looking for John</string>
+    <string name="phrasebook2_asking_for_help_and_directions_child6_tr">&lt;b>TR &lt;/b>&lt;i>John\'u arıyorum&lt;/i></string>
+    <string name="phrasebook2_asking_for_help_and_directions_child7_en">&lt;b>EN &lt;/b>One moment please!</string>
+    <string name="phrasebook2_asking_for_help_and_directions_child7_tr">&lt;b>TR &lt;/b>&lt;i>Bir dakika lütfen!&lt;/i></string>
+    <string name="phrasebook2_asking_for_help_and_directions_child8_en">&lt;b>EN &lt;/b>Hold on please! (phone)</string>
+    <string name="phrasebook2_asking_for_help_and_directions_child8_tr">&lt;b>TR &lt;/b>&lt;i>Bekleyin, lütfen!&lt;/i></string>
+    <string name="phrasebook2_asking_for_help_and_directions_child9_en">&lt;b>EN &lt;/b>How much is this?</string>
+    <string name="phrasebook2_asking_for_help_and_directions_child9_tr">&lt;b>TR &lt;/b>&lt;i>Bunun fiyatı ne kadar?&lt;/i></string>
+    <string name="phrasebook2_asking_for_help_and_directions_child10_en">&lt;b>EN &lt;/b>Excuse me&#8230;! (to ask for something)</string>
+    <string name="phrasebook2_asking_for_help_and_directions_child10_tr">&lt;b>TR &lt;/b>&lt;i>Bakar mısınız?&lt;/i></string>
+    <string name="phrasebook2_asking_for_help_and_directions_child11_en">&lt;b>EN &lt;/b>Excuse me! (to pass by)</string>
+    <string name="phrasebook2_asking_for_help_and_directions_child11_tr">&lt;b>TR &lt;/b>&lt;i>Lütfen&lt;/i></string>
+    <string name="phrasebook2_asking_for_help_and_directions_child12_en">&lt;b>EN &lt;/b>Come with me!</string>
+    <string name="phrasebook2_asking_for_help_and_directions_child12_tr">&lt;b>TR &lt;/b>&lt;i>Benimle gel(in)!&lt;/i></string>
+
+    <string name="phrasebook3_how_to_introduce_yourself">How to introduce Yourself</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child1_en">&lt;b>EN &lt;/b>Do you speak (English/ Turkish)?</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child1_tr">&lt;b>TR &lt;/b>&lt;i>İngilizce / Türkçe konuşuyor musunuz?&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child2_en">&lt;b>EN &lt;/b>Just a little</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child2_tr">&lt;b>TR &lt;/b>&lt;i>Biraz&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child3_en">&lt;b>EN &lt;/b>What\'s your name?</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child3_tr">&lt;b>TR &lt;/b>&lt;i>İsmin(iz) nedir?&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child4_en">&lt;b>EN &lt;/b>My name is&#8230;</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child4_tr">&lt;b>TR &lt;/b>&lt;i>İsmim&#8230;&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child5_en">&lt;b>EN &lt;/b>Mr&#8230; / Mrs.&#8230; / Miss&#8230;</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child5_tr">&lt;b>TR &lt;/b>&lt;i>&#8230;Bey / &#8230;Hanım (Mrs and Ms are the same)&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child6_en">&lt;b>EN &lt;/b>Nice to meet you!</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child6_tr">&lt;b>TR &lt;/b>&lt;i>Memnun oldum!&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child7_en">&lt;b>EN &lt;/b>You\'re very kind!</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child7_tr">&lt;b>TR &lt;/b>&lt;i>Çok naziksiniz&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child8_en">&lt;b>EN &lt;/b>Where are you from?</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child8_tr">&lt;b>TR &lt;/b>&lt;i>Nerelisiniz?&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child9_en">&lt;b>EN &lt;/b>I\'m from (the U.S.A. / Turkey)</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child9_tr">&lt;b>TR &lt;/b>&lt;i>(Amerika / Türkiye) \'dan geliyorum&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child10_en">&lt;b>EN &lt;/b>I\'m (American)</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child10_tr">&lt;b>TR &lt;/b>&lt;i>Amerikalıyım&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child11_en">&lt;b>EN &lt;/b>Where do you live?</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child11_tr">&lt;b>TR &lt;/b>&lt;i>Nerede oturuyorsun(uz)?&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child12_en">&lt;b>EN &lt;/b>I live in (the U.S.A. / Turkey)</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child12_tr">&lt;b>TR &lt;/b>&lt;i>Amerika\'da / Türkiye\'da oturuyorum&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child13_en">&lt;b>EN &lt;/b>Did you like it here?</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child13_tr">&lt;b>TR &lt;/b>&lt;i>Burayı sevdiniz mi?&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child14_en">&lt;b>EN &lt;/b>Turkey is a wonderful country</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child14_tr">&lt;b>TR &lt;/b>&lt;i>Türkiye çok güzel bir ülkedir&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child15_en">&lt;b>EN &lt;/b>What do you do for a living?</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child15_tr">&lt;b>TR &lt;/b>&lt;i>Ne iş yaparsınız?&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child16_en">&lt;b>EN &lt;/b>I work as a (translator / businessman)</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child16_tr">&lt;b>TR &lt;/b>&lt;i>Mütercim / iş adamı olarak çalışıyorum&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child17_en">&lt;b>EN &lt;/b>I like Turkish</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child17_tr">&lt;b>TR &lt;/b>&lt;i>Türkçe seviyorum&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child18_en">&lt;b>EN &lt;/b>I\'ve been learning Turkish for 1 month</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child18_tr">&lt;b>TR &lt;/b>&lt;i>Bir aydan beri Türkçe öğreniyorum&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child19_en">&lt;b>EN &lt;/b>Oh! That\'s good!</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child19_tr">&lt;b>TR &lt;/b>&lt;i>Öyle mi! bu çok güzel bir şey!&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child20_en">&lt;b>EN &lt;/b>How old are you?</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child20_tr">&lt;b>TR &lt;/b>&lt;i>Kaç yaşındasın(ız)?&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child21_en">&lt;b>EN &lt;/b>I\'m (twenty, thirty&#8230;) years old</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child21_tr">&lt;b>TR &lt;/b>&lt;i>Yirmi / otuz yaşındayım&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child22_en">&lt;b>EN &lt;/b>I have to go</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child22_tr">&lt;b>TR &lt;/b>&lt;i>Gitmem lâzım&lt;/i></string>
+    <string name="phrasebook3_how_to_introduce_yourself_child23_en">&lt;b>EN &lt;/b>I will be right back!</string>
+    <string name="phrasebook3_how_to_introduce_yourself_child23_tr">&lt;b>TR &lt;/b>&lt;i>Hemen dönücem&lt;/i></string>
+
+    <string name="phrasebook4_wish_someone_something">Wish Someone Something</string>
+    <string name="phrasebook4_wish_someone_something_child1_en">&lt;b>EN &lt;/b>Good luck!</string>
+    <string name="phrasebook4_wish_someone_something_child1_tr">&lt;b>TR &lt;/b>&lt;i>İyi şanslar!&lt;/i></string>
+    <string name="phrasebook4_wish_someone_something_child2_en">&lt;b>EN &lt;/b>Happy birthday!</string>
+    <string name="phrasebook4_wish_someone_something_child2_tr">&lt;b>TR &lt;/b>&lt;i>Doğum günün(üz) kutlu olsun!&lt;/i></string>
+    <string name="phrasebook4_wish_someone_something_child3_en">&lt;b>EN &lt;/b>Happy new year!</string>
+    <string name="phrasebook4_wish_someone_something_child3_tr">&lt;b>TR &lt;/b>&lt;i>Yeni yılın(ız) kutlu olsun!&lt;/i></string>
+    <string name="phrasebook4_wish_someone_something_child4_en">&lt;b>EN &lt;/b>Merry Christmas!</string>
+    <string name="phrasebook4_wish_someone_something_child4_tr">&lt;b>TR &lt;/b>&lt;i>Noelin(iz) kutlu olsun!&lt;/i></string>
+    <string name="phrasebook4_wish_someone_something_child5_en">&lt;b>EN &lt;/b>Congratulations!</string>
+    <string name="phrasebook4_wish_someone_something_child5_tr">&lt;b>TR &lt;/b>&lt;i>Tebrikler!&lt;/i></string>
+    <string name="phrasebook4_wish_someone_something_child6_en">&lt;b>EN &lt;/b>Enjoy! (for meals&#8230;)</string>
+    <string name="phrasebook4_wish_someone_something_child6_tr">&lt;b>TR &lt;/b>&lt;i>Afiyet olsun! (to be said after the meal)&lt;/i></string>
+    <string name="phrasebook4_wish_someone_something_child7_en">&lt;b>EN &lt;/b>I\'d like to visit Turkey one day</string>
+    <string name="phrasebook4_wish_someone_something_child7_tr">&lt;b>TR &lt;/b>&lt;i>Bir gün türkiyeyi ziyaret etmek isterim&lt;/i></string>
+    <string name="phrasebook4_wish_someone_something_child8_en">&lt;b>EN &lt;/b>Say hi to John for me</string>
+    <string name="phrasebook4_wish_someone_something_child8_tr">&lt;b>TR &lt;/b>&lt;i>John\'a selam söyle(yin)!&lt;/i></string>
+    <string name="phrasebook4_wish_someone_something_child9_en">&lt;b>EN &lt;/b>Bless you (when sneezing)</string>
+    <string name="phrasebook4_wish_someone_something_child9_tr">&lt;b>TR &lt;/b>&lt;i>Çok yaşa! (answer: sen de gör!)&lt;/i></string>
+    <string name="phrasebook4_wish_someone_something_child10_en">&lt;b>EN &lt;/b>Good night and sweet dreams!</string>
+    <string name="phrasebook4_wish_someone_something_child10_tr">&lt;b>TR &lt;/b>&lt;i>İyi geceler ve tatlı rüyalar!&lt;/i></string>
+
+    <string name="phrasebook5_solving_a_misunderstanding">Solving a Misunderstanding</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child1_en">&lt;b>EN &lt;/b>I\'m Sorry! (if you don\'t hear something)</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child1_tr">&lt;b>TR &lt;/b>&lt;i>Efendim?&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child2_en">&lt;b>EN &lt;/b>Sorry (for a mistake)</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child2_tr">&lt;b>TR &lt;/b>&lt;i>Özür dilerim!&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child3_en">&lt;b>EN &lt;/b>No Problem!</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child3_tr">&lt;b>TR &lt;/b>&lt;i>Önemli değil!&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child4_en">&lt;b>EN &lt;/b>Can You Say It Again?</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child4_tr">&lt;b>TR &lt;/b>&lt;i>Bir daha söyler misiniz?&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child5_en">&lt;b>EN &lt;/b>Can You Speak Slowly?</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child5_tr">&lt;b>TR &lt;/b>&lt;i>Daha yavaş konuşabilir misin(iz)?&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child6_en">&lt;b>EN &lt;/b>Write It Down Please!</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child6_tr">&lt;b>TR &lt;/b>&lt;i>Bunu lütfen yazar mısın(ız)?&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child7_en">&lt;b>EN &lt;/b>I Don\'t Understand!</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child7_tr">&lt;b>TR &lt;/b>&lt;i>Anlamadım&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child8_en">&lt;b>EN &lt;/b>I Don\'t Know!</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child8_tr">&lt;b>TR &lt;/b>&lt;i>Bilmiyorum&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child9_en">&lt;b>EN &lt;/b>I Have No Idea</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child9_tr">&lt;b>TR &lt;/b>&lt;i>Hiç fikrim yok&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child10_en">&lt;b>EN &lt;/b>What\'s That Called In Turkish?</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child10_tr">&lt;b>TR &lt;/b>&lt;i>Bu Türkçe nasıl denilir?&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child11_en">&lt;b>EN &lt;/b>What Does "gato" Mean In English?</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child11_tr">&lt;b>TR &lt;/b>&lt;i>\'evet\'\' \'nun İngilizcesi nedir?&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child12_en">&lt;b>EN &lt;/b>How Do You Say "Please" In Turkish?</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child12_tr">&lt;b>TR &lt;/b>&lt;i>"please" Türkçe nasil denilir?&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child13_en">&lt;b>EN &lt;/b>What Is This?</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child13_tr">&lt;b>TR &lt;/b>&lt;i>Bu ne?&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child14_en">&lt;b>EN &lt;/b>My Turkish is bad</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child14_tr">&lt;b>TR &lt;/b>&lt;i>Türkçem kötüdür&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child15_en">&lt;b>EN &lt;/b>I need to practice my Turkish</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child15_tr">&lt;b>TR &lt;/b>&lt;i>Türkçe pratik yapmam lâzım&lt;/i></string>
+    <string name="phrasebook5_solving_a_misunderstanding_child16_en">&lt;b>EN &lt;/b>Don\'t worry!</string>
+    <string name="phrasebook5_solving_a_misunderstanding_child16_tr">&lt;b>TR &lt;/b>&lt;i>Merak etme(yin)!&lt;/i></string>
+
+    <string name="phrasebook6_expressions_and_words">Expressions and Words</string>
+    <string name="phrasebook6_expressions_and_words_child1_en">&lt;b>EN &lt;/b>Good / bad / so-so</string>
+    <string name="phrasebook6_expressions_and_words_child1_tr">&lt;b>TR &lt;/b>&lt;i>İyi / kötü / şöyle böyle&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child2_en">&lt;b>EN &lt;/b>Big / small</string>
+    <string name="phrasebook6_expressions_and_words_child2_tr">&lt;b>TR &lt;/b>&lt;i>Büyük / küçük&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child3_en">&lt;b>EN &lt;/b>Today / now</string>
+    <string name="phrasebook6_expressions_and_words_child3_tr">&lt;b>TR &lt;/b>&lt;i>Bugün / şimdi&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child4_en">&lt;b>EN &lt;/b>Tomorrow / yesterday</string>
+    <string name="phrasebook6_expressions_and_words_child4_tr">&lt;b>TR &lt;/b>&lt;i>Yarın / dün&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child5_en">&lt;b>EN &lt;/b>Yes / no</string>
+    <string name="phrasebook6_expressions_and_words_child5_tr">&lt;b>TR &lt;/b>&lt;i>Evet / hayır&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child6_en">&lt;b>EN &lt;/b>Here you go! (when giving something)</string>
+    <string name="phrasebook6_expressions_and_words_child6_tr">&lt;b>TR &lt;/b>&lt;i>Buyurun!&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child7_en">&lt;b>EN &lt;/b>Do you like it?</string>
+    <string name="phrasebook6_expressions_and_words_child7_tr">&lt;b>TR &lt;/b>&lt;i>Bunu seviyor musun(uz)?&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child8_en">&lt;b>EN &lt;/b>I really like it!</string>
+    <string name="phrasebook6_expressions_and_words_child8_tr">&lt;b>TR &lt;/b>&lt;i>Gerçekten çok seviyorum!&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child9_en">&lt;b>EN &lt;/b>I\'m hungry / thirsty</string>
+    <string name="phrasebook6_expressions_and_words_child9_tr">&lt;b>TR &lt;/b>&lt;i>Acıktım / susadım&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child10_en">&lt;b>EN &lt;/b>In The Morning / Evening / At Night</string>
+    <string name="phrasebook6_expressions_and_words_child10_tr">&lt;b>TR &lt;/b>&lt;i>Sabahleyin / akşamleyin / geceleyin&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child11_en">&lt;b>EN &lt;/b>This / That. Here / There</string>
+    <string name="phrasebook6_expressions_and_words_child11_tr">&lt;b>TR &lt;/b>&lt;i>Bu / şu / o. burada / şurada / orada&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child12_en">&lt;b>EN &lt;/b>Me / You. Him / Her</string>
+    <string name="phrasebook6_expressions_and_words_child12_tr">&lt;b>TR &lt;/b>&lt;i>Ben, sen, o / o (same for him and her)&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child13_en">&lt;b>EN &lt;/b>Really!</string>
+    <string name="phrasebook6_expressions_and_words_child13_tr">&lt;b>TR &lt;/b>&lt;i>Gerçekten mi!&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child14_en">&lt;b>EN &lt;/b>Look!</string>
+    <string name="phrasebook6_expressions_and_words_child14_tr">&lt;b>TR &lt;/b>&lt;i>Baksana!&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child15_en">&lt;b>EN &lt;/b>Hurry up!</string>
+    <string name="phrasebook6_expressions_and_words_child15_tr">&lt;b>TR &lt;/b>&lt;i>Acele et!&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child16_en">&lt;b>EN &lt;/b>What? Where?</string>
+    <string name="phrasebook6_expressions_and_words_child16_tr">&lt;b>TR &lt;/b>&lt;i>Ne? Nerede?&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child17_en">&lt;b>EN &lt;/b>What time is it?</string>
+    <string name="phrasebook6_expressions_and_words_child17_tr">&lt;b>TR &lt;/b>&lt;i>Ne? Nerede?&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child18_en">&lt;b>EN &lt;/b>It\'s 10 o\'clock / It\'s 07:30pm</string>
+    <string name="phrasebook6_expressions_and_words_child18_tr">&lt;b>TR &lt;/b>&lt;i>Saat on / Saat yedi buçuk&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child19_en">&lt;b>EN &lt;/b>Give me this!</string>
+    <string name="phrasebook6_expressions_and_words_child19_tr">&lt;b>TR &lt;/b>&lt;i>Bunu bana ver(in)!&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child20_en">&lt;b>EN &lt;/b>I love you!</string>
+    <string name="phrasebook6_expressions_and_words_child20_tr">&lt;b>TR &lt;/b>&lt;i>Seni seviyorum!&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child21_en">&lt;b>EN &lt;/b>I feel sick</string>
+    <string name="phrasebook6_expressions_and_words_child21_tr">&lt;b>TR &lt;/b>&lt;i>Kendimi kötü hissediyorum&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child22_en">&lt;b>EN &lt;/b>I need a doctor</string>
+    <string name="phrasebook6_expressions_and_words_child22_tr">&lt;b>TR &lt;/b>&lt;i>Bana bir doktor lâzım&lt;/i></string>
+    <string name="phrasebook6_expressions_and_words_child23_en">&lt;b>EN &lt;/b>One, two, three, four, five, six, seven, eight, nine, ten</string>
+    <string name="phrasebook6_expressions_and_words_child23_tr">&lt;b>TR &lt;/b>&lt;i>Bir, iki, üç, dört, beş ,altı, yedi, sekiz, dokuz, on&lt;/i></string>
+
+
     <!-- Information Activity -->
     <string name="history">History of Istanbul</string>
     <string name="important_numbers">Important Phone Numbers</string>
@@ -97,16 +318,7 @@
     <string name="child_text">Child text</string>
     <string name="content_description">description</string>
 
-    <!-- Tools Activity -->
-    <string name="currency_converter">Currency Converter</string>
-    <string name="translator">Translator</string>
-    <string name="phrasebook">Phrasebook</string>
-    <string name="transports">Transportation Info</string>
-
-    <!-- Phrasebook -->
-
-
-    <!-- Do\'s and Don\'ts -->
+    <!-- Do\'s and Don\'ts Activity -->
     <string name="when_visiting_a_mosque_child1">&lt;b>Do &lt;/b>remove your shoes before going inside a mosque.Women must cover hair and dress modestly. Men should not wear shorts.</string>
     <string name="when_visiting_a_mosque_child2">&lt;b>Don’t&lt;/b> talk loudly – it’s a place of worship. Try to avoid visiting a mosque on a Friday since it is a day of prayer.</string>
     <string name="when_visiting_a_mosque_child3">&lt;b>Do &lt;/b>walk directly in front of someone who’s praying or, according to their belief, his prayer won’t be counted.</string>
@@ -144,10 +356,7 @@
     <string name="my_location">My location</string>
     <string name="rating_text">2.5</string>
 
-
-    <!-- Activity... -->
-
-    <!-- Activity Currency Converter -->
+    <!-- Currency Converter Activity -->
     <string name="turkeyLira">TRY-Turkey Lira</string>
     <string name="from">From</string>
     <string name="to">To</string>
@@ -162,7 +371,6 @@
         <item>Japanese Yen-JPY</item>
         <item>Chinese Yuan-CNY</item>
     </string-array>
-
 
 
     <!-- MapFragment -->
@@ -181,8 +389,7 @@
     <string name="mapfragment_route_error_text">There has been an error calculating routes</string>
 
 
-
-    <!-- History -->
+    <!-- History Activity-->
     <string name= "history0"> Across the country, there are thousands of archeological sites, historical places and ancient cities, as well as magnificent scenic spots and natural wonders. Since Roman times, Asiatic Turkey has been known as both "Asia Minor" and "Anatolia". The European part of Turkey is called Thrace. </string>
     <string name= "history1"> These lands have been continually inhabited since the Stone Age. Because Anatolia is located like a natural bridge between continents, no other country in the world has acquired so many historical treasures. </string>
     <string name= "history2"> The Aegean Sea, the Dardanelles and the Bosphorus form the western boundaries of the Anatolian peninsula. Beside the Dardanelles are the ruins of the famous city of Troy — a memento of thousands of years of history- and on the shores of the Bosphorus rises Istanbul in all her beauty and splendor, keeping the memories of her past alive.  </string>
@@ -198,9 +405,6 @@
     <string name= "history12"> This empire was named as the Byzantine Empire by modern historians. Byzantium had a very interesting history, because its development was influenced both by the earlier Anatolian civilizations and, more importantly, by Christianity; its laws and rules were adopted from Rome, but its pomp and ceremonies from the East. </string>
     <string name= "history13"> The city was enlarged once more with the erection of new city walls in the first half of the 5th century. The magnificent city walls on the landward side that we see today were built by Emperor Theodosrus If. They are 6,492 m long. In the 6th century, the city, that now had a population of over half a million, lived through another golden age during the reign of Emperor Justinian. The famous Hagia Sophia is the work ot this emperor. </string>
     <string name= "history14"> The later history of the Byzantine Empire and its capital Istanbul is filled with palace and church    intrigues and Persian and Arab attacks. The throne frequently changed hands after bloody feuds between royal families. Between 726-842, all kinds of religious images were outlawed in the city during the iconoclastic movement. This led to much destruction (and much concealment) of  paintings and statues.</string>
-
-
-
 
 
 </resources>

@@ -61,14 +61,13 @@ public class ParentLevelAdapter extends BaseExpandableListAdapter {
                 Toast.makeText(activity, tempChild.get(childPosition), Toast.LENGTH_SHORT).show();
             }
         });
-        // Change the icon Do\'s and Don\'ts
+        // Change the icon Do\'s and Don\'ts, phones and phrasebook buttons
         ImageView imageView = (ImageView) convertView.findViewById(R.id.childImage);
         String s = tempChild.get(childPosition);
 
         if (s.startsWith("<b>Do ")) {
             imageView.setImageResource(R.drawable.yes);
         } else if (s.startsWith("+") || s.startsWith("1") || s.startsWith("2")|| s.startsWith("3")|| s.startsWith("4")|| s.startsWith("5")|| s.startsWith("6")|| s.startsWith("7")|| s.startsWith("8")|| s.startsWith("9")|| s.startsWith("0") ){
-
             imageView.setImageResource(R.drawable.phone);
             Linkify.TransformFilter filter = new Linkify.TransformFilter() {
                 @Override
@@ -79,9 +78,12 @@ public class ParentLevelAdapter extends BaseExpandableListAdapter {
 
             Pattern pattern = Pattern.compile("[0-9/]+");
             Linkify.addLinks(text, pattern, "tel:", null, filter);
+        } else if (s.startsWith("<b>EN")) {
+            imageView.setImageResource(R.drawable.en_button);
+        } else if (s.startsWith("<b>TR")) {
+        imageView.setImageResource(R.drawable.tr_button);
         }
-        else
-        {
+        else {
             imageView.setImageResource(R.drawable.no);
         }
         return convertView;

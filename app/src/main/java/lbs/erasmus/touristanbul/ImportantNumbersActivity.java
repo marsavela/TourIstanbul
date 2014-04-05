@@ -1,6 +1,5 @@
 package lbs.erasmus.touristanbul;
 
-import android.app.Activity;
 import android.app.ExpandableListActivity;
 import android.content.Context;
 import android.os.Bundle;
@@ -139,8 +138,6 @@ public class ImportantNumbersActivity extends ExpandableListActivity implements 
         child.add(getResources().getString(R.string.important_numbers_salvadorean));
         childItem.add(child);
     }
-
-
 
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {

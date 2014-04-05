@@ -51,14 +51,33 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp" />
 
-        <ImageView
-            android:layout_width="80sp"
-            android:layout_height="80sp"
-            android:id="@+id/user_profile_photo"
-            android:visibility="gone"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="5dp"
-            android:paddingBottom="5sp"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_profile_image"
+            android:gravity="bottom">
+
+            <ImageView
+                android:layout_width="70sp"
+                android:layout_height="70sp"
+                android:id="@+id/user_profile_photo"
+                android:visibility="gone"
+                android:paddingLeft="@dimen/android_spaces"
+                android:paddingTop="@dimen/android_spaces"
+                android:paddingRight="@dimen/android_spaces" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/user_profile_name"
+                android:layout_gravity="bottom"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white"
+                android:paddingBottom="@dimen/android_spaces"/>
+
+        </LinearLayout>
 
     </LinearLayout>
+
 </RelativeLayout>

@@ -9,6 +9,11 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -60,6 +65,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
     private SignInButton mBtnSignIn;
     private ImageView mImgProfilePic;
     private String mPersonName;
+    private TextView mViewPersonName;
     private User mUser;
     private Bitmap mUserProfilePhoto;
     private ImageView mImgSettings;
@@ -104,6 +110,9 @@ public class MainActivity extends Activity implements View.OnClickListener,
         // Set up the profile
         mImgProfilePic = (ImageView) findViewById(R.id.user_profile_photo);
 
+        // Set up the profile name
+        mViewPersonName = (TextView) findViewById(R.id.user_profile_name);
+
         // Set up the settings buttons
         mImgSettings = (ImageView) findViewById(R.id.action_settings_image);
         mTxtSettings = (TextView) findViewById(R.id.action_settings_text);
@@ -111,6 +120,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
         // Button click listeners
         mBtnSignIn.setOnClickListener(this);
         mImgProfilePic.setOnClickListener(this);
+        mViewPersonName.setOnClickListener(this);
         mImgSettings.setOnClickListener(this);
         mTxtSettings.setOnClickListener(this);
 
@@ -205,7 +215,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -223,6 +233,10 @@ public class MainActivity extends Activity implements View.OnClickListener,
                 signInWithGplus();
                 break;
             case R.id.user_profile_photo:
+                // Open Profile
+                openUserProfile();
+                break;
+            case R.id.user_profile_name:
                 // Open Profile
                 openUserProfile();
                 break;
@@ -320,9 +334,11 @@ public class MainActivity extends Activity implements View.OnClickListener,
         if (isSignedIn) {
             mBtnSignIn.setVisibility(View.GONE);
             mImgProfilePic.setVisibility(View.VISIBLE);
+            mViewPersonName.setVisibility(View.VISIBLE);
         } else {
             mBtnSignIn.setVisibility(View.VISIBLE);
             mImgProfilePic.setVisibility(View.GONE);
+            mViewPersonName.setVisibility(View.GONE);
         }
     }
 
@@ -379,6 +395,8 @@ public class MainActivity extends Activity implements View.OnClickListener,
                 mUser = new User(email, mPersonName, personPhotoUrl, personGooglePlusProfile);
 
                 new LoadProfileImage(mImgProfilePic, mUserProfilePhoto).execute(personPhotoUrl);
+                if (mViewPersonName != null)
+                    mViewPersonName.setText(mPersonName);
                 mUser.setmPhoto(mImgProfilePic.getDrawingCache());
 
 
@@ -389,6 +407,32 @@ public class MainActivity extends Activity implements View.OnClickListener,
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Crops a circle out of the thumbnail photo.
+     */
+    public Bitmap getCroppedBitmap(Bitmap bitmap) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),
+                Bitmap.Config.ARGB_8888);
+
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        Canvas canvas = new Canvas(output);
+
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+
+        int halfWidth = bitmap.getWidth()/2;
+        int halfHeight = bitmap.getHeight()/2;
+
+        canvas.drawCircle(halfWidth, halfHeight, Math.max(halfWidth, halfHeight), paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
     }
 
     /**
@@ -416,9 +460,13 @@ public class MainActivity extends Activity implements View.OnClickListener,
         }
 
         protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-            saveImage(getBaseContext(), result, "profile_photo");
-
+            //mImgProfilePic.setImageBitmap(getCroppedBitmap(mUserProfilePhoto));
+            if (result != null) {
+                bmImage.setImageBitmap(getCroppedBitmap(result));
+                saveImage(getBaseContext(), result, "profile_photo");
+            } else
+                bmImage.setImageBitmap(getCroppedBitmap(
+                        BitmapFactory.decodeResource(getResources(), R.drawable.kebap)));
         }
     }
 

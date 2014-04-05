@@ -40,10 +40,10 @@ public class AttractionActivity extends Activity implements OnInitListener, Goog
     //TextView mTitleView;
     private TextView mDescription;
     private ImageView mAttractionImageView;
-    private Button mListenButton;
+    private Button mPlayButton;
     private Button mRateButton;
-    //Prueba
     private TextToSpeech mTTS;
+    private boolean isPaying;
     private final static int MY_DATA_CHECK_CODE = 0;
 
     /*
@@ -81,8 +81,8 @@ public class AttractionActivity extends Activity implements OnInitListener, Goog
         mDescription.setText(mAttraction.getSubtitle());
         mAttractionImageView = (ImageView) findViewById(R.id.image_header);
         mAttractionImageView.setImageURI(mAttraction.getImageUri());
-        mListenButton = (Button) findViewById(R.id.button2);
-        mListenButton.setOnClickListener(new View.OnClickListener() {
+        mPlayButton = (Button) findViewById(R.id.button2);
+        mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 readDescription();
@@ -106,7 +106,7 @@ public class AttractionActivity extends Activity implements OnInitListener, Goog
                             .setCancelable(false)
                             .setNegativeButton("Dismiss",new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
+                                    dialog.dismiss();
                                 }
                             })
                             .setPositiveButton("Rate", new DialogInterface.OnClickListener() {

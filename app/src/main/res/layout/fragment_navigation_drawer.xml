@@ -53,14 +53,25 @@
             android:layout_margin="10dp" />
 
         <ImageView
-            android:layout_width="150sp"
-            android:layout_height="150sp"
+            android:layout_width="fill_parent"
+            android:layout_height="75sp"
             android:id="@+id/user_profile_photo"
-            android:layout_marginRight="10sp"
             android:visibility="gone"
-            android:paddingLeft="10sp"
-            android:paddingBottom="10sp"
-            android:contentDescription="@string/content_description" />
+            android:padding="@dimen/android_spaces"
+            android:contentDescription="@string/content_description"
+            android:layout_gravity="center"
+            android:background="@drawable/background_profile_image"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/user_profile_name"
+            android:background="#424242"
+            android:paddingBottom="@dimen/activity_horizontal_margin"
+            android:textColor="@android:color/white"
+            android:gravity="center" />
 
     </LinearLayout>
 </RelativeLayout>

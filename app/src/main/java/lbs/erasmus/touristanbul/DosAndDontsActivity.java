@@ -3,11 +3,11 @@ package lbs.erasmus.touristanbul;
 import android.app.ExpandableListActivity;
 import android.content.Context;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -20,6 +20,7 @@ public class DosAndDontsActivity extends ExpandableListActivity implements OnChi
 
     ArrayList<String> groupItem = new ArrayList<String>();
     ArrayList<Object> childItem = new ArrayList<Object>();
+    private TextToSpeech mTTS;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -133,7 +134,7 @@ public class DosAndDontsActivity extends ExpandableListActivity implements OnChi
 
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-        Toast.makeText(DosAndDontsActivity.this, "Clicked On Child", Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(DosAndDontsActivity.this, "Clicked On Child", Toast.LENGTH_SHORT).show();
         return true;
     }
 }

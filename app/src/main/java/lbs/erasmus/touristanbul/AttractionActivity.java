@@ -23,7 +23,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.games.Games;
 import com.google.android.gms.location.LocationClient;
+import com.google.example.games.basegameutils.BaseGameActivity;
 
 import java.util.Locale;
 
@@ -33,7 +35,7 @@ import lbs.erasmus.touristanbul.fadingactionbar.FadingActionBarHelper;
 /**
  * Created by sergiu on 24/03/14.
  */
-public class AttractionActivity extends Activity implements OnInitListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
+public class AttractionActivity extends BaseGameActivity implements OnInitListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
 
     // Global constants
     private Attraction mAttraction;
@@ -142,6 +144,9 @@ public class AttractionActivity extends Activity implements OnInitListener, Goog
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // send the users rate ...
+                        Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_attraction_rated));
+                        Games.Achievements.increment(getApiClient(), getResources().getString(R.string.achievement_5attraction_rated), 1);
+                        Games.Achievements.increment(getApiClient(), getResources().getString(R.string.achievement_25attraction_rated), 1);
                     }
                 })
                 .setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
@@ -214,6 +219,10 @@ public class AttractionActivity extends Activity implements OnInitListener, Goog
                 .setChooserTitle("Where do you want to share?")
                 .createChooserIntent();
         startActivity(shareIntent);
+        Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_attraction_shared));
+        Games.Achievements.increment(getApiClient(), getResources().getString(R.string.achievement_5attraction_shared), 1);
+        Games.Achievements.increment(getApiClient(), getResources().getString(R.string.achievement_25attraction_shared), 1);
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -385,5 +394,15 @@ public class AttractionActivity extends Activity implements OnInitListener, Goog
             showAlertDialog(AttractionActivity.this, "No Location Connection",
                     Integer.toString(connectionResult.getErrorCode()), false);
         }
+    }
+
+    @Override
+    public void onSignInFailed() {
+
+    }
+
+    @Override
+    public void onSignInSucceeded() {
+
     }
 }

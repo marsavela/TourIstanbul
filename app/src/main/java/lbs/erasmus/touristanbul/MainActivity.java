@@ -1,7 +1,6 @@
 package lbs.erasmus.touristanbul;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -30,8 +29,10 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+import com.google.example.games.basegameutils.BaseGameActivity;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -43,7 +44,7 @@ import lbs.erasmus.touristanbul.fragments.InformationFragment;
 import lbs.erasmus.touristanbul.fragments.MapFragment;
 import lbs.erasmus.touristanbul.fragments.ToolsFragment;
 
-public class MainActivity extends Activity implements View.OnClickListener,
+public class MainActivity extends BaseGameActivity implements View.OnClickListener,
         GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, NavigationDrawerFragment.NavigationDrawerCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     private static final int RC_SIGN_IN = 0;
@@ -263,6 +264,7 @@ public class MainActivity extends Activity implements View.OnClickListener,
         i.putExtra("User", mUser);
         startActivity(i);
         mNavigationDrawerFragment.closeDrawer();
+        Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_login));
     }
 
 
@@ -306,7 +308,6 @@ public class MainActivity extends Activity implements View.OnClickListener,
     @Override
     public void onConnected(Bundle arg0) {
         mSignInClicked = false;
-    //    Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
 
         // Get user's information
         getProfileInformation();
@@ -433,6 +434,16 @@ public class MainActivity extends Activity implements View.OnClickListener,
         canvas.drawBitmap(bitmap, rect, rect, paint);
 
         return output;
+    }
+
+    @Override
+    public void onSignInFailed() {
+
+    }
+
+    @Override
+    public void onSignInSucceeded() {
+
     }
 
     /**

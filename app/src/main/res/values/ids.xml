@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_id">880094304001</string>
+    <string name="achievement_login">CgkIga7Vzc4ZEAIQDw</string>
+    <string name="achievement_attraction_rated">CgkIga7Vzc4ZEAIQAg</string>
+    <string name="achievement_5attraction_rated">CgkIga7Vzc4ZEAIQAw</string>
+    <string name="achievement_25attraction_rated">CgkIga7Vzc4ZEAIQBA</string>
+    <string name="achievement_translator">CgkIga7Vzc4ZEAIQBQ</string>
+    <string name="achievement_weather">CgkIga7Vzc4ZEAIQBg</string>
+    <string name="achievement_attraction_shared">CgkIga7Vzc4ZEAIQBw</string>
+    <string name="achievement_5attraction_shared">CgkIga7Vzc4ZEAIQCA</string>
+    <string name="achievement_25attraction_shared">CgkIga7Vzc4ZEAIQCQ</string>
+    <string name="achievement_currency_converter">CgkIga7Vzc4ZEAIQDA</string>
+</resources>

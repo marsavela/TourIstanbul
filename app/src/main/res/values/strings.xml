@@ -406,5 +406,9 @@
     <string name= "history13"> The city was enlarged once more with the erection of new city walls in the first half of the 5th century. The magnificent city walls on the landward side that we see today were built by Emperor Theodosrus If. They are 6,492 m long. In the 6th century, the city, that now had a population of over half a million, lived through another golden age during the reign of Emperor Justinian. The famous Hagia Sophia is the work ot this emperor. </string>
     <string name= "history14"> The later history of the Byzantine Empire and its capital Istanbul is filled with palace and church    intrigues and Persian and Arab attacks. The throne frequently changed hands after bloody feuds between royal families. Between 726-842, all kinds of religious images were outlawed in the city during the iconoclastic movement. This led to much destruction (and much concealment) of  paintings and statues.</string>
 
+    <!-- Achievements -->
+
+    <string name="button_achievements">Achievements</string>
+
 
 </resources>

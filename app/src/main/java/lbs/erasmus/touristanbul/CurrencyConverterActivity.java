@@ -1,6 +1,5 @@
 package lbs.erasmus.touristanbul;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -18,6 +17,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.games.Games;
+import com.google.example.games.basegameutils.BaseGameActivity;
+
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -31,7 +33,7 @@ import javax.xml.parsers.SAXParserFactory;
 /**
  * Created by HP on 03/04/2014.
  */
-public class CurrencyConverterActivity extends Activity implements AdapterView.OnItemSelectedListener {
+public class CurrencyConverterActivity extends BaseGameActivity implements AdapterView.OnItemSelectedListener {
 
         private EditText entry;
         private TextView exit;
@@ -150,6 +152,7 @@ public class CurrencyConverterActivity extends Activity implements AdapterView.O
                 } else {
                     exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) / Double.longBitsToDouble(currencySelected)));
                 }
+                Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_currency_converter));
 
             } catch (Exception e) {
                 exit.append("Connection error\n");
@@ -176,7 +179,17 @@ public class CurrencyConverterActivity extends Activity implements AdapterView.O
             }
         }
 
-        private class CurrencyTask extends AsyncTask<Void, Void, Void> {
+    @Override
+    public void onSignInFailed() {
+
+    }
+
+    @Override
+    public void onSignInSucceeded() {
+
+    }
+
+    private class CurrencyTask extends AsyncTask<Void, Void, Void> {
 
 
             @Override

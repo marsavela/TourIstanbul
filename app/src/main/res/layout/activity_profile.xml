@@ -44,4 +44,13 @@
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"/>
 
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_achievements"
+        android:id="@+id/btn_achievements"
+        android:background="@drawable/ab_background"
+        android:layout_above="@+id/btn_sign_out"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

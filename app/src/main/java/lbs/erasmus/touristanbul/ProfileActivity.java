@@ -1,6 +1,5 @@
 package lbs.erasmus.touristanbul;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,7 +11,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
+import com.google.example.games.basegameutils.BaseGameActivity;
 
 import java.io.FileInputStream;
 
@@ -21,12 +22,13 @@ import lbs.erasmus.touristanbul.domain.User;
 /**
  * Created by patmonsi on 11/03/14.
  */
-public class ProfileActivity extends Activity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+public class ProfileActivity extends BaseGameActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
+    private static final int REQUEST_ACHIEVEMENTS = 1;
     // Google client to interact with Google API
     private GoogleApiClient mGoogleApiClient;
-
     private Button mBtnSignOut;
+    private Button mBtnAchievements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +48,11 @@ public class ProfileActivity extends Activity implements GoogleApiClient.Connect
 
         // Set up the Google+ buttons
         mBtnSignOut = (Button) findViewById(R.id.btn_sign_out);
+        mBtnAchievements = (Button) findViewById(R.id.btn_achievements);
 
         // Button click listeners
         mBtnSignOut.setOnClickListener(this);
+        mBtnAchievements.setOnClickListener(this);
 
         // Initializing google plus api client
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -109,6 +113,10 @@ public class ProfileActivity extends Activity implements GoogleApiClient.Connect
                 // Sign out button clicked
                 signOutFromGplus();
                 break;
+            case R.id.btn_achievements:
+                // Show user's achievements
+                startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
+            //    break;
         }
     }
 
@@ -122,7 +130,17 @@ public class ProfileActivity extends Activity implements GoogleApiClient.Connect
             mGoogleApiClient.connect();
             mBtnSignOut.setVisibility(View.GONE);
             this.finish();
-        //    updateUI(false);
         }
+    }
+
+
+    @Override
+    public void onSignInFailed() {
+
+    }
+
+    @Override
+    public void onSignInSucceeded() {
+
     }
 }

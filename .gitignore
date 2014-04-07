@@ -31,3 +31,7 @@ local.properties
 #Mac Shit
 *.DS_Store
 src/*.DS_Store
+
+#Windows Shit
+Thumbs.db
+ehthumbs.db

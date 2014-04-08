@@ -25,7 +25,7 @@ import org.json.JSONObject;
  */
 
 /*
-Thread safe singleton wrapper for Bing oauth token
+thread safe singleton wrapper for Bing oauth token
 */
 public class BingOauth {
     private static final int oauthTimeout = 10000;

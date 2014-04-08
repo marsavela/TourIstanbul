@@ -14,7 +14,7 @@
            android:layout_height="match_parent"
            android:adjustViewBounds="true"
            android:scaleType="fitXY"
-           android:src="@drawable/Istanbulclimateland" />
+           android:src="@drawable/istanbulclimateland" />
     </FrameLayout>
 
 

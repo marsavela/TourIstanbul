@@ -10,12 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
-           android:id="@+id/imageView_imagen"
            android:layout_width="match_parent"
            android:layout_height="379dp"
            android:adjustViewBounds="true"
            android:scaleType="fitXY"
-           android:contentDescription="Climate"
            android:src="@drawable/istanbulclimate" />
     </FrameLayout>
 

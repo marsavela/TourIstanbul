@@ -51,34 +51,47 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
      * Generate the list of all attractions.
      * @return The list of attractions.
      */
-    private List<Attraction> createAllAttractions() {
+    public static List<Attraction> createAllAttractions() {
         // You can add a title, subtitle, and a photo (in the assets directory).
         List<Attraction> attractions = new ArrayList<Attraction>();
+        Location location;
+
         attractions.add(new Attraction("Topkapi Palace" /* title */,
-                "Take a stroll in the flower garden" /* subtitle */, new Location("asd"), "topkapi.jpg" /* image */));
+                "Take a stroll in the flower garden" /* subtitle */,
+                41.01300, 28.98400, /* position */
+                "topkapi.jpg" /* image */));
+
         attractions.add(new Attraction("Süleymaniye Mosque",
                 "Locals come here to eat kuru fasuliye, the Turkish take on baked beans, in a street" +
-                        " once haunted by opium addicts.", new Location("asd"), "suleymaniye.jpg"
+                        " once haunted by opium addicts.", 41.02907, 28.93983, "suleymaniye.jpg"
         ));
+
         attractions.add(new Attraction("Aya Sofya",
                 "Drive out to the vista point and watch the sunrise at 6am", new Location("asd"), "sophia.jpg"));
+
         attractions.add(new Attraction("Turkish and Islamic Arts Museum",
                 "Don't leave without trying a thick black Turkish coffee in the pretty cafe in the" +
-                        " grounds.", new Location("asd"), "islamicmuseum.jpg"
+                        " grounds.", 41.00858, 28.98017, "islamicmuseum.jpg"
         ));
+
         attractions.add(new Attraction("Galata Tower",
-                "Watery Istanbul is a city that cries out to be viewed from on high", new Location("asd"), "galata.jpg"));
+                "Watery Istanbul is a city that cries out to be viewed from on high", 41.02562, 28.97416, "galata.jpg"));
+
         attractions.add(new Attraction("Basilica Cistern",
-                "Your favorite meal cooked by yours truly", new Location("asd"), "cistern.jpg"));
+                "Your favorite meal cooked by yours truly", 41.00838, 28.97795, "cistern.jpg"));
+
         attractions.add(new Attraction("Chora Church",
                 "Like Aya Sofya, it has made the journey from Byzantine church to Ottoman mosque.", new Location("asd"), "chora.jpg"));
+
         attractions.add(new Attraction("Blue Mosque",
-                "One of only a handful of mosques in the world to boast six minarets.", new Location("asd"), "bluemosque.jpg"));
+                "One of only a handful of mosques in the world to boast six minarets.", 41.00579, 28.97612, "bluemosque.jpg"));
+
         attractions.add(new Attraction("Ayasofya Hürrem Sultan Hamam",
-                "Think acres of marble, the sound of running water echoing around stupendous domes", new Location("asd"), "ayasofya.jpg"));
+                "Think acres of marble, the sound of running water echoing around stupendous domes", 41.01132, 28.95080, "ayasofya.jpg"));
+
         attractions.add(new Attraction("Istanbul Archaeology Museums",
                 "Walk to Istanbul's three-in-one equivalent of the British Museum via the grounds " +
-                        "of Topkapi Palace.", new Location("asd"), "archeology.jpg"
+                        "of Topkapi Palace.", 41.01085, 28.98163, "archeology.jpg"
         ));
         return attractions;
     }

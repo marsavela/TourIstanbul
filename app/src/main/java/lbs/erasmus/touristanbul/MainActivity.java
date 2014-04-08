@@ -13,6 +13,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -37,7 +38,10 @@ import com.google.example.games.basegameutils.BaseGameActivity;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
+import lbs.erasmus.touristanbul.domain.Attraction;
 import lbs.erasmus.touristanbul.domain.User;
 import lbs.erasmus.touristanbul.fragments.AttractionsFragment;
 import lbs.erasmus.touristanbul.fragments.InformationFragment;
@@ -45,7 +49,12 @@ import lbs.erasmus.touristanbul.fragments.MapFragment;
 import lbs.erasmus.touristanbul.fragments.ToolsFragment;
 
 public class MainActivity extends BaseGameActivity implements View.OnClickListener,
-        GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, NavigationDrawerFragment.NavigationDrawerCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+        GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener,
+        NavigationDrawerFragment.NavigationDrawerCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks,
+        MapFragment.MapFragmentCommunication {
 
     private static final int RC_SIGN_IN = 0;
     private static final String TAG = "MainActivity";
@@ -71,6 +80,8 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     private Bitmap mUserProfilePhoto;
     private ImageView mImgSettings;
     private TextView mTxtSettings;
+
+    private List<Attraction> mAttractionsList;
 
     /**
      * Fragments for each section of the application.
@@ -104,6 +115,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        mNavigationDrawerFragment.setRetainInstance(true);
 
         // Set up the Google+ buttons
         mBtnSignIn = (SignInButton) findViewById(R.id.btn_sign_in);
@@ -132,6 +144,10 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 .addScope(Plus.SCOPE_PLUS_LOGIN).build();
 
 
+        /**
+         * Generate content for testing
+         */
+        mAttractionsList = AttractionsFragment.createAllAttractions();
     }
 
     @Override
@@ -264,7 +280,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         i.putExtra("User", mUser);
         startActivity(i);
         mNavigationDrawerFragment.closeDrawer();
-        Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_login));
+        Games.Achievements.unlock(getApiClient(), getResources().getString(R.string.achievement_login));
     }
 
 
@@ -444,6 +460,15 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     @Override
     public void onSignInSucceeded() {
 
+    }
+
+    /**
+     * Method to comunicate the map fragment with the list of attractions
+     * @return
+     */
+    @Override
+    public List<Attraction> getAttractionList() {
+        return mAttractionsList;
     }
 
     /**

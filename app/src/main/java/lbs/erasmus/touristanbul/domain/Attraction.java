@@ -35,6 +35,9 @@ public class Attraction implements Parcelable {
     /** Category of the attraction. */
     private String mCategory;
 
+    /** Category res/drawable id **/
+    private int mDrawableId;
+
     /** Interest of the attraction. */
     private String mInterest;
 
@@ -62,6 +65,16 @@ public class Attraction implements Parcelable {
         mTitle = titleString;
         mSubtitle = subtitleString;
         mLocation = location;
+        mImageUri = Uri.parse("content://" + AssetProvider.CONTENT_URI + "/" +
+                imageAssetFilePath);
+    }
+
+    public Attraction(String titleString, String subtitleString, double latitude, double longitude, String imageAssetFilePath) {
+        mTitle = titleString;
+        mSubtitle = subtitleString;
+        mLocation = new Location(titleString);
+        mLocation.setLatitude(latitude);
+        mLocation.setLongitude(longitude);
         mImageUri = Uri.parse("content://" + AssetProvider.CONTENT_URI + "/" +
                 imageAssetFilePath);
     }
@@ -163,6 +176,22 @@ public class Attraction implements Parcelable {
 
     public Uri getImageUri() {
         return mImageUri;
+    }
+
+    public Location getLocation() {
+        return mLocation;
+    }
+
+    public void setLocation(Location location) {
+        this.mLocation = location;
+    }
+
+    public int getDrawableId() {
+        return mDrawableId;
+    }
+
+    public void setDrawableId(int id) {
+        mDrawableId = id;
     }
 
     @Override

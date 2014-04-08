@@ -1,14 +1,11 @@
 package lbs.erasmus.touristanbul.fragments;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -20,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.graphhopper.GHRequest;
@@ -27,10 +25,6 @@ import com.graphhopper.GHResponse;
 import com.graphhopper.GraphHopper;
 import com.graphhopper.GraphHopperAPI;
 import com.graphhopper.routing.Path;
-import com.graphhopper.routing.util.EncodingManager;
-import com.graphhopper.util.Downloader;
-import com.graphhopper.util.Helper;
-import com.graphhopper.util.ProgressListener;
 import com.graphhopper.util.StopWatch;
 
 import org.mapsforge.android.maps.MapView;
@@ -38,8 +32,11 @@ import org.mapsforge.android.maps.MapViewPosition;
 import org.mapsforge.android.maps.overlay.ListOverlay;
 import org.mapsforge.android.maps.overlay.Marker;
 import org.mapsforge.android.maps.overlay.MyLocationOverlay;
+import org.mapsforge.android.maps.overlay.OverlayItem;
+import org.mapsforge.core.model.BoundingBox;
 import org.mapsforge.core.model.GeoPoint;
 import org.mapsforge.core.model.MapPosition;
+import org.mapsforge.core.model.Point;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -52,7 +49,6 @@ import java.util.List;
 
 import lbs.erasmus.touristanbul.R;
 import lbs.erasmus.touristanbul.domain.Attraction;
-import lbs.erasmus.touristanbul.maps.AndroidHelper;
 import lbs.erasmus.touristanbul.maps.GHAsyncTask;
 import lbs.erasmus.touristanbul.maps.Utils;
 
@@ -76,34 +72,58 @@ public class MapFragment extends Fragment {
     private static final String PREFERENCES_FILE = "MapActivity";
 
     private static final int MIN_OBJECT_ZOOM = 18;
-
+    private static final int REFRESH_DISTANCE = 10000;
 
     private FileMapDownloader mFileMapDownloader;
 
     private MapView mMapView;
-    private ListOverlay pathOverlay;
+    private ListOverlay mPathOverlay;
+    private ToggleButton mSnapToLocation;
     private MyLocationOverlay mMyLocationOverlay;
 
     private GraphHopperAPI mHopper;
     private volatile boolean shortestPathRunning = false;
     private volatile boolean prepareInProgress = true;
 
-    List<Attraction> attractionList;
+    private MapFragmentCommunication mCallback;
+    List<Attraction> mAttractionList;
+
+    /**
+     * Interface for communicate activity with map fragment
+     */
+    public interface MapFragmentCommunication {
+        public List<Attraction> getAttractionList();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallback = (MapFragmentCommunication) activity;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
         // Adding the map
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
+        mMapView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int eventAction = motionEvent.getAction();
+                if (eventAction == MotionEvent.ACTION_UP) {
+                    showAttractions();
+                }
+                return false;
+            }
+        });
 
         // Add my location button
-        Button buttonLocation = (Button) rootView.findViewById(R.id.mapfragment_button_location);
-        buttonLocation.setOnClickListener(new View.OnClickListener() {
+        mSnapToLocation = (ToggleButton) rootView.findViewById(R.id.mapfragment_button_location);
+        mSnapToLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //shows user current location
-                //showCurrentPosition();
-                calculateRoute(new GeoPoint(40.983934, 28.820443), new GeoPoint(40.973210, 29.151750));
+                checkSnapToLocation();
+                //calculateRoute(new GeoPoint(40.983934, 28.820443), new GeoPoint(40.973210, 29.151750));
             }
         });
 
@@ -136,6 +156,7 @@ public class MapFragment extends Fragment {
         if (mapFile.exists() && (mFileMapDownloader == null
                 || mFileMapDownloader.getStatus() == AsyncTask.Status.FINISHED)) {
             initializeMapView(mMapView);
+            showAttractions();
         }
     }
 
@@ -194,8 +215,8 @@ public class MapFragment extends Fragment {
         //mapView.getFpsCounter().setFpsCounter(true);
         mapView.setMapFile(getMapFile());
 
-        pathOverlay = new ListOverlay();
-        mapView.getOverlays().add(pathOverlay);
+        mPathOverlay = new ListOverlay();
+        mapView.getOverlays().add(mPathOverlay);
 
         loadGraphStorage();
 
@@ -266,24 +287,63 @@ public class MapFragment extends Fragment {
         mMyLocationOverlay.enableMyLocation(true);
     }
 
+    private void checkSnapToLocation() {
+        if (mSnapToLocation.isChecked()) {
+            showCurrentPosition();
+        } else {
+            mMyLocationOverlay.disableMyLocation();
+        }
+    }
+
     /**
      * Called from MainActivity to put the new attractions on the map
      */
-    public void updateAttractionsList(List<Attraction> attractionList) {
+    public void showAttractions() {
+        Toast.makeText(getActivity(), "Showing attractions", Toast.LENGTH_SHORT).show();
+        mAttractionList = mCallback.getAttractionList();
 
+        if (mAttractionList != null) {
+            mPathOverlay.getOverlayItems().clear();
+            // Save current location
+            Location currentLocation = new Location("CurrentLocation");
+            currentLocation.setLatitude( mMapView.getMapViewPosition().getCenter().latitude);
+            currentLocation.setLongitude(mMapView.getMapViewPosition().getCenter().longitude);
+
+            mPathOverlay.getOverlayItems().clear();
+            Location location;
+            Marker marker;
+            GeoPoint position;
+            int zoomLevel;
+            float distance;
+            // Check all attractions on list
+            for (Attraction attraction : mAttractionList) {
+                location = attraction.getLocation();
+                zoomLevel = mMapView.getMapViewPosition().getZoomLevel();
+                distance = location.distanceTo(currentLocation);
+                if (zoomLevel <= MIN_OBJECT_ZOOM
+                        && distance <= REFRESH_DISTANCE) {
+                    position = new GeoPoint(location.getLatitude(), location.getLongitude());
+                    //marker = Utils.createMarker(getActivity(), position, attraction.getDrawableId());
+                    marker = Utils.createMarker(getActivity(), position, R.drawable.flag_green);
+                    mPathOverlay.getOverlayItems().add(marker);
+                }
+            }
+        }
+
+        mMapView.redraw();
     }
 
     private void calculateRoute(GeoPoint startPoint, GeoPoint endPoint) {
         // Clear map marks
-        pathOverlay.getOverlayItems().clear();
+        mPathOverlay.getOverlayItems().clear();
 
         calcPath(startPoint, endPoint);
 
         Marker marker = Utils.createMarker(getActivity(), startPoint, R.drawable.flag_green);
-        pathOverlay.getOverlayItems().add(marker);
+        mPathOverlay.getOverlayItems().add(marker);
 
         marker = Utils.createMarker(getActivity(), endPoint, R.drawable.flag_red);
-        pathOverlay.getOverlayItems().add(marker);
+        mPathOverlay.getOverlayItems().add(marker);
         mMapView.redraw();
 
     }
@@ -338,7 +398,7 @@ public class MapFragment extends Fragment {
             protected void onPostExecute( GHResponse resp ) {
                 if (!resp.hasErrors()) {
                     Utils.showRouteInfo(getActivity(), resp, time);
-                    pathOverlay.getOverlayItems().add(Utils.createPolyline(resp));
+                    mPathOverlay.getOverlayItems().add(Utils.createPolyline(resp));
                     mMapView.redraw();
                 } else {
                     Utils.showSimpleDialog(getActivity(),

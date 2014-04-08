@@ -18,7 +18,7 @@
         android:layout_margin="10dp"
         android:layout_gravity="right|bottom">
 
-        <Button
+        <ToggleButton
             android:layout_width="@dimen/map_button_size"
             android:layout_height="@dimen/map_button_size"
             android:id="@+id/mapfragment_button_location"

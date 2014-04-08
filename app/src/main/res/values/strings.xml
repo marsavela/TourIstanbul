@@ -93,6 +93,28 @@
     <string name="phrasebook">Phrasebook</string>
     <string name="transports">Transportation Info</string>
 
+    <!-- Currency Converter Activity -->
+    <string name="turkey_lira">TRY-Turkey Lira</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="converter">Converter</string>
+    <string name="change_currency">Switch From To</string>
+    <string-array name="currency_array">
+        <item>Euro-EUR</item>
+        <item>U.S. Dollar-USD</item>
+        <item>Swedish Krona-SEK</item>
+        <item>Norwegian Krone-NOK</item>
+        <item>Japanese Yen-JPY</item>
+        <item>Chinese Yuan-CNY</item>
+    </string-array>
+
+    <!-- Translator Activity -->
+    <string name="english">English</string>
+    <string name="turkish">Turkish</string>
+    <string name="translate">Translate</string>
+    <string name="change_language">Switch Languages</string>
+    <string name="type_your_text_here">Type your text here</string>
+
     <!-- Phrasebook Activity -->
     <string name="phrasebook1_basic_greetings">Basic Greetings</string>
     <string name="phrasebook1_basic_greetings_child1_en">&lt;b>EN &lt;/b>Hi!</string>
@@ -355,22 +377,6 @@
     <string name="when_taking_photos_child2">&lt;b>Don’t&lt;/b> take pictures of any woman wearing a veil, people praying, or any kind of military facility.</string>
     <string name="my_location">My location</string>
     <string name="rating_text">2.5</string>
-
-    <!-- Currency Converter Activity -->
-    <string name="turkeyLira">TRY-Turkey Lira</string>
-    <string name="from">From</string>
-    <string name="to">To</string>
-    <string name="converter">Converter</string>
-    <string name="tabLayout">tabLayout</string>
-    <string name="changeCurrency">Switch From To</string>
-    <string-array name="currency_array">
-        <item>Euro-EUR</item>
-        <item>U.S. Dollar-USD</item>
-        <item>Swedish Krona-SEK</item>
-        <item>Norwegian Krone-NOK</item>
-        <item>Japanese Yen-JPY</item>
-        <item>Chinese Yuan-CNY</item>
-    </string-array>
 
 
     <!-- MapFragment -->

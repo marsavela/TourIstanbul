@@ -8,7 +8,7 @@
         <TextView
             android:layout_width="150dp"
             android:layout_height="60dp"
-            android:text="From"
+            android:text="@string/from"
             android:id="@+id/From"
             android:textSize="20sp"
             android:textAlignment="gravity"
@@ -30,7 +30,7 @@
         <Button
             android:layout_width="380dp"
             android:layout_height="40dp"
-            android:text="@string/changeCurrency"
+            android:text="@string/change_currency"
             android:id="@+id/changeCurrency"
             android:layout_weight="1"
             android:layout_marginTop="70dp"
@@ -40,7 +40,7 @@
         <TextView
             android:layout_width="150dp"
             android:layout_height="60dp"
-            android:text="To"
+            android:text="@string/to"
             android:id="@+id/to"
             android:textSize="20sp"
             android:textAlignment="center"
@@ -53,7 +53,7 @@
         <TextView
             android:layout_width="250dp"
             android:layout_height="60dp"
-            android:text="@string/turkeyLira"
+            android:text="@string/turkey_lira"
             android:id="@+id/destinyCurrency"
             android:textAlignment="center"
             android:textSize="20sp"

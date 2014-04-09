@@ -12,13 +12,12 @@ android:layout_height="match_parent">
         android:text="@string/to"
         android:textSize="20sp"
         android:textAlignment="gravity"
-        android:layout_weight="1"
         android:layout_gravity="center"
         android:gravity="center"
         android:textStyle="bold"
         android:layout_below="@+id/languageFrom"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignLeft="@+id/inputText"
+        android:layout_alignStart="@+id/inputText" />
 
     <Spinner
         android:id="@+id/languageFrom"
@@ -27,11 +26,11 @@ android:layout_height="match_parent">
         android:tag="0"
         android:textAlignment="center"
         android:gravity="center"
-        android:layout_marginTop="40dp"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
         android:layout_toRightOf="@+id/to"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignRight="@+id/languageTo"
+        android:layout_alignEnd="@+id/languageTo" />
 
    <TextView
        android:id="@+id/from"
@@ -44,8 +43,8 @@ android:layout_height="match_parent">
        android:gravity="center"
        android:textStyle="bold"
        android:layout_alignTop="@+id/languageFrom"
-       android:layout_alignParentLeft="true"
-       android:layout_alignParentStart="true" />
+       android:layout_alignLeft="@+id/to"
+       android:layout_alignStart="@+id/to" />
 
     <Spinner
         android:id="@+id/languageTo"
@@ -54,50 +53,61 @@ android:layout_height="match_parent">
         android:tag="0"
         android:textAlignment="center"
         android:gravity="center"
-        android:layout_below="@+id/languageFrom"
-        android:layout_toRightOf="@+id/to"
+        android:layout_above="@+id/inputText"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="28dp"
+        android:layout_toRightOf="@+id/to" />
 
     <EditText
-        android:id="@+id/entry"
-        android:layout_width="match_parent"
+        android:id="@+id/inputText"
+
+        android:layout_width="260dp"
         android:layout_height="40dp"
         android:ems="10"
         android:hint="@string/type_your_text_here"
         android:inputType="text"
         android:layout_gravity="center"
         android:textAlignment="center"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="27dp"
         android:layout_below="@+id/to"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_above="@+id/button_translate">
+        android:layout_alignParentStart="true">
 
         <requestFocus />
 
     </EditText>
 
     <Button
-        android:id="@+id/button_translate"
+        android:id="@+id/translateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/translate"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/inputText"
+        android:layout_alignRight="@+id/languageTo"
+        android:layout_alignEnd="@+id/languageTo" />
 
     <TextView
+        android:id="@+id/outputText"
         android:layout_width="240dp"
         android:layout_height="46dp"
-        android:id="@+id/exit"
         android:inputType="text"
-        android:layout_marginTop="65dp"
-        android:layout_below="@+id/button_translate"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/button_translate"
-        android:layout_alignEnd="@+id/button_translate" />
+        android:layout_alignRight="@+id/translateButton"
+        android:layout_alignEnd="@+id/translateButton"
+        android:layout_alignLeft="@+id/inputText"
+        android:layout_alignStart="@+id/inputText"
+        android:layout_below="@+id/translateButton" />
+
+    <Button
+
+        android:id="@+id/speechButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_above="@+id/translateButton"
+        android:layout_toRightOf="@+id/inputText" />
+
 
 </RelativeLayout>

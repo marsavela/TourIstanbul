@@ -67,7 +67,7 @@
 
     <!-- Preferences -->
     <string name="title_preferences">Preferences</string>
-    <string name="interest_title">INTERESTS (PROBABLY OUT)</string>
+    <string name="interest_title">INTERESTS</string>
     <string name="parents_summary">Places to go with the whole family</string>
     <string name="backpackers_summary">Travelling light? Check this box!</string>
     <string name="business_travelers_summary">Important places for business travelers</string>

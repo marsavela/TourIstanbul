@@ -115,8 +115,9 @@ public class ProfileActivity extends BaseGameActivity implements GoogleApiClient
                 break;
             case R.id.btn_achievements:
                 // Show user's achievements
-                startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
-            //    break;
+                if (isSignedIn())
+                    startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
+                break;
         }
     }
 
@@ -129,6 +130,7 @@ public class ProfileActivity extends BaseGameActivity implements GoogleApiClient
             mGoogleApiClient.disconnect();
             mGoogleApiClient.connect();
             mBtnSignOut.setVisibility(View.GONE);
+            signOut();
             this.finish();
         }
     }

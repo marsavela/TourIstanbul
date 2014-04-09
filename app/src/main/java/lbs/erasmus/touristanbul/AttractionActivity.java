@@ -144,9 +144,11 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // send the users rate ...
-                        Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_attraction_rated));
-                        Games.Achievements.increment(getApiClient(), getResources().getString(R.string.achievement_5attraction_rated), 1);
-                        Games.Achievements.increment(getApiClient(), getResources().getString(R.string.achievement_25attraction_rated), 1);
+                        if (isSignedIn()) {
+                            Games.Achievements.unlock(getApiClient(), getResources().getString(R.string.achievement_attraction_rated));
+                            Games.Achievements.increment(getApiClient(), getResources().getString(R.string.achievement_5attraction_rated), 1);
+                            Games.Achievements.increment(getApiClient(), getResources().getString(R.string.achievement_25attraction_rated), 1);
+                        }
                     }
                 })
                 .setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
@@ -219,10 +221,11 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
                 .setChooserTitle("Where do you want to share?")
                 .createChooserIntent();
         startActivity(shareIntent);
-        Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_attraction_shared));
-        Games.Achievements.increment(getApiClient(), getResources().getString(R.string.achievement_5attraction_shared), 1);
-        Games.Achievements.increment(getApiClient(), getResources().getString(R.string.achievement_25attraction_shared), 1);
-
+        if (isSignedIn()) {
+            Games.Achievements.unlock(getApiClient(), getResources().getString(R.string.achievement_attraction_shared));
+            Games.Achievements.increment(getApiClient(), getResources().getString(R.string.achievement_5attraction_shared), 1);
+            Games.Achievements.increment(getApiClient(), getResources().getString(R.string.achievement_25attraction_shared), 1);
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

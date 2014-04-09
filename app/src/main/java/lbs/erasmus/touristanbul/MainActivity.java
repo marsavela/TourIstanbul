@@ -13,7 +13,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -38,7 +37,6 @@ import com.google.example.games.basegameutils.BaseGameActivity;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import lbs.erasmus.touristanbul.domain.Attraction;
@@ -106,6 +104,9 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setRequestedClients(BaseGameActivity.CLIENT_GAMES |
+                BaseGameActivity.CLIENT_PLUS);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -248,6 +249,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             case R.id.btn_sign_in:
                 // Sign in button clicked
                 signInWithGplus();
+                beginUserInitiatedSignIn();
                 break;
             case R.id.user_profile_photo:
                 // Open Profile
@@ -280,7 +282,9 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         i.putExtra("User", mUser);
         startActivity(i);
         mNavigationDrawerFragment.closeDrawer();
-        Games.Achievements.unlock(getApiClient(), getResources().getString(R.string.achievement_login));
+
+        if (isSignedIn())
+            Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_login));
     }
 
 
@@ -326,6 +330,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         mSignInClicked = false;
 
         // Get user's information
+
         getProfileInformation();
 
         // Update the UI after signing in
@@ -453,13 +458,19 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     }
 
     @Override
-    public void onSignInFailed() {
-
+    public void onSignInSucceeded() {
+        // show sign-out button, hide the sign-in button
+        mBtnSignIn.setVisibility(View.GONE);
+        mImgProfilePic.setVisibility(View.VISIBLE);
+        mViewPersonName.setVisibility(View.VISIBLE);
+    //    getProfileInformation();
     }
 
     @Override
-    public void onSignInSucceeded() {
-
+    public void onSignInFailed() {
+        mBtnSignIn.setVisibility(View.VISIBLE);
+        mImgProfilePic.setVisibility(View.GONE);
+        mViewPersonName.setVisibility(View.GONE);
     }
 
     /**
@@ -470,6 +481,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     public List<Attraction> getAttractionList() {
         return mAttractionsList;
     }
+
 
     /**
      * Background Async task to load user profile picture from url
@@ -529,5 +541,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         }
         return null;
     }
+
 
 }

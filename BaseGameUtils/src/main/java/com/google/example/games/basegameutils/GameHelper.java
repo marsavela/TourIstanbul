@@ -137,7 +137,7 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
      * that we try once the Activity is started -- if true, then the user has
      * already clicked a "Sign-In" button or something similar
      */
-    boolean mUserInitiatedSignIn = false;
+    boolean mUserInitiatedSignIn = true;
 
     // The connection result we got from our last attempt to sign-in.
     ConnectionResult mConnectionResult = null;
@@ -1052,4 +1052,5 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
         debugLog("Forcing mConnectOnStart=" + connectOnStart);
         mConnectOnStart = connectOnStart;
     }
+
 }

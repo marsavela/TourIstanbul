@@ -152,7 +152,8 @@ public class CurrencyConverterActivity extends BaseGameActivity implements Adapt
                 } else {
                     exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) / Double.longBitsToDouble(currencySelected)));
                 }
-                Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_currency_converter));
+                if (isSignedIn())
+                    Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_currency_converter));
 
             } catch (Exception e) {
                 exit.append("Connection error\n");

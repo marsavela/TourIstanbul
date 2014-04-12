@@ -27,6 +27,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.TextView;
 
 import com.graphhopper.GHResponse;
@@ -105,11 +106,11 @@ public final class Utils {
         alertDialog.setView(view);
 
         TextView distanceText = (TextView) view.findViewById(R.id.mapfragment_info_distance);
-        TextView timeText = (TextView) view.findViewById(R.id.mapfragment_info_time);
+        Chronometer timeChrono = (Chronometer) view.findViewById(R.id.mapfragment_info_time);
         TextView calculatedText = (TextView) view.findViewById(R.id.mapfragment_info_calculated);
 
         distanceText.setText(((int) (response.getDistance() / 100) / 10f) + " Km");
-        timeText.setText((response.getMillis()/60000f) + " min");
+        timeChrono.setBase(response.getMillis()/1000);
         calculatedText.setText(time + " sec");
 
         alertDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {

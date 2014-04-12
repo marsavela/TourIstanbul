@@ -39,12 +39,11 @@
             android:layout_weight="1"
             android:textStyle="bold"
             android:text="@string/mapfragment_route_info_time"/>
-        <TextView
+        <Chronometer
             android:id="@+id/mapfragment_info_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="1000"/>
+            android:layout_weight="1" />
 
     </LinearLayout>
 

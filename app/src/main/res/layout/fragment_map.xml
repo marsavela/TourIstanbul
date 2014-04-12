@@ -15,8 +15,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="10dp"
+        android:layout_margin="4dp"
         android:layout_gravity="right|bottom">
+        
+        <ToggleButton
+            android:layout_width="@dimen/map_button_size"
+            android:layout_height="@dimen/map_button_size"
+            android:id="@+id/mapfragment_button_route"
+            android:textOn=""
+            android:textOff=""
+            android:text=""
+            android:drawableTop="@drawable/ic_button_route"/>
 
         <ToggleButton
             android:layout_width="@dimen/map_button_size"

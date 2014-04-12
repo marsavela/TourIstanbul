@@ -149,6 +149,10 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
          * Generate content for testing
          */
         mAttractionsList = AttractionsFragment.createAllAttractions();
+        Attraction attraction = new Attraction("Airport","", 40.983934, 28.820443, null);
+        mAttractionsList.add(attraction);
+        attraction = new Attraction("Yeditepe University","", 40.973210, 29.151750, null);
+        mAttractionsList.add(attraction);
     }
 
     @Override

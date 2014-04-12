@@ -36,42 +36,42 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/attractions_title">
         <CheckBoxPreference
-            android:key="interest1"
+            android:key="interest4"
             android:title="Airports"
             android:summary="@string/airports_summary"
             android:defaultValue="false" />
         <CheckBoxPreference
-            android:key="interest2"
+            android:key="interest5"
             android:title="Hospitals"
             android:summary="@string/hospitals_summary"
             android:defaultValue="false" />
         <CheckBoxPreference
-            android:key="interest3"
+            android:key="interest6"
             android:title="Hotels"
             android:summary="@string/hotels_summary"
             android:defaultValue="false" />
         <CheckBoxPreference
-            android:key="interest4"
+            android:key="interest7"
             android:title="Malls"
             android:summary="@string/malls_summary"
             android:defaultValue="true" />
         <CheckBoxPreference
-            android:key="interest5"
+            android:key="interest8"
             android:title="Mosques"
             android:summary="@string/mosques_summary"
             android:defaultValue="true" />
         <CheckBoxPreference
-            android:key="interest6"
+            android:key="interest9"
             android:title="Museums"
             android:summary="@string/museums_summary"
             android:defaultValue="false" />
         <CheckBoxPreference
-            android:key="interest7"
+            android:key="interest10"
             android:title="Restaurants"
             android:summary="@string/restaurants_summary"
             android:defaultValue="true" />
         <CheckBoxPreference
-            android:key="interest8"
+            android:key="interest11"
             android:title="WIFI Spots"
             android:summary="@string/wifi_spots_summary"
             android:defaultValue="false" />

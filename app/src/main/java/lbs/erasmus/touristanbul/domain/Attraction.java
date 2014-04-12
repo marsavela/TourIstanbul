@@ -17,6 +17,25 @@ import lbs.erasmus.touristanbul.AssetProvider;
  */
 public class Attraction implements Parcelable {
 
+    /**
+     * Public enum to control the attraction category
+     */
+    public enum Category {
+        AIRPORT("airport"), HOSPITAL("hospital"), HOTEL("hotel"), MALL("mall"), MOSQUES("mosques"),
+        MUSEUMS("museums"), RESTAURANTS("restaurant"), WIFI("wifi"), UNKNOWN("unknown");
+
+        private String mType;
+
+        Category(String type) {
+           mType = type;
+        }
+
+        @Override
+        public String toString() {
+            return mType;
+        }
+    }
+
     /** Title of the attraction. */
     private final String mTitle;
 
@@ -33,7 +52,7 @@ public class Attraction implements Parcelable {
     private Location mLocation;
 
     /** Category of the attraction. */
-    private String mCategory;
+    private Category mCategory;
 
     /** Category res/drawable id **/
     private int mDrawableId;
@@ -64,6 +83,7 @@ public class Attraction implements Parcelable {
     public Attraction(String titleString, String subtitleString, Location location, String imageAssetFilePath) {
         mTitle = titleString;
         mSubtitle = subtitleString;
+        mCategory = Category.UNKNOWN;
         mLocation = location;
         mImageUri = Uri.parse("content://" + AssetProvider.CONTENT_URI + "/" +
                 imageAssetFilePath);
@@ -72,6 +92,7 @@ public class Attraction implements Parcelable {
     public Attraction(String titleString, String subtitleString, double latitude, double longitude, String imageAssetFilePath) {
         mTitle = titleString;
         mSubtitle = subtitleString;
+        mCategory = Category.UNKNOWN;
         mLocation = new Location(titleString);
         mLocation.setLatitude(latitude);
         mLocation.setLongitude(longitude);
@@ -87,7 +108,7 @@ public class Attraction implements Parcelable {
      * @param descriptionString is the description
      * @param addressString is the address
      * @param location is the location
-     * @param categoryString is the category
+     * @param category is the category
      * @param interestString is the interest
      * @param ratesDouble is the interest
      * @param numRatesInt is the interest
@@ -97,7 +118,7 @@ public class Attraction implements Parcelable {
      */
 
     public Attraction(String titleString, String subtitleString, String descriptionString,
-                      String addressString, Location location, String categoryString,
+                      String addressString, Location location, Category category,
                       String interestString, double ratesDouble, int numRatesInt, String openingString,
                       String imageAssetFilePath) {
         mTitle = titleString;
@@ -105,7 +126,7 @@ public class Attraction implements Parcelable {
         mDescription = descriptionString;
         mAddress = addressString;
         mLocation = location;
-        mCategory = categoryString;
+        mCategory = category;
         mInterest = interestString;
         mRate = ratesDouble;
         mNumRates = numRatesInt;
@@ -117,6 +138,7 @@ public class Attraction implements Parcelable {
     private Attraction(Parcel parcel) {
         mTitle = parcel.readString();
         mSubtitle = parcel.readString();
+        mCategory = Category.UNKNOWN;
         mLocation = Location.CREATOR.createFromParcel(parcel);
         mImageUri = Uri.parse(parcel.readString());
     }
@@ -154,8 +176,12 @@ public class Attraction implements Parcelable {
         return mAddress;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return mCategory;
+    }
+
+    public String getCategoryName() {
+        return mCategory.toString();
     }
 
     public String getInterest() {
@@ -205,6 +231,11 @@ public class Attraction implements Parcelable {
         parcel.writeString(mSubtitle);
         mLocation.writeToParcel(parcel, i);
         parcel.writeString(mImageUri.toString());
+    }
+
+    @Override
+    public String toString() {
+        return mTitle;
     }
 
     /*

@@ -394,6 +394,12 @@
     <string name="mapfragment_route_error_title">Route error</string>
     <string name="mapfragment_route_error_text">There has been an error calculating routes</string>
 
+    <string name="mapfragment_route_graph_notloaded">Routes not enabled yet, please wait few seconds</string>
+
+    <string name="mapfragment_route_dialog_title">Calculate new route</string>
+    <string name="mapfragment_route_dialog_from">Select origin:</string>
+    <string name="mapfragment_route_dialog_to">Select destination:</string>
+
 
     <!-- History Activity-->
     <string name= "history0"> Across the country, there are thousands of archeological sites, historical places and ancient cities, as well as magnificent scenic spots and natural wonders. Since Roman times, Asiatic Turkey has been known as both "Asia Minor" and "Anatolia". The European part of Turkey is called Thrace. </string>

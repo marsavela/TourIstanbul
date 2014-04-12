@@ -1,11 +1,12 @@
 package lbs.erasmus.touristanbul.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -16,7 +17,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -32,11 +34,8 @@ import org.mapsforge.android.maps.MapViewPosition;
 import org.mapsforge.android.maps.overlay.ListOverlay;
 import org.mapsforge.android.maps.overlay.Marker;
 import org.mapsforge.android.maps.overlay.MyLocationOverlay;
-import org.mapsforge.android.maps.overlay.OverlayItem;
-import org.mapsforge.core.model.BoundingBox;
 import org.mapsforge.core.model.GeoPoint;
 import org.mapsforge.core.model.MapPosition;
-import org.mapsforge.core.model.Point;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -48,6 +47,7 @@ import java.net.URLConnection;
 import java.util.List;
 
 import lbs.erasmus.touristanbul.R;
+import lbs.erasmus.touristanbul.SettingsManager;
 import lbs.erasmus.touristanbul.domain.Attraction;
 import lbs.erasmus.touristanbul.maps.GHAsyncTask;
 import lbs.erasmus.touristanbul.maps.Utils;
@@ -72,21 +72,25 @@ public class MapFragment extends Fragment {
     private static final String PREFERENCES_FILE = "MapActivity";
 
     private static final int MIN_OBJECT_ZOOM = 18;
-    private static final int REFRESH_DISTANCE = 10000;
+    private static final int REFRESH_DISTANCE = 5000;
 
     private FileMapDownloader mFileMapDownloader;
 
     private MapView mMapView;
     private ListOverlay mPathOverlay;
+    private ToggleButton mRouteButton;
     private ToggleButton mSnapToLocation;
     private MyLocationOverlay mMyLocationOverlay;
 
     private GraphHopperAPI mHopper;
-    private volatile boolean shortestPathRunning = false;
     private volatile boolean prepareInProgress = true;
 
     private MapFragmentCommunication mCallback;
     List<Attraction> mAttractionList;
+
+    private GHResponse mRouteResponse;
+    private GeoPoint mStartPoint;
+    private GeoPoint mEndPoint;
 
     /**
      * Interface for communicate activity with map fragment
@@ -117,13 +121,37 @@ public class MapFragment extends Fragment {
             }
         });
 
+        // Add route button
+        mRouteButton = (ToggleButton) rootView.findViewById(R.id.mapfragment_button_route);
+        mRouteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!prepareInProgress) {
+                    //calculateRoute(new GeoPoint(40.983934, 28.820443), new GeoPoint(40.973210, 29.151750));
+                    if (mRouteButton.isChecked()) {
+                        showRouteDialog();
+                    } else {
+                        mRouteResponse = null;
+                        mStartPoint = null;
+                        mEndPoint = null;
+                        showAttractions();
+                    }
+                } else {
+                    Toast.makeText(getActivity(),R.string.mapfragment_route_graph_notloaded,Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         // Add my location button
         mSnapToLocation = (ToggleButton) rootView.findViewById(R.id.mapfragment_button_location);
         mSnapToLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkSnapToLocation();
-                //calculateRoute(new GeoPoint(40.983934, 28.820443), new GeoPoint(40.973210, 29.151750));
+                if (mSnapToLocation.isChecked()) {
+                    showCurrentPosition();
+                } else {
+                    mMyLocationOverlay.disableMyLocation();
+                }
             }
         });
 
@@ -287,20 +315,12 @@ public class MapFragment extends Fragment {
         mMyLocationOverlay.enableMyLocation(true);
     }
 
-    private void checkSnapToLocation() {
-        if (mSnapToLocation.isChecked()) {
-            showCurrentPosition();
-        } else {
-            mMyLocationOverlay.disableMyLocation();
-        }
-    }
-
     /**
      * Called from MainActivity to put the new attractions on the map
      */
     public void showAttractions() {
-        Toast.makeText(getActivity(), "Showing attractions", Toast.LENGTH_SHORT).show();
         mAttractionList = mCallback.getAttractionList();
+        SettingsManager settingsManager = new SettingsManager(getActivity().getApplicationContext());
 
         if (mAttractionList != null) {
             mPathOverlay.getOverlayItems().clear();
@@ -317,17 +337,27 @@ public class MapFragment extends Fragment {
             float distance;
             // Check all attractions on list
             for (Attraction attraction : mAttractionList) {
-                location = attraction.getLocation();
-                zoomLevel = mMapView.getMapViewPosition().getZoomLevel();
-                distance = location.distanceTo(currentLocation);
-                if (zoomLevel <= MIN_OBJECT_ZOOM
-                        && distance <= REFRESH_DISTANCE) {
-                    position = new GeoPoint(location.getLatitude(), location.getLongitude());
-                    //marker = Utils.createMarker(getActivity(), position, attraction.getDrawableId());
-                    marker = Utils.createMarker(getActivity(), position, R.drawable.flag_green);
-                    mPathOverlay.getOverlayItems().add(marker);
+                if (settingsManager.checkAttractionCategory(attraction)) {
+                    location = attraction.getLocation();
+                    zoomLevel = mMapView.getMapViewPosition().getZoomLevel();
+                    distance = location.distanceTo(currentLocation);
+                    if (zoomLevel <= MIN_OBJECT_ZOOM
+                            && distance <= REFRESH_DISTANCE) {
+                        position = new GeoPoint(location.getLatitude(), location.getLongitude());
+                        //marker = Utils.createMarker(getActivity(), position, attraction.getDrawableId());
+                        marker = Utils.createMarker(getActivity(), position, R.drawable.flag_green);
+                        mPathOverlay.getOverlayItems().add(marker);
+                    }
                 }
             }
+        }
+
+        if (mRouteResponse != null) {
+            mPathOverlay.getOverlayItems().add(Utils.createPolyline(mRouteResponse));
+            Marker marker = Utils.createMarker(getActivity(), mStartPoint, R.drawable.flag_green);
+            mPathOverlay.getOverlayItems().add(marker);
+            marker = Utils.createMarker(getActivity(), mEndPoint, R.drawable.flag_red);
+            mPathOverlay.getOverlayItems().add(marker);
         }
 
         mMapView.redraw();
@@ -338,10 +368,11 @@ public class MapFragment extends Fragment {
         mPathOverlay.getOverlayItems().clear();
 
         calcPath(startPoint, endPoint);
+        mStartPoint = startPoint;
+        mEndPoint = endPoint;
 
         Marker marker = Utils.createMarker(getActivity(), startPoint, R.drawable.flag_green);
         mPathOverlay.getOverlayItems().add(marker);
-
         marker = Utils.createMarker(getActivity(), endPoint, R.drawable.flag_red);
         mPathOverlay.getOverlayItems().add(marker);
         mMapView.redraw();
@@ -397,16 +428,19 @@ public class MapFragment extends Fragment {
 
             protected void onPostExecute( GHResponse resp ) {
                 if (!resp.hasErrors()) {
-                    Utils.showRouteInfo(getActivity(), resp, time);
-                    mPathOverlay.getOverlayItems().add(Utils.createPolyline(resp));
-                    mMapView.redraw();
+                    Utils.showRouteInfo(getActivity(), resp, time);;
+                    mRouteResponse = resp;
+                    showAttractions();
                 } else {
+                    mRouteButton.setChecked(false);
+                    mRouteResponse = null;
+                    mStartPoint = null;
+                    mEndPoint = null;
                     Utils.showSimpleDialog(getActivity(),
                             R.string.mapfragment_route_error_title,
                             R.string.mapfragment_route_error_text);
-                    Log.e(getClass().getName(),resp.toString());
+                    Log.e(getClass().getName(), resp.toString());
                 }
-                shortestPathRunning = false;
             }
         }.execute();
     }
@@ -506,5 +540,45 @@ public class MapFragment extends Fragment {
             //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
             Log.d(getClass().getName(),"End");
         }
+    }
+
+    public void showRouteDialog() {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        AlertDialog.Builder alertDialog;
+        alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle(R.string.mapfragment_route_dialog_title);
+        View view = inflater.inflate(R.layout.fragment_map_dialog_route, null);
+        alertDialog.setView(view);
+
+        final Spinner from = (Spinner) view.findViewById(R.id.mapfragment_route_spinner_from);
+        final Spinner to = (Spinner) view.findViewById(R.id.mapfragment_route_spinner_to);
+
+        ArrayAdapter<Attraction> attractionAdapter = new ArrayAdapter<Attraction>(getActivity(),android.R.layout.simple_spinner_item, mAttractionList);
+        attractionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        from.setAdapter(attractionAdapter);
+        to.setAdapter(attractionAdapter);
+
+        alertDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Location locFrom = ((Attraction) from.getSelectedItem()).getLocation();
+                Location locTo = ((Attraction) to.getSelectedItem()).getLocation();
+
+                GeoPoint fromGeoPoint = new GeoPoint(locFrom.getLatitude(),locFrom.getLongitude());
+                GeoPoint toGeoPoint = new GeoPoint(locTo.getLatitude(), locTo.getLongitude());
+
+                calculateRoute(fromGeoPoint, toGeoPoint);
+            }
+        });
+
+        alertDialog.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        alertDialog.show();
     }
 }

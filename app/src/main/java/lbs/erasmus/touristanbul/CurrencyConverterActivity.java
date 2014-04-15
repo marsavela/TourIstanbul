@@ -1,8 +1,10 @@
 package lbs.erasmus.touristanbul;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -44,7 +46,8 @@ public class CurrencyConverterActivity extends BaseGameActivity implements Adapt
         private Spinner currencyOri;
         private SharedPreferences _prefs;
         private SharedPreferences.Editor _prefsEditor;
-        private Long currencySelected;
+        private Long currencySelected, defaultEUR, defaultUSD, defaultSEK, defaultNOK, defaultJPY, defaultCNY;
+
 
 
         @Override
@@ -68,9 +71,9 @@ public class CurrencyConverterActivity extends BaseGameActivity implements Adapt
             // Currency Origin
             currencyOri = (Spinner) findViewById(R.id.currencyOri);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.currency_array,
-                    android.R.layout.simple_spinner_item);
+                    R.layout.spinner_item);
 
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
             currencyOri.setAdapter(adapter);
             Log.v("VERBOSE", "Paso: " + currencyOri.getCount());
 
@@ -117,23 +120,21 @@ public class CurrencyConverterActivity extends BaseGameActivity implements Adapt
         // Management spinner
         public void onItemSelected(AdapterView<?> parent, View view, int pos,
                                    long id) {
-                ((TextView) currencyOri.getChildAt(pos)).setTextColor(Color.BLACK);
-
-            String currencyAcronym = parent.getItemAtPosition(pos).toString().substring(parent.getItemAtPosition(pos).toString().length() - 3, parent.getItemAtPosition(pos).toString().length());
+         String currencyAcronym = parent.getItemAtPosition(pos).toString().substring(parent.getItemAtPosition(pos).toString().length() - 3, parent.getItemAtPosition(pos).toString().length());
 
             if(currencyAcronym.equals("EUR")){
-                Log.v("VERBOSE", "Valor del texto: " + " preferences " +_prefs.getFloat(currencyAcronym.toString(), Float.parseFloat(String.valueOf(3.0632))));
-                currencySelected =  _prefs.getLong(currencyAcronym.toString(), Double.doubleToRawLongBits(3.0632));
+                Log.v("VERBOSE", "Valor del texto: " + " preferences " +_prefs.getFloat(currencyAcronym.toString(),defaultEUR));
+                currencySelected =  _prefs.getLong(currencyAcronym.toString(), defaultEUR);
             } else if (currencyAcronym.equals("USD")){
-                currencySelected =  _prefs.getLong(currencyAcronym.toString(), Double.doubleToRawLongBits(2.2155));
+                currencySelected =  _prefs.getLong(currencyAcronym.toString(), defaultUSD);
             } else if (currencyAcronym.equals("SEK")){
-                currencySelected =  _prefs.getLong(currencyAcronym.toString(), Double.doubleToRawLongBits(0.3461));
+                currencySelected =  _prefs.getLong(currencyAcronym.toString(), defaultSEK);
             } else if (currencyAcronym.equals("NOK")){
-                currencySelected =  _prefs.getLong(currencyAcronym.toString(), Double.doubleToRawLongBits(0.3677));
+                currencySelected =  _prefs.getLong(currencyAcronym.toString(), defaultNOK);
             } else if (currencyAcronym.equals("JPY")){
-                currencySelected =  _prefs.getLong(currencyAcronym.toString(), Double.doubleToRawLongBits(0.0217));
+                currencySelected =  _prefs.getLong(currencyAcronym.toString(), defaultJPY);
             } else if (currencyAcronym.equals("CNY")){
-                currencySelected =  _prefs.getLong(currencyAcronym.toString(), Double.doubleToRawLongBits(0.3572));
+                currencySelected =  _prefs.getLong(currencyAcronym.toString(), defaultCNY);
             }
         }
 
@@ -174,9 +175,23 @@ public class CurrencyConverterActivity extends BaseGameActivity implements Adapt
 
         // connect Web Service to get currencies
         public void getAllCurrency() {
-            if((System.currentTimeMillis() - _prefs.getLong("currencyUpdated", 0L)) > 86400000) {
+            if(isConnectingToInternet() && (System.currentTimeMillis() - _prefs.getLong("currencyUpdated", 0L)) > 86400000) {
+                Log.v("VERBOSE", "Hay conectividad");
                 CurrencyTask currencyTask = new CurrencyTask();
                 currencyTask.execute();
+                defaultEUR =  _prefs.getLong("EUR", Double.doubleToRawLongBits(3.0632));
+                defaultUSD =  _prefs.getLong("USD", Double.doubleToRawLongBits(2.2155));
+                defaultSEK =  _prefs.getLong("SEK", Double.doubleToRawLongBits(0.3461));
+                defaultNOK =  _prefs.getLong("NOK", Double.doubleToRawLongBits(0.3677));
+                defaultJPY =  _prefs.getLong("JPY", Double.doubleToRawLongBits(0.0217));
+                defaultCNY =  _prefs.getLong("CNY", Double.doubleToRawLongBits(0.3572));
+            } else {
+                defaultEUR =  _prefs.getLong("EUR", Double.doubleToRawLongBits(3.0632));
+                defaultUSD =  _prefs.getLong("USD", Double.doubleToRawLongBits(2.2155));
+                defaultSEK =  _prefs.getLong("SEK", Double.doubleToRawLongBits(0.3461));
+                defaultNOK =  _prefs.getLong("NOK", Double.doubleToRawLongBits(0.3677));
+                defaultJPY =  _prefs.getLong("JPY", Double.doubleToRawLongBits(0.0217));
+                defaultCNY =  _prefs.getLong("CNY", Double.doubleToRawLongBits(0.3572));
             }
         }
 
@@ -255,8 +270,20 @@ public class CurrencyConverterActivity extends BaseGameActivity implements Adapt
 
         }
 
+    public boolean isConnectingToInternet(){
+        ConnectivityManager connectivity = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null)
+        {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null)
+                for (int i = 0; i < info.length; i++)
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED)
+                    {
+                        return true;
+                    }
 
-
-
+        }
+        return false;
+    }
 
 }

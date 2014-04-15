@@ -38,11 +38,11 @@ import javax.xml.parsers.SAXParserFactory;
 public class CurrencyConverterActivity extends BaseGameActivity implements AdapterView.OnItemSelectedListener {
 
         private EditText entry;
-        private TextView exit;
+        private TextView exit, from, to;
         private TextView destinyCurrency;
         private boolean changeCurrency;
         private Button changeCurrencyButton, converter;
-        private String currency2;
+        private String currency2, currencyAcronym, previousCurrencyAcronym, previousCurrencyAcronymSpinner;
         private Spinner currencyOri;
         private SharedPreferences _prefs;
         private SharedPreferences.Editor _prefsEditor;
@@ -56,6 +56,8 @@ public class CurrencyConverterActivity extends BaseGameActivity implements Adapt
             setContentView(R.layout.activity_currency_converter);
             entry = (EditText) findViewById(R.id.entry);
             exit = (TextView) findViewById(R.id.exit);
+            from = (TextView) findViewById(R.id.from);
+            to = (TextView) findViewById(R.id.to);
             changeCurrencyButton = (Button) findViewById(R.id.changeCurrency);
             destinyCurrency = (TextView) findViewById(R.id.destinyCurrency);
             converter =  (Button) findViewById(R.id.converter);
@@ -92,15 +94,14 @@ public class CurrencyConverterActivity extends BaseGameActivity implements Adapt
                     if (!changeCurrency) {
                         //Change the currency of origin by destination (Spinner to TextView)
                         changeCurrency = true;
-                        currencyOri.setY(getPixels(120));
+                        currencyOri.setY(getPixels(140));
                         destinyCurrency.setY(getPixels(0));
                     } else {
                         //Change the currency of destiny by destination (TextView to Spinner  )
                         changeCurrency = false;
                         currencyOri.setY(getPixels(0));
-                        destinyCurrency.setY(getPixels(120));
-                        // destinyCurrency.setY(valuey);
-                    }
+                        destinyCurrency.setY(getPixels(140));
+                     }
                 }
             });
 
@@ -120,20 +121,25 @@ public class CurrencyConverterActivity extends BaseGameActivity implements Adapt
         // Management spinner
         public void onItemSelected(AdapterView<?> parent, View view, int pos,
                                    long id) {
-         String currencyAcronym = parent.getItemAtPosition(pos).toString().substring(parent.getItemAtPosition(pos).toString().length() - 3, parent.getItemAtPosition(pos).toString().length());
+         currencyAcronym = parent.getItemAtPosition(pos).toString().substring(parent.getItemAtPosition(pos).toString().length() - 3, parent.getItemAtPosition(pos).toString().length());
 
             if(currencyAcronym.equals("EUR")){
-                Log.v("VERBOSE", "Valor del texto: " + " preferences " +_prefs.getFloat(currencyAcronym.toString(),defaultEUR));
+                //previousCurrencyAcronymSpinner = currencyAcronym;
                 currencySelected =  _prefs.getLong(currencyAcronym.toString(), defaultEUR);
             } else if (currencyAcronym.equals("USD")){
+                //previousCurrencyAcronymSpinner = currencyAcronym;
                 currencySelected =  _prefs.getLong(currencyAcronym.toString(), defaultUSD);
             } else if (currencyAcronym.equals("SEK")){
+                //previousCurrencyAcronymSpinner = currencyAcronym;
                 currencySelected =  _prefs.getLong(currencyAcronym.toString(), defaultSEK);
             } else if (currencyAcronym.equals("NOK")){
+                //previousCurrencyAcronymSpinner = currencyAcronym;
                 currencySelected =  _prefs.getLong(currencyAcronym.toString(), defaultNOK);
             } else if (currencyAcronym.equals("JPY")){
+               // previousCurrencyAcronymSpinner = currencyAcronym;
                 currencySelected =  _prefs.getLong(currencyAcronym.toString(), defaultJPY);
             } else if (currencyAcronym.equals("CNY")){
+               // previousCurrencyAcronymSpinner = currencyAcronym;
                 currencySelected =  _prefs.getLong(currencyAcronym.toString(), defaultCNY);
             }
         }
@@ -146,12 +152,39 @@ public class CurrencyConverterActivity extends BaseGameActivity implements Adapt
 
         // button converter
         public void isClicked(View view) {
-
+            Resources res = this.getResources();
+            String[] monetaryCurrencySybolList = res.getStringArray(R.array.monetary_symbol_array);
             try {
                 if (!changeCurrency){
-                    exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) * Double.longBitsToDouble(currencySelected)));
+                    if(currencyAcronym.equals("EUR")){
+                        exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) * Double.longBitsToDouble(currencySelected)) + " " + monetaryCurrencySybolList[6]);
+                    } else if (currencyAcronym.equals("USD")){
+                        exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) * Double.longBitsToDouble(currencySelected)) + " " + monetaryCurrencySybolList[6]);
+                    } else if (currencyAcronym.equals("SEK")){
+                        exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) * Double.longBitsToDouble(currencySelected)) + " " + monetaryCurrencySybolList[6]);
+                    } else if (currencyAcronym.equals("NOK")){
+                        exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) * Double.longBitsToDouble(currencySelected)) + " " + monetaryCurrencySybolList[6]);
+                    } else if (currencyAcronym.equals("JPY")){
+                        exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) * Double.longBitsToDouble(currencySelected)) + " " + monetaryCurrencySybolList[6]);
+                    } else if (currencyAcronym.equals("CNY")){
+                        exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) * Double.longBitsToDouble(currencySelected)) + " " + monetaryCurrencySybolList[6]);
+                    }
                 } else {
-                    exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) / Double.longBitsToDouble(currencySelected)));
+                    if(currencyAcronym.equals("EUR")){
+                        exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) / Double.longBitsToDouble(currencySelected)) + " " + monetaryCurrencySybolList[0]);
+                    } else if (currencyAcronym.equals("USD")){
+                        exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) / Double.longBitsToDouble(currencySelected)) + " " + monetaryCurrencySybolList[1]);
+                    } else if (currencyAcronym.equals("SEK")){
+                        exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) / Double.longBitsToDouble(currencySelected)) + " " + monetaryCurrencySybolList[2]);
+                    } else if (currencyAcronym.equals("NOK")){
+                        exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) / Double.longBitsToDouble(currencySelected)) + " " + monetaryCurrencySybolList[3]);
+                    } else if (currencyAcronym.equals("JPY")){
+                        exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) / Double.longBitsToDouble(currencySelected)) + " " + monetaryCurrencySybolList[4]);
+                    } else if (currencyAcronym.equals("CNY")){
+                        exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) / Double.longBitsToDouble(currencySelected)) + " " + monetaryCurrencySybolList[5]);
+                    } else if (currencyAcronym.equals(currency2)){
+                        exit.setText(String.format("%.2f", Double.parseDouble(entry.getText().toString()) / Double.longBitsToDouble(currencySelected)) + " " + monetaryCurrencySybolList[6]);
+                    }
                 }
                 if (isSignedIn())
                     Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_currency_converter));
@@ -176,7 +209,6 @@ public class CurrencyConverterActivity extends BaseGameActivity implements Adapt
         // connect Web Service to get currencies
         public void getAllCurrency() {
             if(isConnectingToInternet() && (System.currentTimeMillis() - _prefs.getLong("currencyUpdated", 0L)) > 86400000) {
-                Log.v("VERBOSE", "Hay conectividad");
                 CurrencyTask currencyTask = new CurrencyTask();
                 currencyTask.execute();
                 defaultEUR =  _prefs.getLong("EUR", Double.doubleToRawLongBits(3.0632));

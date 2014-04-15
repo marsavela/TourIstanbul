@@ -18,4 +18,21 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="currency_array">
+        <item>Euro-EUR</item>
+        <item>U.S. Dollar-USD</item>
+        <item>Swedish Krona-SEK</item>
+        <item>Norwegian Krone-NOK</item>
+        <item>Japanese Yen-JPY</item>
+        <item>Chinese Yuan-CNY</item>
+    </string-array>
+    <string-array name="monetary_symbol_array">
+        <item>€</item>
+        <item>$</item>
+        <item>Sk</item>
+        <item>Kr</item>
+        <item>¥</item>
+        <item>元</item>
+        <item>TL</item>
+    </string-array>
 </resources>

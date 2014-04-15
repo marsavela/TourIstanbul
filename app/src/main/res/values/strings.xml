@@ -99,14 +99,8 @@
     <string name="to">To</string>
     <string name="converter">Converter</string>
     <string name="change_currency">Switch From To</string>
-    <string-array name="currency_array">
-        <item>Euro-EUR</item>
-        <item>U.S. Dollar-USD</item>
-        <item>Swedish Krona-SEK</item>
-        <item>Norwegian Krone-NOK</item>
-        <item>Japanese Yen-JPY</item>
-        <item>Chinese Yuan-CNY</item>
-    </string-array>
+    <string name="currencyExchange">Your currency exchange equivalent to</string>
+
 
     <!-- Translator Activity -->
     <string name="english">English</string>

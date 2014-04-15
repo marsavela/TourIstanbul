@@ -6,7 +6,7 @@
 
 
         <TextView
-            android:layout_width="150dp"
+            android:layout_width="130dp"
             android:layout_height="60dp"
             android:text="@string/from"
             android:id="@+id/From"
@@ -23,31 +23,32 @@
             android:layout_height="60dp"
             android:layout_weight="2"
             android:tag="0"
-            android:layout_marginLeft="150dp"
             android:textAlignment="center"
-            android:gravity="center" />
+            android:gravity="center"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="130dp" />
 
         <Button
-            android:layout_width="380dp"
+            android:layout_width="220dp"
             android:layout_height="40dp"
             android:text="@string/change_currency"
             android:id="@+id/changeCurrency"
             android:layout_weight="1"
-            android:layout_marginTop="70dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginTop="80dp"
+            android:layout_marginRight="100dp"
+            android:layout_marginLeft="100dp" />
 
         <TextView
-            android:layout_width="150dp"
+            android:layout_width="130dp"
             android:layout_height="60dp"
             android:text="@string/to"
             android:id="@+id/to"
             android:textSize="20sp"
             android:textAlignment="center"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:layout_gravity="center"
             android:gravity="center"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="140dp"
             android:textStyle="bold"/>
 
         <TextView
@@ -55,13 +56,14 @@
             android:layout_height="60dp"
             android:text="@string/turkey_lira"
             android:id="@+id/destinyCurrency"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:textSize="20sp"
             android:layout_gravity="bottom"
-            android:layout_weight="2"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_marginTop="120dp"
-            android:layout_marginLeft="150dp" />
+            android:layout_weight="5"
+            android:layout_marginTop="140dp"
+            android:layout_marginLeft="130dp"
+            android:gravity="center_vertical"
+            android:layout_marginRight="20dp" />
 
         <EditText
             android:id="@+id/entry"
@@ -72,29 +74,47 @@
             android:inputType="numberDecimal"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:layout_marginTop="190dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
+            android:layout_marginTop="220dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
 
             <requestFocus />
         </EditText>
 
-        <TextView
-            android:layout_width="240dp"
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text="@string/currencyExchange"
+        android:id="@+id/currencyExchange"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        android:layout_below="@+id/entry"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:maxLines="2" />
+
+    <TextView
+            android:layout_width="match_parent"
             android:layout_height="46dp"
             android:id="@+id/exit"
-            android:layout_marginLeft="120dp"
-            android:layout_marginTop="250dp"
             android:numeric="decimal"
             android:inputType="numberDecimal"
-            />
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:textSize="35dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="360dp" />
 
         <Button
             android:id="@+id/converter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/converter"
-            android:layout_marginTop="250dp"
-            android:layout_marginLeft="10dp" />
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="40dp" />
 
-    </RelativeLayout>
+</RelativeLayout>

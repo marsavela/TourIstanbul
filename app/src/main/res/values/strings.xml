@@ -416,5 +416,14 @@
 
     <string name="button_achievements">Achievements</string>
 
+    <!-- weather -->
+
+    <string name="http_action">Weather (HTTP)</string>
+    <string name="not_connected">"The device is not connected to the network!"</string>
+    <string name="title_activity_http">HTTPActivity</string>
+
+
+
+
 
 </resources>

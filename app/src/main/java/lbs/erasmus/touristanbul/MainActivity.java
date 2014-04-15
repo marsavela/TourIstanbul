@@ -294,7 +294,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
         @Override
         protected Void doInBackground(Void... params) {
-            mAttractionsList = daoAttractions.getAttractions();
+            mAttractionsList = daoAttractions.retrieveData();
             return null;
         }
 

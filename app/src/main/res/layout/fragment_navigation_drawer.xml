@@ -3,6 +3,7 @@
     android:id="@+id/relative_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#cccc"
     tools:context="lbs.erasmus.touristanbul.NavigationDrawerFragment">
 
     <ListView
@@ -12,7 +13,7 @@
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"
-        android:background="#cccc"/>
+        android:layout_above="@+id/linear_layout"/>
 
     <LinearLayout
         android:id="@+id/linear_layout"
@@ -44,6 +45,7 @@
                 android:text="@string/title_settings"
                 android:id="@+id/action_settings_text"
                 android:textColor="#ffffff" />
+
         </LinearLayout>
 
         <com.google.android.gms.common.SignInButton
@@ -71,7 +73,9 @@
             android:background="#424242"
             android:paddingBottom="@dimen/activity_horizontal_margin"
             android:textColor="@android:color/white"
+            android:visibility="gone"
             android:gravity="center" />
 
     </LinearLayout>
+
 </RelativeLayout>

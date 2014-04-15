@@ -1,8 +1,10 @@
 package lbs.erasmus.touristanbul;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -20,7 +22,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +84,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     private ImageView mImgSettings;
     private TextView mTxtSettings;
 
+    private DAOAttractions daoAttractions;
     private List<Attraction> mAttractionsList;
 
     /**
@@ -148,11 +154,8 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         /**
          * Generate content for testing
          */
-        mAttractionsList = AttractionsFragment.createAllAttractions();
-        Attraction attraction = new Attraction("Airport","", 40.983934, 28.820443, null);
-        mAttractionsList.add(attraction);
-        attraction = new Attraction("Yeditepe University","", 40.973210, 29.151750, null);
-        mAttractionsList.add(attraction);
+        daoAttractions = new DAOAttractions(this);
+        new TaskAttractions().execute();
     }
 
     @Override
@@ -239,10 +242,72 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         int id = item.getItemId();
         if (id == R.id.action_search) {
             return true;
+        } else if (item.getItemId() == R.id.action_nearby_people) {
+            showNearbyPeopleList();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
+    private void showNearbyPeopleList() {
 
+        String names[] ={"Antonio","Bianca","Carlos","Domingo"};
+
+        AlertDialog.Builder builderRateDialog = new AlertDialog.Builder(this);
+        // Get the layout inflater
+        View lista = getLayoutInflater().inflate(R.layout.fragment_map_dialog_list_people, null);
+
+        // Inflate and set the layout for the dialog
+        // Pass null as the parent view because its going in the dialog layout
+        builderRateDialog.setView(lista)
+                .setTitle("Meet with");
+
+        AlertDialog alertRateDialog = builderRateDialog.create();
+        ListView lv = (ListView) lista.findViewById(R.id.list_nearby_people);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,names);
+        lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(MainActivity.this, "Example action number " + Integer.toString(i),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        alertRateDialog.show();
+    }
+
+
+    private class TaskAttractions extends AsyncTask<Void, Void, Void> {
+
+        private ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog = new ProgressDialog(MainActivity.this);
+            pDialog.setTitle("Contacting Servers");
+            pDialog.setMessage("Logging in ...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            mAttractionsList = daoAttractions.getAttractions();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            pDialog.dismiss();
+            Attraction attraction = new Attraction("Airport","", 40.983934, 28.820443, null);
+            mAttractionsList.add(attraction);
+            attraction = new Attraction("Yeditepe University","", 40.973210, 29.151750, null);
+            mAttractionsList.add(attraction);
+            super.onPostExecute(aVoid);
+        }
+    }
 
     /**
      * Button on click listener

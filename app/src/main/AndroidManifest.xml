@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- To retrieve the account mName (mEmail) as part of sign-in: -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <!-- To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user.
@@ -128,7 +129,11 @@
         <activity
             android:name="lbs.erasmus.touristanbul.WeatherAndClimateActivity"
             android:label="@string/weather"
+            android:screenOrientation="portrait"
             android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

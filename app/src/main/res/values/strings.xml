@@ -101,14 +101,12 @@
     <string name="to">To</string>
     <string name="converter">Converter</string>
     <string name="change_currency">Switch From To</string>
-    <string-array name="currency_array">
-        <item>Euro-EUR</item>
-        <item>U.S. Dollar-USD</item>
-        <item>Swedish Krona-SEK</item>
-        <item>Norwegian Krone-NOK</item>
-        <item>Japanese Yen-JPY</item>
-        <item>Chinese Yuan-CNY</item>
-    </string-array>
+    <string name="currencyExchange">Your currency exchange equivalent to</string>
+
+    <!-- Transports Activity -->
+    <string name="bus">Bus</string>
+    <string name="tram">Tram</string>
+    <string name="ferry">Ferry</string>
 
     <!-- Translator Activity -->
     <string name="english">English</string>
@@ -116,6 +114,18 @@
     <string name="translate">Translate</string>
     <string name="change_language">Switch Languages</string>
     <string name="type_your_text_here">Type your text here</string>
+    <string-array name="supported_languages">
+        <item>Turkish</item>
+        <item>English</item>
+        <item>Italian</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Dutch</item>
+        <item>Greek</item>
+        <item>Korean</item>
+        <item>Japanese</item>
+        <item>Chinese</item>
+    </string-array>
 
     <!-- Phrasebook Activity -->
     <string name="phrasebook1_basic_greetings">Basic Greetings</string>
@@ -423,6 +433,15 @@
     <!-- Achievements -->
 
     <string name="button_achievements">Achievements</string>
+
+    <!-- weather -->
+
+    <string name="http_action">Weather (HTTP)</string>
+    <string name="not_connected">"The device is not connected to the network!"</string>
+    <string name="title_activity_http">HTTPActivity</string>
+
+
+
 
 
 </resources>

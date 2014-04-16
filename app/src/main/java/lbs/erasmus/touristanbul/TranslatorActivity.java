@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 
@@ -25,13 +26,14 @@ import android.widget.TextView;
 public class TranslatorActivity extends Activity implements OnInitListener {
 
     private TextToSpeech tts;
+    //private Spinner translatedFrom, translatedTo;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_translator);
 
         tts = new TextToSpeech(this, this);
-        ((Button) findViewById(R.id.speechButton)).setOnClickListener(new OnClickListener() {
+        ((ImageButton) findViewById(R.id.speechButton)).setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -96,14 +98,14 @@ public class TranslatorActivity extends Activity implements OnInitListener {
         // TODO Auto-generated method stub
         if (status == TextToSpeech.SUCCESS) {
 
-            int result = tts.setLanguage(Locale.ENGLISH);
+            int result = tts.setLanguage(Locale.getDefault());
 
             if (result == TextToSpeech.LANG_MISSING_DATA
                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e("TTS", "This Language is not supported");
             } else {
 
-                //speakOut("Oh yeaaaaaaah");
+                //speakOut("Oh yeah. It works");
             }
 
         } else {

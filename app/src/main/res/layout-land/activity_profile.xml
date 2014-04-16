@@ -40,17 +40,6 @@
         android:layout_below="@id/txtName"/>
 
     <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_achievements"
-        android:id="@+id/btn_achievements"
-        android:background="@drawable/ab_background"
-        android:layout_toRightOf="@id/imgProfilePic"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="10sp"
-        android:layout_below="@id/txtEmail"/>
-
-    <Button
         android:id="@+id/btn_sign_out"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -58,9 +47,9 @@
         android:visibility="visible"
         android:layout_weight="0.3"
         android:gravity="center"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="35dp"
         android:layout_marginLeft="10sp"
         android:layout_toRightOf="@id/imgProfilePic"
-        android:layout_below="@id/btn_achievements"/>
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

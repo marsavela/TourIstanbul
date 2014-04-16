@@ -65,9 +65,11 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
     // Profile pic image size in pixels
     private static final int PROFILE_PIC_SIZE = 400;
+    private static final int REQUEST_ACHIEVEMENTS = 1;
 
     // Google client to interact with Google API
     private GoogleApiClient mGoogleApiClient;
+    private boolean show_achievements=false;
 
     /**
      * A flag indicating that a PendingIntent is in progress and prevents us
@@ -110,6 +112,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -176,7 +179,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     protected void onRestart() {
         super.onRestart();
         updateUI(mGoogleApiClient.isConnected() && mGoogleApiClient!=null);
-    //    mImgProfilePic.setImageBitmap(getImageBitmap(this, "profile_photo"));
     }
 
     @Override
@@ -222,6 +224,17 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 if (mInformationFragment == null)
                     mInformationFragment = new InformationFragment();
                 replaceFragment(mInformationFragment, getString(R.string.title_information));
+                break;
+            case 5:
+                // Show user's achievements
+                if (isSignedIn()) {
+                    startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
+                }
+                else {
+                //    beginUserInitiatedSignIn();
+                    show_achievements=true;
+                    reconnectClient();
+                }
                 break;
         }
     }
@@ -465,10 +478,9 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         mSignInClicked = false;
 
         // Get user's information
-
         getProfileInformation();
 
-        // Update the UI after signing in
+        // Update the UI after signing in with google+
         updateUI(true);
 
     }
@@ -510,7 +522,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     }
 
     /**
-     * Method to resolve any signin errors
+     * Method to resolve any sign in errors
      * */
     private void resolveSignInError() {
         if (mConnectionResult.hasResolution()) {
@@ -529,7 +541,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
      * */
     private void getProfileInformation() {
         try {
-
             if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
                 Person currentPerson = Plus.PeopleApi
                         .getCurrentPerson(mGoogleApiClient);
@@ -549,11 +560,10 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                         personPhotoUrl.length() - 2)
                         + PROFILE_PIC_SIZE;
 
-                mUser = new User(email, mPersonName, personPhotoUrl, personGooglePlusProfile);
-
                 new LoadProfileImage(mImgProfilePic, mUserProfilePhoto).execute(personPhotoUrl);
                 if (mViewPersonName != null)
                     mViewPersonName.setText(mPersonName);
+                mUser = new User(email, mPersonName, personPhotoUrl, personGooglePlusProfile);
                 mUser.setmPhoto(mImgProfilePic.getDrawingCache());
 
 
@@ -592,13 +602,21 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         return output;
     }
 
+    /**
+     * Game Services Sign in
+     */
     @Override
     public void onSignInSucceeded() {
         // show sign-out button, hide the sign-in button
         mBtnSignIn.setVisibility(View.GONE);
         mImgProfilePic.setVisibility(View.VISIBLE);
         mViewPersonName.setVisibility(View.VISIBLE);
-    //    getProfileInformation();
+
+        // Open achievements activity
+        if(show_achievements){
+            startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
+            show_achievements=false;
+        }
     }
 
     @Override

@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameActivity;
 
@@ -24,11 +23,9 @@ import lbs.erasmus.touristanbul.domain.User;
  */
 public class ProfileActivity extends BaseGameActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
-    private static final int REQUEST_ACHIEVEMENTS = 1;
     // Google client to interact with Google API
     private GoogleApiClient mGoogleApiClient;
     private Button mBtnSignOut;
-    private Button mBtnAchievements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +45,9 @@ public class ProfileActivity extends BaseGameActivity implements GoogleApiClient
 
         // Set up the Google+ buttons
         mBtnSignOut = (Button) findViewById(R.id.btn_sign_out);
-        mBtnAchievements = (Button) findViewById(R.id.btn_achievements);
 
         // Button click listeners
         mBtnSignOut.setOnClickListener(this);
-        mBtnAchievements.setOnClickListener(this);
 
         // Initializing google plus api client
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -112,11 +107,6 @@ public class ProfileActivity extends BaseGameActivity implements GoogleApiClient
             case R.id.btn_sign_out:
                 // Sign out button clicked
                 signOutFromGplus();
-                break;
-            case R.id.btn_achievements:
-                // Show user's achievements
-                if (isSignedIn())
-                    startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
                 break;
         }
     }

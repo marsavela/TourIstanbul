@@ -40,8 +40,8 @@
             android:key="interest3"
             android:title="Business Travelers"
             android:summary="@string/business_travelers_summary"
-            android:defaultValue="true" />
-
+            android:defaultValue="false" />
+        
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/attractions_title">

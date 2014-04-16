@@ -27,6 +27,14 @@ public class User implements Parcelable {
         return mPhoto;
     }
 
+    public String getmPhotoUrl() {
+        return mPhotoUrl;
+    }
+
+    public void setmPhotoUrl(String mPhotoUrl) {
+        this.mPhotoUrl = mPhotoUrl;
+    }
+
     public void setmPhoto(Bitmap mPhoto) {
         this.mPhoto = mPhoto;
     }

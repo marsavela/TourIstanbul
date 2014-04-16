@@ -71,6 +71,12 @@
             android:defaultValue="true" />
 
         <CheckBoxPreference
+            android:key="interest7"
+            android:title="Monuments"
+            android:summary="@string/monuments_summary"
+            android:defaultValue="true" />
+
+        <CheckBoxPreference
             android:key="interest8"
             android:title="Mosques"
             android:summary="@string/mosques_summary"

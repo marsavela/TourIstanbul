@@ -39,8 +39,11 @@ public class ProfileActivity extends BaseGameActivity implements GoogleApiClient
 
         User mUser = getIntent().getExtras().getParcelable("User");
 
-        mTxtName.setText(mUser.getmName());
-        mTxtEmail.setText(mUser.getmEmail());
+        if (mUser != null) {
+            mTxtName.setText(mUser.getmName());
+            mTxtEmail.setText(mUser.getmEmail());
+        }
+
         mImgProfilePic.setImageBitmap(getImageBitmap(this, "profile_photo"));
 
         // Set up the Google+ buttons
@@ -79,6 +82,7 @@ public class ProfileActivity extends BaseGameActivity implements GoogleApiClient
             return b;
         }
         catch(Exception e){
+            e.printStackTrace();
         }
         return null;
     }

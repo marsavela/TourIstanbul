@@ -39,7 +39,6 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.example.games.basegameutils.BaseGameActivity;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -87,6 +86,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     private ImageView mImgSettings;
     private TextView mTxtSettings;
 
+    private DAOUsers daoUsers;
     private DAOAttractions daoAttractions;
     private ArrayList<Attraction> mAttractionsList;
     SettingsActivity settings;
@@ -166,6 +166,8 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             new TaskAttractions().execute();
         //mAttractionsList = daoAttractions.getAttractions();
         filterAttractions();
+
+        daoUsers = new DAOUsers(this);
     }
 
     @Override
@@ -480,7 +482,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         // Get user's information
         getProfileInformation();
 
-        // Update the UI after signing in with google+
+        // Update the UI after signing in with google+ and downloading the profile picture
         updateUI(true);
 
     }
@@ -549,16 +551,9 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 String personGooglePlusProfile = currentPerson.getUrl();
                 String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
 
-                Log.e(TAG, "Name: " + mPersonName + ", plusProfile: "
-                        + personGooglePlusProfile + ", email: " + email
-                        + ", Image: " + personPhotoUrl);
+        //        Log.e(TAG, "Name: " + mPersonName + ", plusProfile: " + personGooglePlusProfile + ", email: " + email + ", Image: " + personPhotoUrl);
 
-                // by default the profile url gives 50x50 px image only
-                // we can replace the value with whatever dimension we want by
-                // replacing sz=X
-                personPhotoUrl = personPhotoUrl.substring(0,
-                        personPhotoUrl.length() - 2)
-                        + PROFILE_PIC_SIZE;
+                personPhotoUrl = personPhotoUrl.substring(0, personPhotoUrl.length() - 2) + PROFILE_PIC_SIZE;
 
                 new LoadProfileImage(mImgProfilePic, mUserProfilePhoto).execute(personPhotoUrl);
                 if (mViewPersonName != null)
@@ -566,6 +561,10 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 mUser = new User(email, mPersonName, personPhotoUrl, personGooglePlusProfile);
                 mUser.setmPhoto(mImgProfilePic.getDrawingCache());
 
+                if(daoUsers.newUserRegistration(mUser)){
+                    Toast.makeText(this, "User registered succesfully", Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "User registered succesfully");
+                }
 
             } else {
                 Toast.makeText(this,
@@ -648,6 +647,14 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             this.mIcon11 = mIcon11;
         }
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mViewPersonName.setText(mPersonName);
+            bmImage.setImageBitmap(getCroppedBitmap(
+                    BitmapFactory.decodeResource(getResources(), R.drawable.kebap)));
+        }
+
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
             try {
@@ -665,9 +672,16 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             if (result != null) {
                 bmImage.setImageBitmap(getCroppedBitmap(result));
                 saveImage(getBaseContext(), result, "profile_photo");
+                if(daoUsers.updateProfilePicture(mUser)){
+                    Toast.makeText(getParent(), "User profile picture updated succesfully", Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "User profile picture updated succesfully");
+                }
             } else
                 bmImage.setImageBitmap(getCroppedBitmap(
                         BitmapFactory.decodeResource(getResources(), R.drawable.kebap)));
+
+//            mImgProfilePic.setVisibility(View.VISIBLE);
+//            mViewPersonName.setVisibility(View.VISIBLE);
         }
     }
 
@@ -681,18 +695,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public Bitmap getImageBitmap(Context context,String name){
-        try{
-            FileInputStream fis = context.openFileInput(name);
-            Bitmap b = BitmapFactory.decodeStream(fis);
-            fis.close();
-            return b;
-        }
-        catch(Exception e){
-        }
-        return null;
     }
 
 }

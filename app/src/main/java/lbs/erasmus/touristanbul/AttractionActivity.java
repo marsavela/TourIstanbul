@@ -350,7 +350,7 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
     @Override
     public void onConnected(Bundle dataBundle) {
         // Display the connection status
-        Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
 
     }
 

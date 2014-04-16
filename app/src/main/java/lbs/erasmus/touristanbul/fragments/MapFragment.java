@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -82,7 +81,7 @@ public class MapFragment extends Fragment {
     private ListOverlay mPathOverlay;
     private ToggleButton mRouteButton;
     private ToggleButton mSnapToLocation;
-    private MyLocationOverlay mMyLocationOverlay;
+    private UserLocation mLocationOverlay;
 
     private GraphHopperAPI mHopper;
     private volatile boolean prepareInProgress = true;
@@ -99,6 +98,7 @@ public class MapFragment extends Fragment {
      */
     public interface MapFragmentCommunication {
         public List<Attraction> getAttractionList();
+        public void setUserLocation(Location location);
     }
 
     @Override
@@ -152,7 +152,8 @@ public class MapFragment extends Fragment {
                 if (mSnapToLocation.isChecked()) {
                     showCurrentPosition();
                 } else {
-                    mMyLocationOverlay.disableMyLocation();
+                    mLocationOverlay.disableMyLocation();
+                    mCallback.setUserLocation(null);
                 }
             }
         });
@@ -314,8 +315,8 @@ public class MapFragment extends Fragment {
     private void showCurrentPosition() {
         Drawable drawable = getResources().getDrawable(android.R.drawable.ic_menu_compass);
         drawable = Marker.boundCenter(drawable);
-        mMyLocationOverlay = new MyLocationOverlay(getActivity(), mMapView, drawable);
-        mMyLocationOverlay.enableMyLocation(true);
+        mLocationOverlay = new UserLocation(getActivity(), mMapView, drawable);
+        mLocationOverlay.enableMyLocation(true);
     }
 
     /**
@@ -582,5 +583,18 @@ public class MapFragment extends Fragment {
             }
         });
         alertDialog.show();
+    }
+
+    private class UserLocation extends MyLocationOverlay {
+
+        public UserLocation(Context context, MapView mapView, Drawable drawable) {
+            super(context, mapView, drawable);
+        }
+
+        @Override
+        public void onLocationChanged(Location location) {
+            super.onLocationChanged(location);
+            mCallback.setUserLocation(location);
+        }
     }
 }

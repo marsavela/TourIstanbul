@@ -17,6 +17,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -115,6 +116,11 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
      */
 
     private CharSequence mTitle;
+
+    /**
+     * Used to find others nearby users
+     */
+    private Location mUserLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -655,6 +661,14 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     public List<Attraction> getAttractionList() {
         //filterAttractions();
         return mAttractionsList;
+    }
+
+    /**
+     * When location is enabled the position will be updated
+     */
+    @Override
+    public void setUserLocation(Location location) {
+        mUserLocation = location;
     }
 
     /**

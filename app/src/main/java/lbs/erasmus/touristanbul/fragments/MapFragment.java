@@ -337,7 +337,7 @@ public class MapFragment extends Fragment {
             float distance;
             // Check all attractions on list
             for (Attraction attraction : mAttractionList) {
-                if (settingsManager.checkAttractionCategory(attraction)) {
+                if (settingsManager.checkAttractionCategory(attraction) || settingsManager.checkAttractionInterest(attraction)) {
                     location = attraction.getLocation();
                     zoomLevel = mMapView.getMapViewPosition().getZoomLevel();
                     distance = location.distanceTo(currentLocation);

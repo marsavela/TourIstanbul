@@ -268,7 +268,9 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         if (id == R.id.action_search) {
             return true;
         } else if (item.getItemId() == R.id.action_nearby_people) {
-            showNearbyPeopleList();
+            //showNearbyPeopleList();
+            daoAttractions.clearDB();
+            new TaskAttractions().execute();
             return true;
         }
         return super.onOptionsItemSelected(item);

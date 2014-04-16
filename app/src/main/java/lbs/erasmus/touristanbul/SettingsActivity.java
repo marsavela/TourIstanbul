@@ -11,8 +11,6 @@ import android.preference.PreferenceManager;
  */
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    OnPreferencesChanged mListener;
-
     @Override
     protected void onCreate(final Bundle savedInstanceState)
     {
@@ -70,13 +68,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 key.equals(ATTRACTIONS_MALLS) || key.equals(ATTRACTIONS_MOSQUES) ||
                 key.equals(ATTRACTIONS_MUSEUMS) ||
                 key.equals(ATTRACTIONS_RESTAURANTS) || key.equals(ATTRACTIONS_WIFI)) {
-            mListener.onPreferencesUpdated();
         }
 
-    }
-
-    public void setOnPreferencesChanged(OnPreferencesChanged listener)
-    {
-        mListener = listener;
     }
 }

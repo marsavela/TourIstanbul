@@ -134,7 +134,7 @@ public class SettingsManager {
             return getRestaurantsAttractions();
         else if (attraction.getCategory().equals("Wifi"))
             return getWifiAttractions();
-        else return true;
+        else return false;
     }
 
     /**
@@ -149,6 +149,6 @@ public class SettingsManager {
             return getBackpackersInterest();
         else if (attraction.getInterest().equals("Business Travelers"))
             return getBusinessInterest();
-        else return true;
+        else return false;
     }
 }

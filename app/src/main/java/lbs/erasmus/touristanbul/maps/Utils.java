@@ -44,6 +44,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -70,10 +71,18 @@ public final class Utils {
         alertDialog.show();
     }
 
-    public static Marker createMarker(Context context, GeoPoint p, int resource )
+    public static Marker createTextMarker(Context context,String title, GeoPoint point, int resource)
     {
         Drawable drawable = context.getResources().getDrawable(resource);
-        return new Marker(p, Marker.boundCenterBottom(drawable));
+
+        return new TextMarker(title, point, Marker.boundCenterBottom(drawable), context.getResources().getDisplayMetrics().density);
+    }
+
+    public static Marker createMarker(Context context, GeoPoint point, int resource)
+    {
+        Drawable drawable = context.getResources().getDrawable(resource);
+
+        return new Marker(point, Marker.boundCenterBottom(drawable));
     }
 
     public static Polyline createPolyline( GHResponse response )
@@ -175,7 +184,49 @@ public final class Utils {
             e.printStackTrace();
             return false;
         }
-
         return true;
     }
+
+    public static int getCategoryDrawableId(String category) {
+        if (category.equals("Airport"))
+            return R.drawable.ic_airport;
+        else if (category.equals("Hospital"))
+            return R.drawable.ic_hospital;
+        else if (category.equals("Hotel"))
+            return R.drawable.ic_hotel;
+        else if (category.equals("Mall"))
+            return R.drawable.ic_mall;
+        else if (category.equals("Mosques"))
+            return R.drawable.ic_mosque;
+        else if (category.equals("Museums"))
+            return R.drawable.ic_museum;
+        else if (category.equals("Restaurant"))
+            return R.drawable.ic_restaurant;
+        else if (category.equals("Wifi"))
+            return R.drawable.ic_wifi;
+        else return R.drawable.flag_green;
+    }
+
+    public static File createFileFromInputStream(InputStream inputStream, String filename) {
+        try{
+            File file = new File(filename);
+            OutputStream outputStream = new FileOutputStream(file);
+            byte buffer[] = new byte[1024];
+            int length = 0;
+
+            while((length=inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer,0,length);
+            }
+
+            outputStream.close();
+            inputStream.close();
+
+            return file;
+        }catch (IOException e) {
+            //Logging exception
+        }
+
+        return null;
+    }
+
 }

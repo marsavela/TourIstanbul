@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -18,6 +19,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -41,6 +43,7 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.example.games.basegameutils.BaseGameActivity;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -52,6 +55,7 @@ import lbs.erasmus.touristanbul.fragments.AttractionsFragment;
 import lbs.erasmus.touristanbul.fragments.InformationFragment;
 import lbs.erasmus.touristanbul.fragments.MapFragment;
 import lbs.erasmus.touristanbul.fragments.ToolsFragment;
+import lbs.erasmus.touristanbul.maps.Utils;
 
 public class MainActivity extends BaseGameActivity implements View.OnClickListener,
         GooglePlayServicesClient.ConnectionCallbacks,
@@ -164,7 +168,9 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         daoAttractions = new DAOAttractions(this);
         mAttractionsList = new ArrayList<Attraction>();
 
-        if (!daoAttractions.checkDataBase())
+        File mapFile = MapFragment.getMapFile();
+
+        if (!daoAttractions.checkDataBase() || !mapFile.exists())
             new TaskAttractions().execute();
         //mAttractionsList = daoAttractions.getAttractions();
         filterAttractions();
@@ -358,7 +364,39 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
         @Override
         protected Void doInBackground(Void... params) {
-            daoAttractions.downloadAndSaveData();
+            if (!daoAttractions.checkDataBase()) daoAttractions.downloadAndSaveData();
+
+            File mapFile = MapFragment.getMapFile();
+            if (!mapFile.exists()) {
+                File outputFile = null;
+                AssetManager assetsManager = getAssets();
+                try {
+                    String localfolder = MapFragment.getLocalFolder() + "-gh";
+                    // Check if the folder exists
+                    File path = new File(localfolder);
+                    if (!path.exists()) path.mkdirs();
+
+                    // Delete zip file if exists
+                    outputFile = new File(path, MapFragment.ZIP_FILENAME);
+                    if (outputFile.exists()) outputFile.delete();
+
+                    InputStream inputStream = assetsManager.open(MapFragment.ZIP_FILENAME);
+                    Utils.createFileFromInputStream(inputStream, localfolder + "/" + MapFragment.ZIP_FILENAME);
+
+                    // unzip files file
+                    Utils.unzipFile(localfolder, MapFragment.ZIP_FILENAME);
+
+                    if (outputFile.exists()) outputFile.delete();
+
+                    if (mMapFragment != null) {
+                        mMapFragment.initializeMapView();
+                        mMapFragment.centerMap();
+                    }
+                } catch (Exception e) {
+                    Log.e(getClass().getName(), "Error while copying maps to sd");
+                }
+            }
+
             return null;
         }
 

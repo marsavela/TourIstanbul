@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -62,7 +63,8 @@ public class MapFragment extends Fragment {
     private static final String APP_FOLDER = "touristanbul";
     private static final String AREA_NAME ="istanbul";
     private static final String MAP_FILENAME = "istanbul.map";
-    private static final String ZIP_FILENAME = "istanbul.ghz";
+
+    public static final String ZIP_FILENAME = "istanbul.ghz";
 
     private static final String INTENT_BROADCAST_POSITION = "broadcast_gps";
 
@@ -71,7 +73,7 @@ public class MapFragment extends Fragment {
     private static final String KEY_ZOOM_LEVEL = "zoomLevel";
     private static final String PREFERENCES_FILE = "MapActivity";
 
-    private static final int MIN_OBJECT_ZOOM = 18;
+    private static final int MIN_OBJECT_ZOOM = 13;
     private static final int REFRESH_DISTANCE = 5000;
 
     private FileMapDownloader mFileMapDownloader;
@@ -155,6 +157,7 @@ public class MapFragment extends Fragment {
             }
         });
 
+        /* Code to download map from server
         // Check if the maps file exists, if not shows a download dialog
         mFileMapDownloader = null;
         File mapFile = getMapFile();
@@ -168,6 +171,7 @@ public class MapFragment extends Fragment {
                         R.string.mapfragment_advice_text);
             }
         }
+        */
 
         return rootView;
     }
@@ -183,7 +187,7 @@ public class MapFragment extends Fragment {
         File mapFile = getMapFile();
         if (mapFile.exists() && (mFileMapDownloader == null
                 || mFileMapDownloader.getStatus() == AsyncTask.Status.FINISHED)) {
-            initializeMapView(mMapView);
+            initializeMapView();
             showAttractions();
         }
     }
@@ -217,38 +221,36 @@ public class MapFragment extends Fragment {
         return new GeoPoint(41.0096334, 28.9651646);
     }
 
-    private File getMapFile() {
+    public static File getMapFile() {
         return new File(getMapFileName());
     }
 
-    private String getMapFileName() {
+    private static String getMapFileName() {
         //TODO: download istanbul map to a SD folder
         return getLocalFolder() + "-gh/" + MAP_FILENAME;
     }
 
-    private String getLocalFolder() {
+    public static String getLocalFolder() {
         //TODO: download istanbul map to a SD folder
         return Environment.getExternalStorageDirectory() + "/" + APP_FOLDER + "/" + AREA_NAME;
     }
 
     /**
      * Set initial map view parameters
-     *
-     * @param mapView
      */
-    private void initializeMapView(MapView mapView) {
-        mapView.setClickable(true);
-        mapView.getMapScaleBar().setShowMapScaleBar(true);
-        mapView.setBuiltInZoomControls(false);
+    public void initializeMapView() {
+        mMapView.setClickable(true);
+        mMapView.getMapScaleBar().setShowMapScaleBar(true);
+        mMapView.setBuiltInZoomControls(false);
         //mapView.getFpsCounter().setFpsCounter(true);
-        mapView.setMapFile(getMapFile());
+        mMapView.setMapFile(getMapFile());
 
         mPathOverlay = new ListOverlay();
-        mapView.getOverlays().add(mPathOverlay);
+        mMapView.getOverlays().add(mPathOverlay);
 
         loadGraphStorage();
 
-        restoreMapView(mapView);
+        restoreMapView(mMapView);
     }
 
     /**
@@ -258,11 +260,12 @@ public class MapFragment extends Fragment {
      * @return the MapViewPosition set
      */
     protected MapViewPosition initializePosition(MapViewPosition mapViewPosition) {
-        GeoPoint center = mapViewPosition.getCenter();
-        if (center.equals(new GeoPoint(0, 0))) {
-            mapViewPosition.setCenter(getInitialPosition());
-        }
+        mapViewPosition.setCenter(getInitialPosition());
         return mapViewPosition;
+    }
+
+    public void centerMap() {
+        mMapView.getMapViewPosition().setCenter(getInitialPosition());
     }
 
     /**
@@ -322,8 +325,9 @@ public class MapFragment extends Fragment {
         mAttractionList = mCallback.getAttractionList();
         SettingsManager settingsManager = new SettingsManager(getActivity().getApplicationContext());
 
+        mPathOverlay.getOverlayItems().clear();
+
         if (mAttractionList != null) {
-            mPathOverlay.getOverlayItems().clear();
             // Save current location
             Location currentLocation = new Location("CurrentLocation");
             currentLocation.setLatitude( mMapView.getMapViewPosition().getCenter().latitude);
@@ -333,19 +337,18 @@ public class MapFragment extends Fragment {
             Location location;
             Marker marker;
             GeoPoint position;
-            int zoomLevel;
-            float distance;
+            int zoomLevel = mMapView.getMapViewPosition().getZoomLevel();
+            //float distance;
             // Check all attractions on list
-            for (Attraction attraction : mAttractionList) {
-                if (settingsManager.checkAttractionCategory(attraction) || settingsManager.checkAttractionInterest(attraction)) {
-                    location = attraction.getLocation();
-                    zoomLevel = mMapView.getMapViewPosition().getZoomLevel();
-                    distance = location.distanceTo(currentLocation);
-                    if (zoomLevel <= MIN_OBJECT_ZOOM
-                            && distance <= REFRESH_DISTANCE) {
+            if (zoomLevel >= MIN_OBJECT_ZOOM) {
+                for (Attraction attraction : mAttractionList) {
+                    if (settingsManager.checkAttractionCategory(attraction) || settingsManager.checkAttractionInterest(attraction)) {
+                        location = attraction.getLocation();
+                        //distance = location.distanceTo(currentLocation);
+
                         position = new GeoPoint(location.getLatitude(), location.getLongitude());
-                        //marker = Utils.createMarker(getActivity(), position, attraction.getDrawableId());
-                        marker = Utils.createMarker(getActivity(), position, R.drawable.flag_green);
+                        //marker = Utils.createMarker(getActivity(), position, Utils.getCategoryDrawableId(attraction.getCategory()));
+                        marker = Utils.createTextMarker(getActivity(), attraction.getTitle(), position, Utils.getCategoryDrawableId(attraction.getCategory()));
                         mPathOverlay.getOverlayItems().add(marker);
                     }
                 }
@@ -458,7 +461,6 @@ public class MapFragment extends Fragment {
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMax(100);
             progressDialog.setProgress(0);
-            progressDialog.setMax(0);
             progressDialog.setTitle(getResources().getString(R.string.mapfragment_downloading_title));
             progressDialog.setMessage(getResources().getString(R.string.mapfragment_downloading_text_download));
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -531,7 +533,7 @@ public class MapFragment extends Fragment {
             super.onPostExecute(outputFile);
             progressDialog.dismiss();
             if(!isCancelled()){
-                initializeMapView(mMapView);
+                initializeMapView();
             }
 
             if (outputFile.exists()) outputFile.delete();

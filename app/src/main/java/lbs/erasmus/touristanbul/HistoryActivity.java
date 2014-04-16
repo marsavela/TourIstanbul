@@ -19,6 +19,7 @@ public class HistoryActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setGroupData();
         setContentView(R.layout.activity_history);
+
         setListAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_1, groupItem));
     }
 

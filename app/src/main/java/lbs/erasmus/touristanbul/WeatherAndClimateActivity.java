@@ -124,7 +124,7 @@ public class WeatherAndClimateActivity extends Activity {
         @Override
         protected void onPostExecute(Void result) {
             // TODO Auto-generated method stub
-            ((TextView) findViewById(R.id.tvWeatherTemperature)).setText(temperature + " �C");
+            ((TextView) findViewById(R.id.tvWeatherTemperature)).setText(temperature + " ·C");
             ((TextView) findViewById(R.id.tvWeatherDescription)).setText(description);
             Drawable icon = null;
             switch(weather) {

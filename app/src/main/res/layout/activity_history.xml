@@ -8,13 +8,25 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+
+        <ImageView
+            android:id="@+id/ivHistoryImage"
+            android:layout_width="match_parent"
+            android:layout_height="299dp"
+            android:src="@drawable/people"
+            android:layout_gravity="center_horizontal|top" />
 
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:drawSelectorOnTop="false" />
+            android:layout_height="217dp"
+            android:layout_below="@+id/ivHistoryImage"
+            android:drawSelectorOnTop="false"
+            android:layout_gravity="center_horizontal|bottom" />
     </FrameLayout>
 
 

@@ -69,6 +69,7 @@
         <activity
             android:name="lbs.erasmus.touristanbul.HistoryActivity"
             android:label="@string/history"
+            android:screenOrientation="portrait"
             android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data

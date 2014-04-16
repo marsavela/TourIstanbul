@@ -58,7 +58,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,
-        MapFragment.MapFragmentCommunication, OnPreferencesChanged {
+        MapFragment.MapFragmentCommunication {
 
     private static final int RC_SIGN_IN = 0;
     private static final String TAG = "MainActivity";
@@ -119,8 +119,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-        settings = new SettingsActivity();
-        settings.setOnPreferencesChanged(this);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -182,6 +180,12 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        filterAttractions();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         if (mGoogleApiClient.isConnected()) {
@@ -200,12 +204,13 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 replaceFragment(mMapFragment, getString(R.string.title_map));
                 break;
             case 2:
+                filterAttractions();
                 Bundle extras = new Bundle();
                 extras.putParcelableArrayList("Attractions",mAttractionsList);
                 if (mAttractionsFragment == null) {
                     mAttractionsFragment = new AttractionsFragment();
-                    mAttractionsFragment.setArguments(extras);
                 }
+                mAttractionsFragment.setArguments(extras);
                 replaceFragment(mAttractionsFragment, getString(R.string.title_attractions));
                 break;
             case 3:
@@ -327,59 +332,11 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     private void filterAttractions() {
         mAttractionsList = new ArrayList<Attraction>();
         SettingsManager settingsManager = new SettingsManager(this);
-        ArrayList<String> interests = getUserInterests();
         for (Attraction a : daoAttractions.getAttractions()) {
             //if (interests.contains(a.getCategory()) || interests.contains(a.getInterest()))
             if (settingsManager.checkAttractionCategory(a) || settingsManager.checkAttractionInterest(a))
                 mAttractionsList.add(a);
         }
-    }
-
-    private ArrayList<String> getUserInterests() {
-        String INTERESTS_PARENTS = "interest1";
-        String INTERESTS_BACKPACKERS = "interest2";
-        String INTERESTS_BUSINESS = "interest3";
-        String ATTRACTIONS_AIRPORTS = "interest4";
-        String ATTRACTIONS_HOSPITALS = "interest5";
-        String ATTRACTIONS_HOTELS = "interest6";
-        String ATTRACTIONS_MALLS = "interest7";
-        String ATTRACTIONS_MOSQUES = "interest8";
-        String ATTRACTIONS_MUSEUMS = "interest9";
-        String ATTRACTIONS_RESTAURANTS = "interest10";
-        String ATTRACTIONS_WIFI = "interest11";
-
-        SettingsManager settingsManager = new SettingsManager(this);
-        ArrayList<String> interests = new ArrayList<String>();
-
-        if(settingsManager.getParentsInterest())
-            interests.add(INTERESTS_PARENTS);
-        if(settingsManager.getBackpackersInterest())
-            interests.add(INTERESTS_BACKPACKERS);
-        if(settingsManager.getBusinessInterest())
-            interests.add(INTERESTS_BUSINESS);
-        if(settingsManager.getAirportAttractions())
-            interests.add(ATTRACTIONS_AIRPORTS);
-        if(settingsManager.getHospitalAttractions())
-            interests.add(ATTRACTIONS_HOSPITALS);
-        if(settingsManager.getHotelsAttractions())
-            interests.add(ATTRACTIONS_HOTELS);
-        if(settingsManager.getMallsAttractions())
-            interests.add(ATTRACTIONS_MALLS);
-        if(settingsManager.getMosquesAttractions())
-            interests.add(ATTRACTIONS_MOSQUES);
-        if(settingsManager.getMuseumsAttractions())
-            interests.add(ATTRACTIONS_MUSEUMS);
-        if(settingsManager.getRestaurantsAttractions())
-            interests.add(ATTRACTIONS_RESTAURANTS);
-        if(settingsManager.getWifiAttractions())
-            interests.add(ATTRACTIONS_WIFI);
-
-        return interests;
-    }
-
-    @Override
-    public void onPreferencesUpdated() {
-        filterAttractions();
     }
 
     private class TaskAttractions extends AsyncTask<Void, Void, Void> {
@@ -655,6 +612,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
      */
     @Override
     public List<Attraction> getAttractionList() {
+        filterAttractions();
         return mAttractionsList;
     }
 

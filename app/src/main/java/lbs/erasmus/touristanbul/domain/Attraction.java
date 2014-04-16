@@ -7,8 +7,11 @@ package lbs.erasmus.touristanbul.domain;
 
 import android.location.Location;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.io.File;
 
 import lbs.erasmus.touristanbul.AssetProvider;
 
@@ -16,6 +19,9 @@ import lbs.erasmus.touristanbul.AssetProvider;
  * Model object for attraction.
  */
 public class Attraction implements Parcelable {
+
+    private static final String APP_FOLDER = "touristanbul";
+    private static final String IMG_FOLDER = "images";
 
     /**
      * Public enum to control the attraction category
@@ -52,7 +58,8 @@ public class Attraction implements Parcelable {
     private Location mLocation;
 
     /** Category of the attraction. */
-    private Category mCategory;
+    //private Category mCategory;
+    private String mCategory;
 
     /** Category res/drawable id **/
     private int mDrawableId;
@@ -83,7 +90,7 @@ public class Attraction implements Parcelable {
     public Attraction(String titleString, String subtitleString, Location location, String imageAssetFilePath) {
         mTitle = titleString;
         mSubtitle = subtitleString;
-        mCategory = Category.UNKNOWN;
+        //mCategory = Category.UNKNOWN;
         mLocation = location;
         mImageUri = Uri.parse("content://" + AssetProvider.CONTENT_URI + "/" +
                 imageAssetFilePath);
@@ -92,12 +99,11 @@ public class Attraction implements Parcelable {
     public Attraction(String titleString, String subtitleString, double latitude, double longitude, String imageAssetFilePath) {
         mTitle = titleString;
         mSubtitle = subtitleString;
-        mCategory = Category.UNKNOWN;
+        //mCategory = Category.UNKNOWN;
         mLocation = new Location(titleString);
         mLocation.setLatitude(latitude);
         mLocation.setLongitude(longitude);
-        mImageUri = Uri.parse("content://" + AssetProvider.CONTENT_URI + "/" +
-                imageAssetFilePath);
+        mImageUri = Uri.fromFile(new File(getImagePath() + imageAssetFilePath));
     }
 
     /**
@@ -118,7 +124,7 @@ public class Attraction implements Parcelable {
      */
 
     public Attraction(String titleString, String subtitleString, String descriptionString,
-                      String addressString, Location location, Category category,
+                      String addressString, Location location, String category,
                       String interestString, double ratesDouble, int numRatesInt, String openingString,
                       String imageAssetFilePath) {
         mTitle = titleString;
@@ -131,34 +137,35 @@ public class Attraction implements Parcelable {
         mRate = ratesDouble;
         mNumRates = numRatesInt;
         mOpeningTimes = openingString;
-        mImageUri = Uri.parse("content://" + AssetProvider.CONTENT_URI + "/" +
-                imageAssetFilePath);
+        //mImageUri = Uri.parse("content://" + AssetProvider.CONTENT_URI + "/" +
+          //      imageAssetFilePath);
+        mImageUri = Uri.fromFile(new File(getImagePath() + imageAssetFilePath));
     }
 
-    private Attraction(Parcel parcel) {
+    /*private Attraction(Parcel parcel) {
         mTitle = parcel.readString();
         mSubtitle = parcel.readString();
         mCategory = Category.UNKNOWN;
         mLocation = Location.CREATOR.createFromParcel(parcel);
         mImageUri = Uri.parse(parcel.readString());
     }
+    */
 
-    /* New Attraction(Parcel parcel)
+    //* New Attraction(Parcel parcel)
 
     private Attraction(Parcel parcel) {
         mTitle = parcel.readString();
         mSubtitle = parcel.readString();
-	mDescription = parcel.readString();
+	    mDescription = parcel.readString();
         mAddress = parcel.readString();
         mLocation = Location.CREATOR.createFromParcel(parcel);
-	mCategory = parcel.readString();
-	mInterest = parcel.readDouble();
-        mRate = ratesDouble();
-	mNumRates = parcel.readInt();
-        mOpeningTimes = ratesString();
+	    mCategory = parcel.readString();
+	    mInterest = parcel.readString();
+        mRate = parcel.readDouble();
+	    mNumRates = parcel.readInt();
+        mOpeningTimes = parcel.readString();
         mImageUri = Uri.parse(parcel.readString());
     }
-    */
 
     public String getTitle() {
         return mTitle;
@@ -176,7 +183,7 @@ public class Attraction implements Parcelable {
         return mAddress;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return mCategory;
     }
 
@@ -225,20 +232,20 @@ public class Attraction implements Parcelable {
         return 0;
     }
 
-    @Override
+    /*@Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(mTitle);
         parcel.writeString(mSubtitle);
         mLocation.writeToParcel(parcel, i);
         parcel.writeString(mImageUri.toString());
-    }
+    }*/
 
     @Override
     public String toString() {
         return mTitle;
     }
 
-    /*
+
     //New writeToParcel according new constructor
     @Override
     public void writeToParcel(Parcel parcel, int i) {
@@ -254,7 +261,6 @@ public class Attraction implements Parcelable {
         parcel.writeString(mOpeningTimes);
         parcel.writeString(mImageUri.toString());
     }
-    */
 
     public static final Creator<Attraction> CREATOR = new Creator<Attraction>() {
         @Override
@@ -264,8 +270,12 @@ public class Attraction implements Parcelable {
 
         @Override
         public Attraction[] newArray(int i) {
-            return new Attraction[0];
+            return new Attraction[i];
         }
     };
 
+    private String getImagePath() {
+        return Environment.getExternalStorageDirectory() + File.separator + APP_FOLDER
+                + File.separator + IMG_FOLDER + File.separator;
+    }
 }

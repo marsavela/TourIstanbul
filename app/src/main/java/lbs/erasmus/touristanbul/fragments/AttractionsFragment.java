@@ -26,6 +26,8 @@ import lbs.erasmus.touristanbul.domain.Attraction;
  */
 public class AttractionsFragment extends Fragment implements AdapterView.OnItemClickListener {
 
+    private AttractionsAdapter attractionsAdapter;
+
     public AttractionsFragment() {
     }
 
@@ -38,13 +40,28 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
         // Find the {@link GridView} that was already defined in the XML layout
         GridView gridView = (GridView) rootView.findViewById(R.id.grid);
 
-        // Initialize the adapter with all the attractions. Set the adapter on the {@link GridView}.
-        gridView.setAdapter(new AttractionsAdapter(inflater, createAllAttractions()));
+        Bundle extras = getArguments();
+        ArrayList<Attraction> attractionArrayList;
+        if (extras != null) {
 
-        // Set a click listener for each attraction in the grid
-        gridView.setOnItemClickListener(this);
+            attractionArrayList = extras.getParcelableArrayList("Attractions");
+            // Initialize the adapter with all the attractions. Set the adapter on the {@link GridView}.
+            //gridView.setAdapter(new AttractionsAdapter(inflater, createAllAttractions()));
+            attractionsAdapter = new AttractionsAdapter(inflater, attractionArrayList);
+            gridView.setAdapter(attractionsAdapter);
+
+            // Set a click listener for each attraction in the grid
+            gridView.setOnItemClickListener(this);
+
+        }
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        attractionsAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -111,7 +128,6 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
         // Find attraction that was clicked based off of position in adapter
         Attraction attraction = (Attraction) parent.getItemAtPosition(position);
 
-        //TODO Hay que enlazar con la actividad correspondiente a las fichas de las atracciones
         if(attraction != null) {
             //Toast.makeText(getActivity(), attraction.mTitle, Toast.LENGTH_LONG).show();
             Intent i = new Intent(getActivity(), AttractionActivity.class);

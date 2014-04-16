@@ -80,6 +80,8 @@
     <string name="airports_summary">Airports</string>
     <string name="hotels_summary">Know where to spend the night</string>
     <string name="wifi_spots_summary">WIFI Spots</string>
+    <string name="share_location_title">LOCATION</string>
+    <string name="share_location_summary">Let other people see your location</string>
 
     <!-- Attraction Activity -->
     <string name="description">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</string>
@@ -338,7 +340,7 @@
     <string name="dos_and_donts">Do\'s and Don\'ts</string>
     <string name="group_text">Group Text</string>
     <string name="child_text">Child text</string>
-    <string name="content_description">description</string>
+    <string name="content_description">Description</string>
 
     <!-- Do\'s and Don\'ts Activity -->
     <string name="when_visiting_a_mosque_child1">&lt;b>Do &lt;/b>remove your shoes before going inside a mosque.Women must cover hair and dress modestly. Men should not wear shorts.</string>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
     <PreferenceCategory android:title="MEASURE UNITS">
+
         <ListPreference
             android:title="Distance Units"
             android:key="distance_units"
@@ -9,6 +11,7 @@
             android:entries="@array/distance_units"
             android:entryValues="@array/distance_units_values"
             android:defaultValue="3" />
+
         <ListPreference
             android:title="Temperature Scale"
             android:key="temperature_scale"
@@ -16,64 +19,89 @@
             android:entries="@array/temperature_scale"
             android:entryValues="@array/temperature_scale_values"
             android:defaultValue="2" />
+
     </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/interest_title">
+
         <CheckBoxPreference
             android:key="interest1"
             android:title="Parents"
             android:summary="@string/parents_summary"
             android:defaultValue="true" />
+
         <CheckBoxPreference
             android:key="interest2"
             android:title="Backpackers"
             android:summary="@string/backpackers_summary"
             android:defaultValue="false" />
+
         <CheckBoxPreference
             android:key="interest3"
             android:title="Business Travelers"
             android:summary="@string/business_travelers_summary"
             android:defaultValue="true" />
+
     </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/attractions_title">
+
         <CheckBoxPreference
             android:key="interest4"
             android:title="Airports"
             android:summary="@string/airports_summary"
             android:defaultValue="false" />
+
         <CheckBoxPreference
             android:key="interest5"
             android:title="Hospitals"
             android:summary="@string/hospitals_summary"
             android:defaultValue="false" />
+
         <CheckBoxPreference
             android:key="interest6"
             android:title="Hotels"
             android:summary="@string/hotels_summary"
             android:defaultValue="false" />
+
         <CheckBoxPreference
             android:key="interest7"
             android:title="Malls"
             android:summary="@string/malls_summary"
             android:defaultValue="true" />
+
         <CheckBoxPreference
             android:key="interest8"
             android:title="Mosques"
             android:summary="@string/mosques_summary"
             android:defaultValue="true" />
+
         <CheckBoxPreference
             android:key="interest9"
             android:title="Museums"
             android:summary="@string/museums_summary"
             android:defaultValue="false" />
+
         <CheckBoxPreference
             android:key="interest10"
             android:title="Restaurants"
             android:summary="@string/restaurants_summary"
             android:defaultValue="true" />
+
         <CheckBoxPreference
             android:key="interest11"
             android:title="WIFI Spots"
             android:summary="@string/wifi_spots_summary"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/share_location_title">
+
+        <CheckBoxPreference
+            android:key="share_location"
+            android:title="Share your location"
+            android:summary="@string/share_location_summary"
             android:defaultValue="false" />
 
     </PreferenceCategory>

@@ -129,7 +129,7 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
 
         helper.initActionBar(this);
     }
-//hola otra vez
+
     private void rateDialog() {
         AlertDialog.Builder builderRateDialog = new AlertDialog.Builder(this);
         // Get the layout inflater
@@ -207,6 +207,8 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
             case R.id.menu_item_share:
                 shareAttraction();
                 return true;
+            case R.id.menu_item_point:
+                Toast.makeText(this,"This should show you this attraction on the map.",Toast.LENGTH_SHORT).show();
             default:
                 return super.onOptionsItemSelected(item);
         }

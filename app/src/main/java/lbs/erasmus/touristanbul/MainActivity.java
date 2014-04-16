@@ -42,6 +42,7 @@ import com.google.example.games.basegameutils.BaseGameActivity;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import lbs.erasmus.touristanbul.domain.Attraction;
@@ -57,7 +58,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,
-        MapFragment.MapFragmentCommunication {
+        MapFragment.MapFragmentCommunication, OnPreferencesChanged {
 
     private static final int RC_SIGN_IN = 0;
     private static final String TAG = "MainActivity";
@@ -85,7 +86,8 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     private TextView mTxtSettings;
 
     private DAOAttractions daoAttractions;
-    private List<Attraction> mAttractionsList;
+    private ArrayList<Attraction> mAttractionsList;
+    SettingsActivity settings;
 
     /**
      * Fragments for each section of the application.
@@ -117,6 +119,8 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
+        settings = new SettingsActivity();
+        settings.setOnPreferencesChanged(this);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -155,7 +159,12 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
          * Generate content for testing
          */
         daoAttractions = new DAOAttractions(this);
-        new TaskAttractions().execute();
+        mAttractionsList = new ArrayList<Attraction>();
+
+        if (!daoAttractions.checkDataBase())
+            new TaskAttractions().execute();
+        //mAttractionsList = daoAttractions.getAttractions();
+        filterAttractions();
     }
 
     @Override
@@ -191,8 +200,12 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 replaceFragment(mMapFragment, getString(R.string.title_map));
                 break;
             case 2:
-                if (mAttractionsFragment == null)
+                Bundle extras = new Bundle();
+                extras.putParcelableArrayList("Attractions",mAttractionsList);
+                if (mAttractionsFragment == null) {
                     mAttractionsFragment = new AttractionsFragment();
+                    mAttractionsFragment.setArguments(extras);
+                }
                 replaceFragment(mAttractionsFragment, getString(R.string.title_attractions));
                 break;
             case 3:
@@ -228,6 +241,13 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main, menu);
+
+            SettingsManager settingsManager = new SettingsManager(this);
+            if (!settingsManager.getShareLocation()) {
+                MenuItem m = menu.findItem(R.id.action_nearby_people);
+                m.setVisible(false);
+            }
+
             restoreActionBar();
             return true;
         }
@@ -248,6 +268,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void showNearbyPeopleList() {
 
         String names[] ={"Antonio","Bianca","Carlos","Domingo"};
@@ -275,6 +296,91 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         alertRateDialog.show();
     }
 
+    /*@Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        //TODO No refresca las attractions
+
+        String INTERESTS_PARENTS = "interest1";
+        String INTERESTS_BACKPACKERS = "interest2";
+        String INTERESTS_BUSINESS = "interest3";
+        String ATTRACTIONS_AIRPORTS = "interest4";
+        String ATTRACTIONS_HOSPITALS = "interest5";
+        String ATTRACTIONS_HOTELS = "interest6";
+        String ATTRACTIONS_MALLS = "interest7";
+        String ATTRACTIONS_MOSQUES = "interest8";
+        String ATTRACTIONS_MUSEUMS = "interest9";
+        String ATTRACTIONS_RESTAURANTS = "interest10";
+        String ATTRACTIONS_WIFI = "interest11";
+
+        if (key.equals(INTERESTS_PARENTS) || key.equals(INTERESTS_BACKPACKERS) ||
+                key.equals(INTERESTS_BUSINESS) || key.equals(ATTRACTIONS_AIRPORTS) ||
+                key.equals(ATTRACTIONS_HOSPITALS) || key.equals(ATTRACTIONS_HOTELS) ||
+                key.equals(ATTRACTIONS_MALLS) || key.equals(ATTRACTIONS_MOSQUES) ||
+                key.equals(ATTRACTIONS_MUSEUMS) ||
+                key.equals(ATTRACTIONS_RESTAURANTS) || key.equals(ATTRACTIONS_WIFI)) {
+            filterAttractions();
+        }
+
+    }*/
+
+    private void filterAttractions() {
+        mAttractionsList = new ArrayList<Attraction>();
+        SettingsManager settingsManager = new SettingsManager(this);
+        ArrayList<String> interests = getUserInterests();
+        for (Attraction a : daoAttractions.getAttractions()) {
+            //if (interests.contains(a.getCategory()) || interests.contains(a.getInterest()))
+            if (settingsManager.checkAttractionCategory(a) || settingsManager.checkAttractionInterest(a))
+                mAttractionsList.add(a);
+        }
+    }
+
+    private ArrayList<String> getUserInterests() {
+        String INTERESTS_PARENTS = "interest1";
+        String INTERESTS_BACKPACKERS = "interest2";
+        String INTERESTS_BUSINESS = "interest3";
+        String ATTRACTIONS_AIRPORTS = "interest4";
+        String ATTRACTIONS_HOSPITALS = "interest5";
+        String ATTRACTIONS_HOTELS = "interest6";
+        String ATTRACTIONS_MALLS = "interest7";
+        String ATTRACTIONS_MOSQUES = "interest8";
+        String ATTRACTIONS_MUSEUMS = "interest9";
+        String ATTRACTIONS_RESTAURANTS = "interest10";
+        String ATTRACTIONS_WIFI = "interest11";
+
+        SettingsManager settingsManager = new SettingsManager(this);
+        ArrayList<String> interests = new ArrayList<String>();
+
+        if(settingsManager.getParentsInterest())
+            interests.add(INTERESTS_PARENTS);
+        if(settingsManager.getBackpackersInterest())
+            interests.add(INTERESTS_BACKPACKERS);
+        if(settingsManager.getBusinessInterest())
+            interests.add(INTERESTS_BUSINESS);
+        if(settingsManager.getAirportAttractions())
+            interests.add(ATTRACTIONS_AIRPORTS);
+        if(settingsManager.getHospitalAttractions())
+            interests.add(ATTRACTIONS_HOSPITALS);
+        if(settingsManager.getHotelsAttractions())
+            interests.add(ATTRACTIONS_HOTELS);
+        if(settingsManager.getMallsAttractions())
+            interests.add(ATTRACTIONS_MALLS);
+        if(settingsManager.getMosquesAttractions())
+            interests.add(ATTRACTIONS_MOSQUES);
+        if(settingsManager.getMuseumsAttractions())
+            interests.add(ATTRACTIONS_MUSEUMS);
+        if(settingsManager.getRestaurantsAttractions())
+            interests.add(ATTRACTIONS_RESTAURANTS);
+        if(settingsManager.getWifiAttractions())
+            interests.add(ATTRACTIONS_WIFI);
+
+        return interests;
+    }
+
+    @Override
+    public void onPreferencesUpdated() {
+        filterAttractions();
+    }
 
     private class TaskAttractions extends AsyncTask<Void, Void, Void> {
 
@@ -288,23 +394,24 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             pDialog.setTitle("Contacting Servers");
             pDialog.setMessage("Logging in ...");
             pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
+            pDialog.setCancelable(false);
             pDialog.show();
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            mAttractionsList = daoAttractions.retrieveData();
+            daoAttractions.downloadAndSaveData();
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            pDialog.dismiss();
-            Attraction attraction = new Attraction("Airport","", 40.983934, 28.820443, null);
+            mAttractionsList = daoAttractions.getAttractions();
+            /*Attraction attraction = new Attraction("Airport","", 40.983934, 28.820443, null);
             mAttractionsList.add(attraction);
             attraction = new Attraction("Yeditepe University","", 40.973210, 29.151750, null);
-            mAttractionsList.add(attraction);
+            mAttractionsList.add(attraction);*/
+            pDialog.dismiss();
             super.onPostExecute(aVoid);
         }
     }
@@ -551,7 +658,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         return mAttractionsList;
     }
 
-
     /**
      * Background Async task to load user profile picture from url
      * */
@@ -610,6 +716,5 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         }
         return null;
     }
-
 
 }

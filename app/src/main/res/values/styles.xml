@@ -9,6 +9,10 @@
     
     <style name="Widget.Light.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid" />
 
+    <style name="Widget.ActionBar.Orange">
+        <item name="android:background">@drawable/ab_background</item>
+    </style>
+
     <style name="Widget.ActionBar.Transparent">
         <item name="android:background">@android:color/transparent</item>
     </style>

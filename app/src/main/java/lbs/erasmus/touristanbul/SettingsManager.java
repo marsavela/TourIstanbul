@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 
 import lbs.erasmus.touristanbul.domain.Attraction;
 
-import lbs.erasmus.touristanbul.domain.Attraction.Category;
-
 /**
  * Created by nacho on 12/04/14.
  */
@@ -17,7 +15,7 @@ public class SettingsManager {
     private final static String DISTANCE_UNITS = "distance_units";
     private final static String TEMPERATURE_SCALE = "temperature_scale";
     private final static String INTERESTS_PARENTS = "interest1";
-    private final static String INTERESTS_BACKPACKETS = "interest2";
+    private final static String INTERESTS_BACKPACKERS = "interest2";
     private final static String INTERESTS_BUSINESS = "interest3";
     private final static String ATTRACTIONS_AIRPORTS = "interest4";
     private final static String ATTRACTIONS_HOSPITALS = "interest5";
@@ -27,6 +25,7 @@ public class SettingsManager {
     private final static String ATTRACTIONS_MUSEUMS = "interest9";
     private final static String ATTRACTIONS_RESTAURANTS = "interest10";
     private final static String ATTRACTIONS_WIFI = "interest11";
+    private final static String LOCATION = "share_location";
 
     private SharedPreferences mPrefs;
     private Context mContext;
@@ -50,7 +49,7 @@ public class SettingsManager {
     }
 
     public boolean getBackpackersInterest() {
-        return mPrefs.getBoolean(INTERESTS_BACKPACKETS, true);
+        return mPrefs.getBoolean(INTERESTS_BACKPACKERS, true);
     }
 
     public boolean getBusinessInterest() {
@@ -89,13 +88,17 @@ public class SettingsManager {
         return mPrefs.getBoolean(ATTRACTIONS_WIFI, true);
     }
 
+    public boolean getShareLocation() {
+        return mPrefs.getBoolean(LOCATION, true);
+    }
+
     /**
      * Return true if the attraction category is enabled
      * @param attraction to check
      * @return boolean
      */
     public boolean checkAttractionCategory(Attraction attraction) {
-        switch (attraction.getCategory()) {
+        /*switch (attraction.getCategory()) {
             case AIRPORT:
                 return getAirportAttractions();
             case HOSPITAL:
@@ -114,6 +117,38 @@ public class SettingsManager {
                 return getWifiAttractions();
             default:
                 return true;
-        }
+        }*/
+        if (attraction.getCategory().equals("Airport"))
+            return getAirportAttractions();
+        else if (attraction.getCategory().equals("Hospital"))
+            return getHospitalAttractions();
+        else if (attraction.getCategory().equals("Hotel"))
+            return getHotelsAttractions();
+        else if (attraction.getCategory().equals("Mall"))
+            return getMallsAttractions();
+        else if (attraction.getCategory().equals("Mosques"))
+            return getMosquesAttractions();
+        else if (attraction.getCategory().equals("Museums"))
+            return getMuseumsAttractions();
+        else if (attraction.getCategory().equals("Restaurant"))
+            return getRestaurantsAttractions();
+        else if (attraction.getCategory().equals("Wifi"))
+            return getWifiAttractions();
+        else return true;
+    }
+
+    /**
+     * Return true if the attraction category is enabled
+     * @param attraction to check
+     * @return boolean
+     */
+    public boolean checkAttractionInterest(Attraction attraction) {
+        if (attraction.getInterest().equals("Parents"))
+            return getParentsInterest();
+        else if (attraction.getInterest().equals("Backpackers"))
+            return getBackpackersInterest();
+        else if (attraction.getInterest().equals("Business Travelers"))
+            return getBusinessInterest();
+        else return true;
     }
 }

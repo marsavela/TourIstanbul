@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,6 +18,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -180,13 +182,20 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     @Override
     protected void onRestart() {
         super.onRestart();
-        updateUI(mGoogleApiClient.isConnected() && mGoogleApiClient!=null);
+        updateUI(mGoogleApiClient.isConnected() && mGoogleApiClient != null);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        filterAttractions();
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        boolean asd = sharedPref.getBoolean("update", false);
+        if (asd) {
+            filterAttractions();
+            editor.putBoolean("update", false);
+            editor.commit();
+        }
     }
 
     @Override
@@ -208,14 +217,14 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 replaceFragment(mMapFragment, getString(R.string.title_map));
                 break;
             case 2:
-                filterAttractions();
                 Bundle extras = new Bundle();
-                extras.putParcelableArrayList("Attractions",mAttractionsList);
+                extras.putParcelableArrayList("Attractions", mAttractionsList);
                 if (mAttractionsFragment == null) {
                     mAttractionsFragment = new AttractionsFragment();
+                    mAttractionsFragment.setArguments(extras);
                 }
-                mAttractionsFragment.setArguments(extras);
                 replaceFragment(mAttractionsFragment, getString(R.string.title_attractions));
+                mAttractionsFragment.setAttractions(mAttractionsList);
                 break;
             case 3:
                 if (mToolsFragment == null)
@@ -318,34 +327,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         alertRateDialog.show();
     }
 
-    /*@Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-        //TODO No refresca las attractions
-
-        String INTERESTS_PARENTS = "interest1";
-        String INTERESTS_BACKPACKERS = "interest2";
-        String INTERESTS_BUSINESS = "interest3";
-        String ATTRACTIONS_AIRPORTS = "interest4";
-        String ATTRACTIONS_HOSPITALS = "interest5";
-        String ATTRACTIONS_HOTELS = "interest6";
-        String ATTRACTIONS_MALLS = "interest7";
-        String ATTRACTIONS_MOSQUES = "interest8";
-        String ATTRACTIONS_MUSEUMS = "interest9";
-        String ATTRACTIONS_RESTAURANTS = "interest10";
-        String ATTRACTIONS_WIFI = "interest11";
-
-        if (key.equals(INTERESTS_PARENTS) || key.equals(INTERESTS_BACKPACKERS) ||
-                key.equals(INTERESTS_BUSINESS) || key.equals(ATTRACTIONS_AIRPORTS) ||
-                key.equals(ATTRACTIONS_HOSPITALS) || key.equals(ATTRACTIONS_HOTELS) ||
-                key.equals(ATTRACTIONS_MALLS) || key.equals(ATTRACTIONS_MOSQUES) ||
-                key.equals(ATTRACTIONS_MUSEUMS) ||
-                key.equals(ATTRACTIONS_RESTAURANTS) || key.equals(ATTRACTIONS_WIFI)) {
-            filterAttractions();
-        }
-
-    }*/
-
     private void filterAttractions() {
         mAttractionsList = new ArrayList<Attraction>();
         SettingsManager settingsManager = new SettingsManager(this);
@@ -354,6 +335,9 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             if (settingsManager.checkAttractionCategory(a) || settingsManager.checkAttractionInterest(a))
                 mAttractionsList.add(a);
         }
+
+        if (mAttractionsFragment != null)
+            mAttractionsFragment.setAttractions(mAttractionsList);
     }
 
     private class TaskAttractions extends AsyncTask<Void, Void, Void> {
@@ -631,7 +615,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
      */
     @Override
     public List<Attraction> getAttractionList() {
-        filterAttractions();
+        //filterAttractions();
         return mAttractionsList;
     }
 

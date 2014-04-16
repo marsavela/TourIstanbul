@@ -68,6 +68,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 key.equals(ATTRACTIONS_MALLS) || key.equals(ATTRACTIONS_MOSQUES) ||
                 key.equals(ATTRACTIONS_MUSEUMS) ||
                 key.equals(ATTRACTIONS_RESTAURANTS) || key.equals(ATTRACTIONS_WIFI)) {
+
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean("update", true);
+            editor.commit();
         }
 
     }

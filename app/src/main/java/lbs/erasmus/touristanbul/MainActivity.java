@@ -94,6 +94,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     private boolean mIntentInProgress;
     private boolean mSignInClicked;
     private boolean isSearch;
+    private boolean mDbReady;
     private ConnectionResult mConnectionResult;
     private SignInButton mBtnSignIn;
     private ImageView mImgProfilePic;
@@ -191,8 +192,8 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         mAttractionsList = new ArrayList<Attraction>();
 
         File mapFile = MapFragment.getMapFile();
-
-        if (!daoAttractions.checkDataBase() || !mapFile.exists())
+        mDbReady = daoAttractions.checkDataBase();
+        if (!mDbReady || !mapFile.exists())
             new TaskAttractions().execute();
         //mAttractionsList = daoAttractions.getAttractions();
         filterAttractions();
@@ -468,7 +469,11 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!daoAttractions.checkDataBase()) daoAttractions.downloadAndSaveData();
+            if (!mDbReady) {
+                daoAttractions.downloadAndSaveData();
+                filterAttractions();
+                mDbReady = daoAttractions.checkDataBase();
+            }
 
             File mapFile = MapFragment.getMapFile();
             if (!mapFile.exists()) {

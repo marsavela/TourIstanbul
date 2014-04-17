@@ -20,7 +20,6 @@ import android.graphics.Rect;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -105,6 +104,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     private ImageView mImgSettings;
     private TextView mTxtSettings;
     private SearchView searchView;
+    private Bundle extras;
 
     private DAOUsers daoUsers;
     private DAOAttractions daoAttractions;
@@ -147,6 +147,8 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
         setRequestedClients(BaseGameActivity.CLIENT_GAMES |
                 BaseGameActivity.CLIENT_PLUS);
+
+        extras = new Bundle();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -241,29 +243,30 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // Update the main content by replacing fragments
-
+        Log.v("VERBOSE", "Enrtro een el navigation drawer " + position );
         switch (position + 1) {
             case 1:
+                Log.v("VERBOSE", "Enrtro en map");
                 if (mMapFragment == null)
                     mMapFragment = new MapFragment();
                 replaceFragment(mMapFragment, getString(R.string.title_map));
                 break;
             case 2:
-                Bundle extras = new Bundle();
+                Log.v("VERBOSE", "Enrtro en attractions");
                 extras.putParcelableArrayList("Attractions", mAttractionsList);
-                if (mAttractionsFragment == null) {
-                    mAttractionsFragment = new AttractionsFragment();
-                    mAttractionsFragment.setArguments(extras);
-                }
+                mAttractionsFragment = new AttractionsFragment();
+                mAttractionsFragment.setArguments(extras);
                 replaceFragment(mAttractionsFragment, getString(R.string.title_attractions));
                 mAttractionsFragment.setAttractions(mAttractionsList);
                 break;
             case 3:
+                Log.v("VERBOSE", "Enrtro en tools");
                 if (mToolsFragment == null)
                     mToolsFragment = new ToolsFragment();
                 replaceFragment(mToolsFragment, getString(R.string.title_tools));
                 break;
             case 4:
+                Log.v("VERBOSE", "Enrtro en information");
                 if (mInformationFragment == null)
                     mInformationFragment = new InformationFragment();
                 replaceFragment(mInformationFragment, getString(R.string.title_information));
@@ -857,7 +860,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
              new AttemptAttractions().execute(queryStr);
              attractions = mAttractionsList;
                 if(attractions.size() == 0){ Log.v("VERBOSE", "Por base de datos fallo en el servidor: ");attractions = daoAttractions.getAttractionsByName(queryStr);}
-
+            extras.putParcelableArrayList("Attractions", mAttractionsList);
         } else {
             attractions = daoAttractions.getAttractionsByName(queryStr);
         }
@@ -877,6 +880,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             }
             replaceFragment(mAttractionsFragment, getString(R.string.title_attractions));
             Log.v("VERBOSE", "VAlor de list " + attractionSearch.size());
+            extras.putParcelableArrayList("Attractions", mAttractionsList);
             mAttractionsFragment.setAttractions(attractionSearch);
         }
 
@@ -928,21 +932,10 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                     mAttractionsList = new ArrayList<Attraction>();
                     for (int i = 0; i < json.getJSONArray("attractions").length(); i++) {
                         jsonAttraction = (JSONObject) json.getJSONArray("attractions").get(i);
-                        Attraction attraction = new Attraction();
-                        attraction.setmTitle(jsonAttraction.getString("name"));
-                        attraction.setmAddress(jsonAttraction.getString("address"));
-                        Location l = new Location("");
+                         Location l = new Location("");
                         l.setLatitude(jsonAttraction.getDouble("latitude"));
                         l.setLongitude(jsonAttraction.getDouble("longitude"));
-                        attraction.setmCategory(jsonAttraction.getString("category"));
-                        attraction.setmRate(jsonAttraction.getDouble("rate"));
-                        attraction.setmRate(jsonAttraction.getDouble("numRates"));
-                        attraction.setmOpeningTimes(jsonAttraction.getString("openingTime"));
-                        attraction.setmInterest(jsonAttraction.getString("interest"));
-                        attraction.setmDescription(jsonAttraction.getString("description"));
-                        attraction.setmSubtitle(jsonAttraction.getString("subtitle"));
-                        String imageName = jsonAttraction.getString("nameImage");
-                        attraction.setmImageUri(Uri.fromFile(new File(attraction.getImagePath() + imageName)));
+                        Attraction attraction = new Attraction(jsonAttraction.getString("name"),jsonAttraction.getString("subtitle"), jsonAttraction.getString("description"),  jsonAttraction.getString("address"), l, jsonAttraction.getString("category"),jsonAttraction.getString("interest"), jsonAttraction.getDouble("rate"), jsonAttraction.getInt("numRates"), jsonAttraction.getString("openingTime"), jsonAttraction.getString("nameImage"));
                         mAttractionsList.add(attraction);
                         Log.v("VERBOSE", "Numero de elmentos " + mAttractionsList.size());
                     }

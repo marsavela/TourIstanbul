@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lbs.erasmus.touristanbul.AttractionActivity;
+import lbs.erasmus.touristanbul.DAOAttractions;
 import lbs.erasmus.touristanbul.R;
 import lbs.erasmus.touristanbul.domain.Attraction;
 
@@ -29,6 +30,7 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
     private AttractionsAdapter attractionsAdapter;
     private ArrayList<Attraction> attractionArrayList;
     private GridView gridView;
+    private DAOAttractions daoAttractions;
 
     public AttractionsFragment() {
     }
@@ -43,10 +45,13 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
         gridView = (GridView) rootView.findViewById(R.id.grid);
 
         Bundle extras = getArguments();
+        daoAttractions = new DAOAttractions(this.getActivity());
         //attractionArrayList = new ArrayList<Attraction>();
+        Log.v("VERBOSE", "VAlor de los extras " + extras.toString() + extras.size());
         if (extras != null) {
-
-            attractionArrayList = extras.getParcelableArrayList("Attractions");
+            Log.v("VERBOSE", "Hay extras");
+             attractionArrayList = extras.getParcelableArrayList("Attractions");
+           // attractionArrayList = daoAttractions.getAttractions();
             // Initialize the adapter with all the attractions. Set the adapter on the {@link GridView}.
             //gridView.setAdapter(new AttractionsAdapter(inflater, createAllAttractions()));
             attractionsAdapter = new AttractionsAdapter(inflater, attractionArrayList);
@@ -54,7 +59,6 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
 
             // Set a click listener for each attraction in the grid
             gridView.setOnItemClickListener(this);
-
 
         }
 

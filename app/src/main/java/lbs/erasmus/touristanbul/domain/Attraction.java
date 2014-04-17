@@ -79,9 +79,6 @@ public class Attraction implements Parcelable {
     /** Content URI of the image for the attraction. */
     private Uri mImageUri;
 
-    public Attraction() {
-    }
-
     /**
      * Constructs a new {@link Attraction}.
      *

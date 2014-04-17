@@ -165,6 +165,7 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
         return false;
     }
 
+
     @Override
     protected void onStart() {
         super.onStart();

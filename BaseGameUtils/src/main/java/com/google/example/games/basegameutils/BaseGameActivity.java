@@ -176,4 +176,6 @@ public abstract class BaseGameActivity extends FragmentActivity implements
     protected GameHelper.SignInFailureReason getSignInError() {
         return mHelper.getSignInError();
     }
+
+
 }

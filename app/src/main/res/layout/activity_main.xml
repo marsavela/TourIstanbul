@@ -27,4 +27,6 @@
         android:layout_gravity="start"
         android:name="lbs.erasmus.touristanbul.NavigationDrawerFragment" />
 
+
+
 </android.support.v4.widget.DrawerLayout>

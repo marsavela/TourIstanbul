@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -18,6 +17,9 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -30,6 +32,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,9 +46,14 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.example.games.basegameutils.BaseGameActivity;
 
+import org.apache.http.NameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +63,6 @@ import lbs.erasmus.touristanbul.fragments.AttractionsFragment;
 import lbs.erasmus.touristanbul.fragments.InformationFragment;
 import lbs.erasmus.touristanbul.fragments.MapFragment;
 import lbs.erasmus.touristanbul.fragments.ToolsFragment;
-import lbs.erasmus.touristanbul.maps.Utils;
 
 public class MainActivity extends BaseGameActivity implements View.OnClickListener,
         GooglePlayServicesClient.ConnectionCallbacks,
@@ -63,7 +70,8 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,
-        MapFragment.MapFragmentCommunication {
+        MapFragment.MapFragmentCommunication,
+        SearchView.OnQueryTextListener{
 
     private static final int RC_SIGN_IN = 0;
     private static final String TAG = "MainActivity";
@@ -82,6 +90,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
      */
     private boolean mIntentInProgress;
     private boolean mSignInClicked;
+    private boolean isSearch;
     private ConnectionResult mConnectionResult;
     private SignInButton mBtnSignIn;
     private ImageView mImgProfilePic;
@@ -91,6 +100,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     private Bitmap mUserProfilePhoto;
     private ImageView mImgSettings;
     private TextView mTxtSettings;
+    private SearchView searchView;
 
     private DAOUsers daoUsers;
     private DAOAttractions daoAttractions;
@@ -110,16 +120,15 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
+    // JSON parser class
+    private JSONParser jsonParser;
+    private ArrayList<Attraction> attractionsList;
+
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
 
     private CharSequence mTitle;
-
-    /**
-     * Used to find others nearby users
-     */
-    private Location mUserLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,14 +182,20 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         daoAttractions = new DAOAttractions(this);
         mAttractionsList = new ArrayList<Attraction>();
 
-        File mapFile = MapFragment.getMapFile();
-
-        if (!daoAttractions.checkDataBase() || !mapFile.exists())
-            new TaskAttractions().execute();
-        //mAttractionsList = daoAttractions.getAttractions();
-        filterAttractions();
+            if (!daoAttractions.checkDataBase())
+                new TaskAttractions().execute();
+            //mAttractionsList = daoAttractions.getAttractions();
+            filterAttractions();
 
         daoUsers = new DAOUsers(this);
+
+        jsonParser = new JSONParser();
+        daoAttractions = new DAOAttractions(this);
+        mAttractionsFragment = null;
+        attractionsList = null;
+
+
+
     }
 
     @Override
@@ -250,7 +265,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             case 5:
                 // Show user's achievements
                 if (isSignedIn()) {
-                    Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_login));
                     startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
                 }
                 else {
@@ -277,17 +291,25 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.v("VERBOSE", "Entrando en el create menu");
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
+            MenuItem m = null;
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main, menu);
-
+            Log.v("VERBOSE", "Creando manejador de settings");
             SettingsManager settingsManager = new SettingsManager(this);
             if (!settingsManager.getShareLocation()) {
-                MenuItem m = menu.findItem(R.id.action_nearby_people);
+                m = menu.findItem(R.id.action_nearby_people);
                 m.setVisible(false);
             }
+            Log.v("VERBOSE", "creando view search");
+            m = menu.findItem(R.id.action_search);
+            searchView = (SearchView) m.getActionView();
+            searchView.setQueryHint("Enter attraction");
+            searchView.setOnQueryTextListener(this);
+
 
             restoreActionBar();
             return true;
@@ -295,13 +317,28 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
+     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+         int id = item.getItemId();
+         Log.v("VERBOSE", "id menu"  + id + "id de busqueda " + R.id.action_search + "Personitas " + R.id.action_nearby_people);
         if (id == R.id.action_search) {
+            Log.v("VERBOSE", "Entro dentro de la busqueda");
+           /* searchView = (SearchView) findViewById(R.id.action_search);
+            SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
+            searchView.setQueryHint("Enter attraction");
+            searchView.setOnQueryTextListener(this);*/
+            // Get the intent, verify the action and get the query
+
+            // if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+
+            try {
+                doMySearch(String.valueOf(searchView.getQuery()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return true;
         } else if (item.getItemId() == R.id.action_nearby_people) {
             //showNearbyPeopleList();
@@ -352,6 +389,21 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             mAttractionsFragment.setAttractions(mAttractionsList);
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query){
+        try {
+            doMySearch(query);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return true;
+    }
+
     private class TaskAttractions extends AsyncTask<Void, Void, Void> {
 
         private ProgressDialog pDialog;
@@ -370,39 +422,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (!daoAttractions.checkDataBase()) daoAttractions.downloadAndSaveData();
-
-            File mapFile = MapFragment.getMapFile();
-            if (!mapFile.exists()) {
-                File outputFile = null;
-                AssetManager assetsManager = getAssets();
-                try {
-                    String localfolder = MapFragment.getLocalFolder() + "-gh";
-                    // Check if the folder exists
-                    File path = new File(localfolder);
-                    if (!path.exists()) path.mkdirs();
-
-                    // Delete zip file if exists
-                    outputFile = new File(path, MapFragment.ZIP_FILENAME);
-                    if (outputFile.exists()) outputFile.delete();
-
-                    InputStream inputStream = assetsManager.open(MapFragment.ZIP_FILENAME);
-                    Utils.createFileFromInputStream(inputStream, localfolder + "/" + MapFragment.ZIP_FILENAME);
-
-                    // unzip files file
-                    Utils.unzipFile(localfolder, MapFragment.ZIP_FILENAME);
-
-                    if (outputFile.exists()) outputFile.delete();
-
-                    if (mMapFragment != null) {
-                        mMapFragment.initializeMapView();
-                        mMapFragment.centerMap();
-                    }
-                } catch (Exception e) {
-                    Log.e(getClass().getName(), "Error while copying maps to sd");
-                }
-            }
-
+            daoAttractions.downloadAndSaveData();
             return null;
         }
 
@@ -461,6 +481,8 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         startActivity(i);
         mNavigationDrawerFragment.closeDrawer();
 
+        if (isSignedIn())
+            Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_login));
     }
 
 
@@ -584,12 +606,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 new LoadProfileImage(mImgProfilePic, mUserProfilePhoto).execute(personPhotoUrl);
                 if (mViewPersonName != null)
                     mViewPersonName.setText(mPersonName);
-
-/*                Location mLocation = new Location("Nose");
-                mLocation.setLatitude(41.0096334);
-                mLocation.setLongitude(28.9651646);*/
-
-                mUser = new User(email, mPersonName, personPhotoUrl, personGooglePlusProfile, mUserLocation);
+                mUser = new User(email, mPersonName, personPhotoUrl, personGooglePlusProfile);
                 mUser.setmPhoto(mImgProfilePic.getDrawingCache());
 
                 if(daoUsers.newUserRegistration(mUser)){
@@ -644,10 +661,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
         // Open achievements activity
         if(show_achievements){
-            if (isSignedIn()) {
-                Games.Achievements.unlock(getApiClient(), getResources().getString(R.string.achievement_login));
-                startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
-            }
+            startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
             show_achievements=false;
         }
     }
@@ -669,12 +683,9 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         return mAttractionsList;
     }
 
-    /**
-     * When location is enabled the position will be updated
-     */
     @Override
     public void setUserLocation(Location location) {
-        mUserLocation = location;
+
     }
 
     /**
@@ -715,6 +726,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 bmImage.setImageBitmap(getCroppedBitmap(result));
                 saveImage(getBaseContext(), result, "profile_photo");
                 if(daoUsers.updateProfilePicture(mUser)){
+                    Toast.makeText(getParent(), "User profile picture updated succesfully", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "User profile picture updated succesfully");
                 }
             } else
@@ -738,4 +750,122 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         }
     }
 
+
+    private void doMySearch(String queryStr) throws JSONException {
+
+        ArrayList<Attraction> attractions = new ArrayList<Attraction>();
+        boolean isFound = false;
+        if(isConnectingToInternet()){
+            Log.v("VERBOSE", "LLamando al aystask: ");
+            //AttemptAttractions attemptAttractions = new AttemptAttractions(queryStr, null, attractions);
+             new AttemptAttractions().execute(queryStr);
+             attractions = mAttractionsList;
+        } else {
+            attractions = daoAttractions.getAttractionsByName(queryStr);
+        }
+        Log.v("VERBOSE", "Tamaño del array: " + attractions.size());
+        if (attractions.size() != 0 ){
+            ArrayList<Attraction> attractionSearch = new ArrayList<Attraction>();
+            for (int i = 0; i < attractions.size(); i++){
+                Log.v("VERBOSE", "Agrego attraction: " + i);
+                isFound = true;
+                attractionSearch.add(attractions.get(i));
+            }
+            Bundle extras = new Bundle();
+            extras.putParcelableArrayList("Attractions", attractionSearch);
+            if (mAttractionsFragment == null) {
+                mAttractionsFragment = new AttractionsFragment();
+                mAttractionsFragment.setArguments(extras);
+            }
+            replaceFragment(mAttractionsFragment, getString(R.string.title_attractions));
+            Log.v("VERBOSE", "VAlor de list " + attractionSearch.size());
+            mAttractionsFragment.setAttractions(attractionSearch);
+        }
+
+        if (isFound == false){
+            Toast.makeText(this, "Attraction introduced is not valid, please try again", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public boolean isConnectingToInternet(){
+        ConnectivityManager connectivity = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null)
+        {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null)
+                for (int i = 0; i < info.length; i++)
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED)
+                    {
+                        return true;
+                    }
+
+        }
+        return false;
+    }
+
+    class AttemptAttractions extends AsyncTask<String, Void, ArrayList<Attraction>> {
+        List<NameValuePair> params =  new ArrayList<NameValuePair>();
+        /**
+         * Before starting background thread Show Progress Dialog
+         * */
+        boolean failure = false;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected ArrayList<Attraction> doInBackground(String... args) {
+            // TODO Auto-generated method stub
+            HttpURLConnection con = null;
+            JSONObject jsonAttraction = null;
+            try {
+                Log.v("VERBOSE", "Valor del args " + args[0]);
+                String url = "http://s459655320.mialojamiento.es/index.php/attraction/" + args[0];
+                Log.v("VERBOSE", "url " + url);
+                JSONObject json = jsonParser.makeHttpRequest(
+                        url, "GET", null);
+                if(json.getString("error").equals(false)){
+                    mAttractionsList = new ArrayList<Attraction>();
+                    for (int i = 0; i < json.getJSONArray("attractions").length(); i++) {
+                        jsonAttraction = (JSONObject) json.getJSONArray("attractions").get(i);
+                        Attraction attraction = new Attraction();
+                        attraction.setmTitle(jsonAttraction.getString("name"));
+                        attraction.setmAddress(jsonAttraction.getString("address"));
+                        Location l = new Location("");
+                        l.setLatitude(jsonAttraction.getDouble("latitude"));
+                        l.setLongitude(jsonAttraction.getDouble("longitude"));
+                        attraction.setmCategory(jsonAttraction.getString("category"));
+                        attraction.setmRate(jsonAttraction.getDouble("rate"));
+                        attraction.setmRate(jsonAttraction.getDouble("numRates"));
+                        attraction.setmOpeningTimes(jsonAttraction.getString("openingTime"));
+                        attraction.setmInterest(jsonAttraction.getString("interest"));
+                        attraction.setmDescription(jsonAttraction.getString("description"));
+                        attraction.setmSubtitle(jsonAttraction.getString("subtitle"));
+                        String imageName = jsonAttraction.getString("nameImage");
+                        attraction.setmImageUri(Uri.fromFile(new File(attraction.getImagePath() + imageName)));
+                        mAttractionsList.add(attraction);
+                        Log.v("VERBOSE", "Numero de elmentos " + mAttractionsList.size());
+                    }
+                } else {
+                    //Toast.makeText(getApplicationContext(), "Attraction introduced is not valid, please try again", Toast.LENGTH_SHORT);
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return mAttractionsList;
+        }
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog once product deleted
+        }
+
+    }
 }
+
+

@@ -28,7 +28,7 @@ public class Attraction implements Parcelable {
      */
     public enum Category {
         AIRPORT("Airport"), HOSPITAL("Hospital"), HOTEL("Hotel"), MALL("Mall"), MOSQUES("Mosques"),
-        MUSEUMS("Museums"), RESTAURANTS("Restaurant"), WIFI("Wifi"), UNKNOWN("Unknown");
+        MUSEUMS("Museums"), RESTAURANTS("Restaurant"), WIFI("Wifi"),MONUMENTS("Monuments"), UNKNOWN("Unknown");
 
         private String mType;
 
@@ -43,10 +43,10 @@ public class Attraction implements Parcelable {
     }
 
     /** Title of the attraction. */
-    private final String mTitle;
+    private String mTitle;
 
     /** Short description of the attraction. */
-    private final String mSubtitle;
+    private String mSubtitle;
 
     /** Description of the attraction. */
     private String mDescription;
@@ -77,7 +77,10 @@ public class Attraction implements Parcelable {
     private String mOpeningTimes;
 
     /** Content URI of the image for the attraction. */
-    private final Uri mImageUri;
+    private Uri mImageUri;
+
+    public Attraction() {
+    }
 
     /**
      * Constructs a new {@link Attraction}.
@@ -227,6 +230,54 @@ public class Attraction implements Parcelable {
         mDrawableId = id;
     }
 
+    public void setmDescription(String mDescription) {
+        this.mDescription = mDescription;
+    }
+
+    public void setmAddress(String mAddress) {
+        this.mAddress = mAddress;
+    }
+
+    public void setmLocation(Location mLocation) {
+        this.mLocation = mLocation;
+    }
+
+    public void setmCategory(String mCategory) {
+        this.mCategory = mCategory;
+    }
+
+    public void setmDrawableId(int mDrawableId) {
+        this.mDrawableId = mDrawableId;
+    }
+
+    public void setmInterest(String mInterest) {
+        this.mInterest = mInterest;
+    }
+
+    public void setmRate(double mRate) {
+        this.mRate = mRate;
+    }
+
+    public void setmNumRates(int mNumRates) {
+        this.mNumRates = mNumRates;
+    }
+
+    public void setmOpeningTimes(String mOpeningTimes) {
+        this.mOpeningTimes = mOpeningTimes;
+    }
+
+    public void setmTitle(String mTitle) {
+        this.mTitle = mTitle;
+    }
+
+    public void setmSubtitle(String mSubtitle) {
+        this.mSubtitle = mSubtitle;
+    }
+
+    public void setmImageUri(Uri mImageUri) {
+        this.mImageUri = mImageUri;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -274,7 +325,7 @@ public class Attraction implements Parcelable {
         }
     };
 
-    private String getImagePath() {
+    public String getImagePath() {
         return Environment.getExternalStorageDirectory() + File.separator + APP_FOLDER
                 + File.separator + IMG_FOLDER + File.separator;
     }

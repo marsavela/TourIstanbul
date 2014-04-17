@@ -152,6 +152,51 @@ public class DAOAttractions {
     }
 
     /**
+     * Select all attractions of a name.
+     *
+     * @param name
+     * @return a list of
+     */
+    public ArrayList<Attraction> getAttractionsByName(String name) {
+        ArrayList<Attraction> attractionArrayList = new ArrayList<Attraction>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TAG_ATTRACTIONS + " WHERE " + TAG_NAME + " like '%"
+                + name + "%' OR " + TAG_DESCRIPTION + " like '%" + name + "%'";
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            do {
+                Location location = new Location("Nose");
+                location.setLatitude(c.getDouble(c.getColumnIndex(TAG_LATITUDE)));
+                location.setLongitude(c.getDouble(c.getColumnIndex(TAG_LONGITUDE)));
+
+                Attraction attraction = new Attraction(
+                        c.getString(c.getColumnIndex(TAG_NAME)),
+                        c.getString(c.getColumnIndex(TAG_SUBTITLE)),
+                        c.getString(c.getColumnIndex(TAG_DESCRIPTION)),
+                        c.getString(c.getColumnIndex(TAG_ADDRESS)),
+                        location,
+                        c.getString(c.getColumnIndex(TAG_CATEGORY)),
+                        //Attraction.Category.valueOf(c.getString("category")),
+                        c.getString(c.getColumnIndex(TAG_INTEREST)),
+                        c.getDouble(c.getColumnIndex(TAG_RATE)),
+                        c.getInt(c.getColumnIndex(TAG_NUM_RATES)),
+                        c.getString(c.getColumnIndex(TAG_OPENING_TIME)),
+                        c.getString(c.getColumnIndex(TAG_NAME_IMAGE))
+                );
+
+                attractionArrayList.add(attraction);
+            } while (c.moveToNext());
+        }
+
+        return attractionArrayList;
+    }
+
+    /**
      * Inser a given Act in the local DB.
      *
      * @param attraction one attraction

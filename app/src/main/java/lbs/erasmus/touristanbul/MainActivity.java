@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -63,6 +64,7 @@ import lbs.erasmus.touristanbul.fragments.AttractionsFragment;
 import lbs.erasmus.touristanbul.fragments.InformationFragment;
 import lbs.erasmus.touristanbul.fragments.MapFragment;
 import lbs.erasmus.touristanbul.fragments.ToolsFragment;
+import lbs.erasmus.touristanbul.maps.Utils;
 
 public class MainActivity extends BaseGameActivity implements View.OnClickListener,
         GooglePlayServicesClient.ConnectionCallbacks,
@@ -105,7 +107,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     private DAOUsers daoUsers;
     private DAOAttractions daoAttractions;
     private ArrayList<Attraction> mAttractionsList;
-    SettingsActivity settings;
 
     /**
      * Fragments for each section of the application.
@@ -129,6 +130,11 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
      */
 
     private CharSequence mTitle;
+
+    /**
+     * Used to find others nearby users
+     */
+    private Location mUserLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,10 +188,12 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         daoAttractions = new DAOAttractions(this);
         mAttractionsList = new ArrayList<Attraction>();
 
-            if (!daoAttractions.checkDataBase())
-                new TaskAttractions().execute();
-            //mAttractionsList = daoAttractions.getAttractions();
-            filterAttractions();
+        File mapFile = MapFragment.getMapFile();
+
+        if (!daoAttractions.checkDataBase() || !mapFile.exists())
+            new TaskAttractions().execute();
+        //mAttractionsList = daoAttractions.getAttractions();
+        filterAttractions();
 
         daoUsers = new DAOUsers(this);
 
@@ -216,8 +224,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         super.onResume();
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPref.edit();
-        boolean asd = sharedPref.getBoolean("update", false);
-        if (asd) {
+        if (sharedPref.getBoolean("update", false)) {
             filterAttractions();
             editor.putBoolean("update", false);
             editor.commit();
@@ -265,6 +272,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             case 5:
                 // Show user's achievements
                 if (isSignedIn()) {
+                    Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_login));
                     startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
                 }
                 else {
@@ -300,16 +308,16 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             getMenuInflater().inflate(R.menu.main, menu);
             Log.v("VERBOSE", "Creando manejador de settings");
             SettingsManager settingsManager = new SettingsManager(this);
-            if (!settingsManager.getShareLocation()) {
-                m = menu.findItem(R.id.action_nearby_people);
-                m.setVisible(false);
-            }
             Log.v("VERBOSE", "creando view search");
             m = menu.findItem(R.id.action_search);
             searchView = (SearchView) m.getActionView();
             searchView.setQueryHint("Enter attraction");
             searchView.setOnQueryTextListener(this);
 
+            if (mUser == null) {
+                m = menu.findItem(R.id.action_nearby_people);
+                m.setVisible(false);
+            }
 
             restoreActionBar();
             return true;
@@ -317,7 +325,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         return super.onCreateOptionsMenu(menu);
     }
 
-     @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -343,15 +351,19 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         } else if (item.getItemId() == R.id.action_nearby_people) {
             //showNearbyPeopleList();
             daoAttractions.clearDB();
-            new TaskAttractions().execute();
+            new TaskNearbyPeople().execute();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void showNearbyPeopleList() {
+    private void showNearbyPeopleList(ArrayList<User> users) {
 
-        String names[] ={"Antonio","Bianca","Carlos","Domingo"};
+        ArrayList<String> names = new ArrayList<String>();
+
+        for (User u : users) {
+            names.add(u.getmName());
+        }
 
         AlertDialog.Builder builderRateDialog = new AlertDialog.Builder(this);
         // Get the layout inflater
@@ -404,6 +416,35 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         return true;
     }
 
+    private class TaskNearbyPeople extends AsyncTask<Void, Void, ArrayList<User>> {
+
+        private ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog = new ProgressDialog(MainActivity.this);
+            pDialog.setTitle("Contacting Servers");
+            pDialog.setMessage("Looking for someone for you ;)");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected ArrayList<User> doInBackground(Void... params) {
+            return daoUsers.nearUsersPosition(mUser);
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<User> users) {
+            showNearbyPeopleList(users);
+            pDialog.dismiss();
+            super.onPostExecute(users);
+        }
+    }
+
     private class TaskAttractions extends AsyncTask<Void, Void, Void> {
 
         private ProgressDialog pDialog;
@@ -414,7 +455,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
             pDialog = new ProgressDialog(MainActivity.this);
             pDialog.setTitle("Contacting Servers");
-            pDialog.setMessage("Logging in ...");
+            pDialog.setMessage("Magic ...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
@@ -422,7 +463,39 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
         @Override
         protected Void doInBackground(Void... params) {
-            daoAttractions.downloadAndSaveData();
+            if (!daoAttractions.checkDataBase()) daoAttractions.downloadAndSaveData();
+
+            File mapFile = MapFragment.getMapFile();
+            if (!mapFile.exists()) {
+                File outputFile = null;
+                AssetManager assetsManager = getAssets();
+                try {
+                    String localfolder = MapFragment.getLocalFolder() + "-gh";
+                    // Check if the folder exists
+                    File path = new File(localfolder);
+                    if (!path.exists()) path.mkdirs();
+
+                    // Delete zip file if exists
+                    outputFile = new File(path, MapFragment.ZIP_FILENAME);
+                    if (outputFile.exists()) outputFile.delete();
+
+                    InputStream inputStream = assetsManager.open(MapFragment.ZIP_FILENAME);
+                    Utils.createFileFromInputStream(inputStream, localfolder + "/" + MapFragment.ZIP_FILENAME);
+
+                    // unzip files file
+                    Utils.unzipFile(localfolder, MapFragment.ZIP_FILENAME);
+
+                    if (outputFile.exists()) outputFile.delete();
+
+                    if (mMapFragment != null) {
+                        mMapFragment.initializeMapView();
+                        mMapFragment.centerMap();
+                    }
+                } catch (Exception e) {
+                    Log.e(getClass().getName(), "Error while copying maps to sd");
+                }
+            }
+
             return null;
         }
 
@@ -471,6 +544,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
     private void openUserSettings() {
         Intent i = new Intent(this, SettingsActivity.class);
+        i.putExtra("User", mUser);
         startActivity(i);
         mNavigationDrawerFragment.closeDrawer();
     }
@@ -481,8 +555,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         startActivity(i);
         mNavigationDrawerFragment.closeDrawer();
 
-        if (isSignedIn())
-            Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_login));
     }
 
 
@@ -606,7 +678,12 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 new LoadProfileImage(mImgProfilePic, mUserProfilePhoto).execute(personPhotoUrl);
                 if (mViewPersonName != null)
                     mViewPersonName.setText(mPersonName);
-                mUser = new User(email, mPersonName, personPhotoUrl, personGooglePlusProfile);
+
+/*                Location mLocation = new Location("Nose");
+                mLocation.setLatitude(41.0096334);
+                mLocation.setLongitude(28.9651646);*/
+
+                mUser = new User(email, mPersonName, personPhotoUrl, personGooglePlusProfile, mUserLocation);
                 mUser.setmPhoto(mImgProfilePic.getDrawingCache());
 
                 if(daoUsers.newUserRegistration(mUser)){
@@ -661,7 +738,10 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
         // Open achievements activity
         if(show_achievements){
-            startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
+            if (isSignedIn()) {
+                Games.Achievements.unlock(getApiClient(), getResources().getString(R.string.achievement_login));
+                startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
+            }
             show_achievements=false;
         }
     }
@@ -683,9 +763,12 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         return mAttractionsList;
     }
 
+    /**
+     * When location is enabled the position will be updated
+     */
     @Override
     public void setUserLocation(Location location) {
-
+        mUserLocation = location;
     }
 
     /**
@@ -726,7 +809,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 bmImage.setImageBitmap(getCroppedBitmap(result));
                 saveImage(getBaseContext(), result, "profile_photo");
                 if(daoUsers.updateProfilePicture(mUser)){
-                    Toast.makeText(getParent(), "User profile picture updated succesfully", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "User profile picture updated succesfully");
                 }
             } else
@@ -867,5 +949,3 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
     }
 }
-
-

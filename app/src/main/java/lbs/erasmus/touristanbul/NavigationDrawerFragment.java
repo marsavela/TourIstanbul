@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -95,7 +94,14 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+        mDrawerListView.setAdapter(new DrawerAdapter(getActionBar().getThemedContext(), new String[]{
+                getString(R.string.title_map),
+                getString(R.string.title_attractions),
+                getString(R.string.title_tools),
+                getString(R.string.title_information),
+                getString(R.string.title_achievements),
+        }));
+        /*mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
@@ -106,7 +112,7 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_information),
                         getString(R.string.title_achievements),
                 }
-        ));
+        ));*/
 
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return rootView;
@@ -145,7 +151,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerToggle = new ActionBarDrawerToggle(
                 getActivity(),                    /* host Activity */
                 mDrawerLayout,                    /* DrawerLayout object */
-                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
+                R.drawable.ic_navigation_drawer,             /* nav drawer image to replace 'Up' caret */
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {

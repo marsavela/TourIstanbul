@@ -38,11 +38,9 @@ public class DAOUsers {
     private static final String TAG_SUCCESS = "success";
 
     private final Context context;
-    private DBHelper dbHelper;
 
     public DAOUsers(Context context) {
         this.context = context;
-        dbHelper = new DBHelper(context);
     }
 
     /**

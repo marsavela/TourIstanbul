@@ -1,21 +1,30 @@
 package lbs.erasmus.touristanbul;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
+
+import lbs.erasmus.touristanbul.domain.User;
 
 /**
  * Created by patmonsi on 20/03/14.
  */
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private static User mUser;
+    public final static String PREFERENCES_FILE = "lbs.erasmus.touristanbul_preferences";
+    public final static String SHARE_LOCATION = "share_location";
+
     @Override
     protected void onCreate(final Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
+        mUser = getIntent().getExtras().getParcelable("User");
     }
 
     public static class MyPreferenceFragment extends PreferenceFragment
@@ -25,6 +34,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
+            if (mUser == null)
+            findPreference(SHARE_LOCATION).setEnabled(false);
         }
     }
 
@@ -62,6 +73,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         String ATTRACTIONS_RESTAURANTS = "interest10";
         String ATTRACTIONS_WIFI = "interest11";
 
+
         if (key.equals(INTERESTS_PARENTS) || key.equals(INTERESTS_BACKPACKERS) ||
                 key.equals(INTERESTS_BUSINESS) || key.equals(ATTRACTIONS_AIRPORTS) ||
                 key.equals(ATTRACTIONS_HOSPITALS) || key.equals(ATTRACTIONS_HOTELS) ||
@@ -73,7 +85,40 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean("update", true);
             editor.commit();
+
+        } else if (key.equals(SHARE_LOCATION)) {
+            new UpdateShareBit().execute();
+        }
+    }
+
+    /**
+     * Async Task to get and send data to My Sql database through JSON response.
+     **/
+    private class UpdateShareBit extends AsyncTask<User, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(User... user) {
+            return sendBit();
         }
 
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (success) {
+                showToast("Settings updated successfully.");
+            } else {
+                showToast("Error while updating your settings. Please, try again later.");
+            }
+        }
     }
+
+    private boolean sendBit() {
+        SettingsManager settingsManager = new SettingsManager(this);
+        DAOUsers daoUsers = new DAOUsers(this);
+        return daoUsers.updateShareBit(mUser, settingsManager.getShareLocation() ? 1 : 0);
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
 }

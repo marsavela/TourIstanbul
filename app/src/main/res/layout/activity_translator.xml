@@ -21,7 +21,6 @@
 
     <Spinner
         android:id="@+id/languageFrom"
-        android:prompt="@string/english"
         android:layout_width="250dp"
         android:layout_height="60dp"
         android:tag="0"
@@ -47,12 +46,12 @@
         android:layout_alignLeft="@+id/to"
         android:layout_alignStart="@+id/to" />
 
-    <Spinner
+    <TextView
         android:id="@+id/languageTo"
-        android:prompt="@string/turkish"
+        android:text="@string/turkish"
+        android:textSize="20sp"
         android:layout_width="250dp"
         android:layout_height="60dp"
-        android:tag="0"
         android:textAlignment="center"
         android:gravity="center"
         android:layout_above="@+id/inputText"
@@ -63,12 +62,11 @@
 
     <EditText
         android:id="@+id/inputText"
-
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:ems="10"
         android:hint="@string/type_your_text_here"
-        android:inputType="text"
+        android:inputType="textNoSuggestions"
         android:layout_gravity="center"
         android:textAlignment="center"
         android:layout_marginTop="25dp"
@@ -86,7 +84,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/translate"
-        android:layout_alignTop="@+id/inputText"
+        android:layout_alignBottom="@+id/inputText"
         android:layout_alignRight="@+id/languageTo"
         android:layout_alignEnd="@+id/languageTo" />
 
@@ -98,16 +96,19 @@
         android:layout_below="@+id/translateButton"
         android:layout_marginTop="81dp"
         android:layout_alignLeft="@+id/inputText"
-        android:layout_alignStart="@+id/inputText" />
+        android:layout_alignStart="@+id/inputText"
+        android:layout_alignRight="@+id/inputText"
+        android:layout_alignEnd="@+id/inputText" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:id="@+id/speechButton"
-        android:src="@drawable/ic_btn_speak_now"
-        android:layout_alignTop="@+id/outputText"
-        android:layout_toRightOf="@+id/outputText"
-        android:contentDescription="@string/translator" />
+        android:src="@drawable/text_to_speech"
+        android:contentDescription="@string/translator"
+        android:layout_alignBottom="@+id/outputText"
+        android:layout_alignLeft="@+id/translateButton"
+        android:layout_alignStart="@+id/translateButton" />
 
 
 </RelativeLayout>

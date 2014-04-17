@@ -87,9 +87,9 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
     }
 
     public void setAttractions(ArrayList<Attraction> mAttractionsList) {
-        Log.v("VERBOSE", "datos del primer name del resultado 2: " + mAttractionsList.get(0).getTitle());
+        //Log.v("VERBOSE", "datos del primer name del resultado 2: " + mAttractionsList.get(0).getTitle());
         attractionArrayList = mAttractionsList;
-        Log.v("VERBOSE", "datos del primer name del resultado 3: " + attractionArrayList.get(0).getTitle());
+        //Log.v("VERBOSE", "datos del primer name del resultado 3: " + attractionArrayList.get(0).getTitle());
         updateAdapter(attractionArrayList);
     }
 

@@ -111,25 +111,23 @@
     <string name="ferry">Ferry</string>
 
     <!-- Translator Activity -->
-    <string name="english">English</string>
     <string name="turkish">Turkish</string>
     <string name="translate">Translate</string>
     <string name="change_language">Switch Languages</string>
     <string name="type_your_text_here">Type your text here</string>
     <string-array name="supported_languages">
-        <item>Turkish</item>
         <item>English</item>
-        <item>Italian</item>
-        <item>French</item>
-        <item>German</item>
-        <item>Dutch</item>
-        <item>Greek</item>
-        <item>Korean</item>
-        <item>Japanese</item>
-        <item>Chinese</item>
+    <!--<item>Italian</item>-->
+    <!--<item>French</item>-->
+    <!--<item>German</item>-->
+    <!--<item>Dutch</item>-->
+    <!--<item>Greek</item>-->
+    <!--<item>Korean</item>-->
+    <!--<item>Japanese</item>-->
+    <!--<item>Chinese</item>-->
     </string-array>
 
-    <!-- Phrasebook Activity -->
+<!-- Phrasebook Activity -->
     <string name="phrasebook1_basic_greetings">Basic Greetings</string>
     <string name="phrasebook1_basic_greetings_child1_en">&lt;b>EN &lt;/b>Hi!</string>
     <string name="phrasebook1_basic_greetings_child1_tr">&lt;b>TR &lt;/b>&lt;i>Merhaba!&lt;/i></string>

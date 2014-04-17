@@ -100,7 +100,8 @@
         <activity
             android:name="lbs.erasmus.touristanbul.TranslatorActivity"
             android:label="@string/translator"
-            android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
+            android:parentActivityName="lbs.erasmus.touristanbul.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

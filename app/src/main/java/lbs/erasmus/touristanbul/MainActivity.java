@@ -770,14 +770,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     }
 
     /**
-     * When location is enabled the position will be updated
-     */
-    @Override
-    public void setUserLocation(Location location) {
-        mUserLocation = location;
-    }
-
-    /**
      * Background Async task to load user profile picture from url
      * */
     private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
@@ -950,6 +942,15 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         protected void onPostExecute(String file_url) {
             // dismiss the dialog once product deleted
         }
+    }
 
+    /**
+     * When location is enabled the position will be updated
+     */
+    @Override
+    public void setUserLocation(Location location) {
+        mUserLocation = location;
+        mUser.setmLocation(location);
+    //    daoUsers.updateUserLocation(mUser);
     }
 }

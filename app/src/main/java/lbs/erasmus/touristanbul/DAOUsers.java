@@ -158,19 +158,9 @@ public class DAOUsers {
     // Update user location
     public boolean updateUserLocation(User mUser){
 
-        // url to update user's location
-        String url_user_login = "http://s459655320.mialojamiento.es/index.php/updateLocation";
-
-        // Building Parameters
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("email", mUser.getmEmail()));
-        params.add(new BasicNameValuePair("locationx", Double.toString(mUser.getmLocation().getLatitude())));
-        params.add(new BasicNameValuePair("locationy", Double.toString(mUser.getmLocation().getLatitude())));
-
-        JSONParser jsonParser = new JSONParser();
-        JSONObject json = jsonParser.makeHttpRequest(url_user_login, "POST", params);
-
         try {
+            JSONObject json = new updateUserLocation().execute(mUser).get();
+
             // check log cat from response
             Log.d("Update User's Location: ", json.toString());
 
@@ -180,11 +170,63 @@ public class DAOUsers {
             if (!error) {
                 return true;
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
+        } catch (InterruptedException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        } catch (ExecutionException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
         }
+
         return false;
+    }
+
+    /**
+     * Async Task to get and send data to My Sql database through JSON response.
+     **/
+    private class updateUserLocation extends AsyncTask<User, Void, JSONObject> {
+
+        private ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            // activity.finish();
+            pDialog = new ProgressDialog(context);
+            pDialog.setTitle("Contacting Servers");
+            pDialog.setMessage("Logging in ...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(User... mUser) {
+
+            // url to update user's location
+            String url_update_location = "http://s459655320.mialojamiento.es/index.php/updateLocation";
+
+            Log.e("Update User's Location: ", mUser[0].getmEmail() + ", " + mUser[0].getmLocation().getLatitude() + ", " + mUser[0].getmLocation().getLongitude());
+
+            // Building Parameters
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("email", mUser[0].getmEmail()));
+            params.add(new BasicNameValuePair("locationx", Double.toString(mUser[0].getmLocation().getLatitude())));
+            params.add(new BasicNameValuePair("locationy", Double.toString(mUser[0].getmLocation().getLatitude())));
+
+            JSONParser jsonParser = new JSONParser();
+            JSONObject json = jsonParser.makeHttpRequest(url_update_location, "POST", params);
+
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject json) {
+            pDialog.dismiss();
+        }
     }
 
 

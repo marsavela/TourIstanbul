@@ -853,8 +853,11 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         if(isConnectingToInternet()){
             Log.v("VERBOSE", "LLamando al aystask: ");
             //AttemptAttractions attemptAttractions = new AttemptAttractions(queryStr, null, attractions);
+            mAttractionsList = new ArrayList<Attraction>();
              new AttemptAttractions().execute(queryStr);
              attractions = mAttractionsList;
+                if(attractions.size() == 0){ Log.v("VERBOSE", "Por base de datos fallo en el servidor: ");attractions = daoAttractions.getAttractionsByName(queryStr);}
+
         } else {
             attractions = daoAttractions.getAttractionsByName(queryStr);
         }

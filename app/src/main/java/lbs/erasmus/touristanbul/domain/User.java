@@ -1,6 +1,7 @@
 package lbs.erasmus.touristanbul.domain;
 
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -14,6 +15,15 @@ public class User implements Parcelable {
     private String mPhotoUrl;
     private String mPlusProfile;
     private Bitmap mPhoto;
+    private Location mLocation;
+
+    public User(String mEmail, String mName, String mPhotoUrl, Location mLocation) {
+        super();
+        this.mEmail = mEmail;
+        this.mName = mName;
+        this.mPhotoUrl = mPhotoUrl;
+        this.mLocation = mLocation;
+    }
 
     public User(String mEmail, String mName, String mPhoto, String mPlusProfile) {
         super();
@@ -21,6 +31,23 @@ public class User implements Parcelable {
         this.mName = mName;
         this.mPhotoUrl = mPhoto;
         this.mPlusProfile = mPlusProfile;
+    }
+
+    public User(String mEmail, String mName, String mPhoto, String mPlusProfile, Location mLocation) {
+        super();
+        this.mEmail = mEmail;
+        this.mName = mName;
+        this.mPhotoUrl = mPhoto;
+        this.mPlusProfile = mPlusProfile;
+        this.mLocation = mLocation;
+    }
+
+    public Location getmLocation() {
+        return mLocation;
+    }
+
+    public void setmLocation(Location mLocation) {
+        this.mLocation = mLocation;
     }
 
     public Bitmap getmPhoto() {

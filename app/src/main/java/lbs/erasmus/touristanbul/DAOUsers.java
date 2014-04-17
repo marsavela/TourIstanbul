@@ -4,14 +4,18 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.Log;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +60,10 @@ public class DAOUsers {
             // check log cat from response
             Log.d("Create Response", json.toString());
 
-            // check for success tag
+            // Checking for SUCCESS TAG
+            boolean error = json.getBoolean("error");
 
-            int success = json.getInt(TAG_SUCCESS);
-            if (success == 1) {
+            if (!error) {
                 return true;
             }
         } catch (JSONException e) {
@@ -124,6 +128,68 @@ public class DAOUsers {
         }
     }
 
+
+    // User Login to get the api_key
+    public String userLogin(User mUser){
+
+        String api_key=null;
+
+        // url to log in
+        String url_user_login = "http://s459655320.mialojamiento.es/index.php/login";
+
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("email", mUser.getmEmail()));
+        params.add(new BasicNameValuePair("password", "1234"));
+
+        JSONParser jsonParser = new JSONParser();
+        JSONObject json = jsonParser.makeHttpRequest(url_user_login, "POST", params);
+
+        try {
+            api_key = json.getString("apiKey");
+            Log.d("apiKey: ", api_key);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return api_key;
+    }
+
+
+    // Update user location
+    public boolean updateUserLocation(User mUser){
+
+        // url to update user's location
+        String url_user_login = "http://s459655320.mialojamiento.es/index.php/updateLocation";
+
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("email", mUser.getmEmail()));
+        params.add(new BasicNameValuePair("locationx", Double.toString(mUser.getmLocation().getLatitude())));
+        params.add(new BasicNameValuePair("locationy", Double.toString(mUser.getmLocation().getLatitude())));
+
+        JSONParser jsonParser = new JSONParser();
+        JSONObject json = jsonParser.makeHttpRequest(url_user_login, "POST", params);
+
+        try {
+            // check log cat from response
+            Log.d("Update User's Location: ", json.toString());
+
+            // Checking for SUCCESS TAG
+            boolean error = json.getBoolean("error");
+
+            if (!error) {
+                return true;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
     // Update profile picture
     public boolean updateProfilePicture(User mUser){
 
@@ -133,12 +199,13 @@ public class DAOUsers {
             // check log cat from response
             Log.d("Create Response", json.toString());
 
-            // check for success tag
+            // Checking for SUCCESS TAG
+            boolean error = json.getBoolean("error");
 
-            int success = json.getInt(TAG_SUCCESS);
-            if (success == 1) {
+            if (!error) {
                 return true;
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e1) {
@@ -176,24 +243,32 @@ public class DAOUsers {
         protected JSONObject doInBackground(User... user) {
 
             // url to create new product
-            String url_check_user = "http://s459655320.mialojamiento.es/index.php/updatePicture";
+            String url_update_photo = "http://s459655320.mialojamiento.es/index.php/updatePicture";
 
-/*            Bitmap bitmap = getImageBitmap(context, "profile_photo");
-            ByteArrayOutputStream stream=new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
-            byte[] byte_arr=stream.toByteArray();
-            String image_str=Base64.encodeToString(byte_arr, Base64.NO_WRAP|Base64.URL_SAFE);*/
+                Bitmap bitmap = getImageBitmap(context, "profile_photo");
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+                byte[] byte_arr = stream.toByteArray();
+                String image_str = Base64.encodeToString(byte_arr, Base64.NO_WRAP | Base64.URL_SAFE);
 
-            // Building Parameters
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("email", user[0].getmEmail()));
-            params.add(new BasicNameValuePair("picture", user[0].getmPhotoUrl()));
+                // Building Parameters
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("email", user[0].getmEmail()));
+                params.add(new BasicNameValuePair("picture", image_str));
+                params.add(new BasicNameValuePair("From", userLogin(user[0])));
 
-            // getting JSON Object
-            // Note that create product url accepts POST method
-            JSONParser jsonParser = new JSONParser();
-            JSONObject json = jsonParser.makeHttpRequest(url_check_user,
+            /*    // lets add some headers (nested JSON object)
+                JSONObject header = new JSONObject();
+                header.put("From", userLogin(user[0]));
+                jsonobj.put("header", header);*/
+
+
+                // getting JSON Object
+                // Note that create product url accepts POST method
+                JSONParser jsonParser = new JSONParser();
+                JSONObject json = jsonParser.makeHttpRequest(url_update_photo,
                     "POST", params);
+
 
             return json;
         }
@@ -217,5 +292,95 @@ public class DAOUsers {
         }
         return null;
     }
+
+
+    // Get near user's location
+    public ArrayList<User> nearUsersPosition(User mUser){
+        ArrayList<User> mNearUsersList = new ArrayList<User>();
+
+        JSONArray jsonArray = null;
+
+        // url to get near user's location
+        String url_near_users_location = "http://s459655320.mialojamiento.es/index.php/nearUserLocation";
+
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("email", mUser.getmEmail()));
+        params.add(new BasicNameValuePair("locationx", Double.toString(mUser.getmLocation().getLatitude())));
+        params.add(new BasicNameValuePair("locationy", Double.toString(mUser.getmLocation().getLatitude())));
+
+        JSONParser jsonParser = new JSONParser();
+        JSONObject json = jsonParser.makeHttpRequest(url_near_users_location, "POST", params);
+
+        try {
+            // check log cat from response
+        //    Log.d("Update User's Location: ", json.toString());
+
+            // Checking for SUCCESS TAG
+            boolean error = json.getBoolean("error");
+
+            if (!error) {
+
+                // Getting Array of Users
+                jsonArray = json.getJSONArray("users");
+            }
+
+            if (jsonArray != null)
+                // looping through All users
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject c = null;
+                    c = jsonArray.getJSONObject(i);
+
+                    Location mLocation = new Location("Nose");
+                    mLocation.setLatitude(c.getDouble("latitude"));
+                    mLocation.setLongitude(c.getDouble("longitude"));
+
+                    // Storing each json item in variable
+                    mNearUsersList.add(new User(
+                            c.getString("email"),
+                            c.getString("name"),
+                            c.getString("picture"),
+                            mLocation
+                    ));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return mNearUsersList;
+
+    }
+
+    // Update user's share bit, receives a user a a share bit (0|1)
+    public boolean updateShareBit(User mUser, Integer share){
+
+        // url to get near user's location
+        String url_share_bit = "http://s459655320.mialojamiento.es/index.php/updateShareLocation";
+
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("email", mUser.getmEmail()));
+        params.add(new BasicNameValuePair("shareLocation", Integer.toString(share)));
+
+        JSONParser jsonParser = new JSONParser();
+        JSONObject json = jsonParser.makeHttpRequest(url_share_bit, "POST", params);
+
+        try {
+            // check log cat from response
+            Log.d("Share Bit: ", json.toString());
+
+            // Checking for SUCCESS TAG
+            boolean error = json.getBoolean("error");
+
+            if (!error) {
+                return true;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
+
 }
 

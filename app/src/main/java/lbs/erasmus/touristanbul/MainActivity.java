@@ -20,7 +20,6 @@ import android.graphics.Rect;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -251,6 +250,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             case 5:
                 // Show user's achievements
                 if (isSignedIn()) {
+                    Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_login));
                     startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
                 }
                 else {
@@ -461,8 +461,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         startActivity(i);
         mNavigationDrawerFragment.closeDrawer();
 
-        if (isSignedIn())
-            Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_login));
     }
 
 
@@ -586,7 +584,12 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 new LoadProfileImage(mImgProfilePic, mUserProfilePhoto).execute(personPhotoUrl);
                 if (mViewPersonName != null)
                     mViewPersonName.setText(mPersonName);
-                mUser = new User(email, mPersonName, personPhotoUrl, personGooglePlusProfile);
+
+/*                Location mLocation = new Location("Nose");
+                mLocation.setLatitude(41.0096334);
+                mLocation.setLongitude(28.9651646);*/
+
+                mUser = new User(email, mPersonName, personPhotoUrl, personGooglePlusProfile, mUserLocation);
                 mUser.setmPhoto(mImgProfilePic.getDrawingCache());
 
                 if(daoUsers.newUserRegistration(mUser)){
@@ -641,7 +644,10 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
         // Open achievements activity
         if(show_achievements){
-            startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
+            if (isSignedIn()) {
+                Games.Achievements.unlock(getApiClient(), getResources().getString(R.string.achievement_login));
+                startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
+            }
             show_achievements=false;
         }
     }
@@ -709,7 +715,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 bmImage.setImageBitmap(getCroppedBitmap(result));
                 saveImage(getBaseContext(), result, "profile_photo");
                 if(daoUsers.updateProfilePicture(mUser)){
-                    Toast.makeText(getParent(), "User profile picture updated succesfully", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "User profile picture updated succesfully");
                 }
             } else

@@ -198,11 +198,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         daoUsers = new DAOUsers(this);
 
         jsonParser = new JSONParser();
-        daoAttractions = new DAOAttractions(this);
-        mAttractionsFragment = null;
         attractionsList = null;
-
-
 
     }
 
@@ -349,8 +345,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             }
             return true;
         } else if (item.getItemId() == R.id.action_nearby_people) {
-            //showNearbyPeopleList();
-            daoAttractions.clearDB();
             new TaskNearbyPeople().execute();
             return true;
         }

@@ -52,6 +52,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -272,7 +273,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                     startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
                 }
                 else {
-                //    beginUserInitiatedSignIn();
                     show_achievements=true;
                     reconnectClient();
                 }
@@ -652,30 +652,57 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         }
     }
 
+
+    /**
+     * Game Services Sign in
+     */
+    @Override
+    public void onSignInSucceeded() {
+        // show sign-out button, hide the sign-in button
+        mBtnSignIn.setVisibility(View.GONE);
+        mImgProfilePic.setVisibility(View.VISIBLE);
+        mViewPersonName.setVisibility(View.VISIBLE);
+
+        // Open achievements activity
+        if(show_achievements){
+            if (isSignedIn()) {
+                Games.Achievements.unlock(getApiClient(), getResources().getString(R.string.achievement_login));
+                startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
+            }
+            show_achievements=false;
+        }
+    }
+
+    @Override
+    public void onSignInFailed() {
+        mBtnSignIn.setVisibility(View.VISIBLE);
+        mImgProfilePic.setVisibility(View.GONE);
+        mViewPersonName.setVisibility(View.GONE);
+    }
+
+
     /**
      * Fetching user's information name, email, profile pic
      * */
     private void getProfileInformation() {
         try {
             if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
-                Person currentPerson = Plus.PeopleApi
-                        .getCurrentPerson(mGoogleApiClient);
+                Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
                 mPersonName = currentPerson.getDisplayName();
                 String personPhotoUrl = currentPerson.getImage().getUrl();
                 String personGooglePlusProfile = currentPerson.getUrl();
                 String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
-
-        //        Log.e(TAG, "Name: " + mPersonName + ", plusProfile: " + personGooglePlusProfile + ", email: " + email + ", Image: " + personPhotoUrl);
-
                 personPhotoUrl = personPhotoUrl.substring(0, personPhotoUrl.length() - 2) + PROFILE_PIC_SIZE;
 
-                new LoadProfileImage(mImgProfilePic, mUserProfilePhoto).execute(personPhotoUrl);
+                Log.e(TAG, "Name: " + mPersonName + ", plusProfile: " + personGooglePlusProfile + ", email: " + email + ", Image: " + personPhotoUrl);
+
+                if(getImageBitmap(this, "profile_photo")!=null)
+                    mImgProfilePic.setImageBitmap(getCroppedBitmap(getImageBitmap(this, "profile_photo")));
+                else
+                    new LoadProfileImage(mImgProfilePic, mUserProfilePhoto).execute(personPhotoUrl);
+
                 if (mViewPersonName != null)
                     mViewPersonName.setText(mPersonName);
-
-/*                Location mLocation = new Location("Nose");
-                mLocation.setLatitude(41.0096334);
-                mLocation.setLongitude(28.9651646);*/
 
                 mUser = new User(email, mPersonName, personPhotoUrl, personGooglePlusProfile, mUserLocation);
                 mUser.setmPhoto(mImgProfilePic.getDrawingCache());
@@ -712,40 +739,25 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         int halfHeight = bitmap.getHeight()/2;
 
         canvas.drawCircle(halfWidth, halfHeight, Math.max(halfWidth, halfHeight), paint);
-
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-
         canvas.drawBitmap(bitmap, rect, rect, paint);
 
         return output;
     }
 
-    /**
-     * Game Services Sign in
-     */
-    @Override
-    public void onSignInSucceeded() {
-        // show sign-out button, hide the sign-in button
-        mBtnSignIn.setVisibility(View.GONE);
-        mImgProfilePic.setVisibility(View.VISIBLE);
-        mViewPersonName.setVisibility(View.VISIBLE);
-
-        // Open achievements activity
-        if(show_achievements){
-            if (isSignedIn()) {
-                Games.Achievements.unlock(getApiClient(), getResources().getString(R.string.achievement_login));
-                startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
-            }
-            show_achievements=false;
+    public Bitmap getImageBitmap(Context context,String name){
+        try{
+            FileInputStream fis = context.openFileInput(name);
+            Bitmap b = BitmapFactory.decodeStream(fis);
+            fis.close();
+            return b;
         }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    @Override
-    public void onSignInFailed() {
-        mBtnSignIn.setVisibility(View.VISIBLE);
-        mImgProfilePic.setVisibility(View.GONE);
-        mViewPersonName.setVisibility(View.GONE);
-    }
 
     /**
      * Method to comunicate the map fragment with the list of attractions
@@ -809,8 +821,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 bmImage.setImageBitmap(getCroppedBitmap(
                         BitmapFactory.decodeResource(getResources(), R.drawable.kebap)));
 
-//            mImgProfilePic.setVisibility(View.VISIBLE);
-//            mViewPersonName.setVisibility(View.VISIBLE);
         }
     }
 

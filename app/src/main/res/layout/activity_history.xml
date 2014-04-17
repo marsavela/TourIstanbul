@@ -17,7 +17,7 @@
             android:id="@+id/ivHistoryImage"
             android:layout_width="match_parent"
             android:layout_height="299dp"
-            android:src="@drawable/ic_airport"
+            android:src="@drawable/people"
             android:layout_gravity="center_horizontal|top" />
 
         <ListView

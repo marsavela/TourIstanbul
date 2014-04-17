@@ -15,15 +15,16 @@
 
         <ImageView
             android:id="@+id/ivHistoryImage"
-            android:layout_width="match_parent"
-            android:layout_height="299dp"
-            android:layout_gravity="center_horizontal|top" />
-            <!--android:src="@drawable/people"-->
+            android:layout_width="319dp"
+            android:layout_height="208dp"
+            android:layout_gravity="center_horizontal|top"
+            android:src="@drawable/peopleh"
+            android:adjustViewBounds="true" />
 
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
-            android:layout_height="217dp"
+            android:layout_height="310dp"
             android:layout_below="@+id/ivHistoryImage"
             android:drawSelectorOnTop="false"
             android:layout_gravity="center_horizontal|bottom" />

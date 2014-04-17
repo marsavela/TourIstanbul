@@ -25,6 +25,7 @@ public class HistoryActivity extends ListActivity {
 
 
     public void setGroupData() {
+        groupItem.add("HISTORY");
         groupItem.add(getResources().getString(R.string.history0));
         groupItem.add(getResources().getString(R.string.history1));
         groupItem.add(getResources().getString(R.string.history2));

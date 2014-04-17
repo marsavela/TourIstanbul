@@ -297,11 +297,6 @@ public class DAOUsers {
                 params.add(new BasicNameValuePair("picture", image_str));
                 params.add(new BasicNameValuePair("From", userLogin(user[0])));
 
-            /*    // lets add some headers (nested JSON object)
-                JSONObject header = new JSONObject();
-                header.put("From", userLogin(user[0]));
-                jsonobj.put("header", header);*/
-
 
                 // getting JSON Object
                 // Note that create product url accepts POST method
@@ -339,32 +334,20 @@ public class DAOUsers {
         ArrayList<User> mNearUsersList = new ArrayList<User>();
 
         JSONArray jsonArray = null;
-
-        // url to get near user's location
-        String url_near_users_location = "http://s459655320.mialojamiento.es/index.php/nearUserLocation";
-
-        // Building Parameters
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("email", mUser.getmEmail()));
-        params.add(new BasicNameValuePair("locationx", Double.toString(mUser.getmLocation().getLatitude())));
-        params.add(new BasicNameValuePair("locationy", Double.toString(mUser.getmLocation().getLatitude())));
-
-        JSONParser jsonParser = new JSONParser();
-        JSONObject json = jsonParser.makeHttpRequest(url_near_users_location, "POST", params);
-
+        Log.d("Near users location", "near users");
         try {
+            JSONObject json = new nearUsersPosition().execute(mUser).get();
+
             // check log cat from response
-        //    Log.d("Update User's Location: ", json.toString());
+            Log.d("Near users location", json.toString());
 
             // Checking for SUCCESS TAG
             boolean error = json.getBoolean("error");
 
             if (!error) {
-
                 // Getting Array of Users
                 jsonArray = json.getJSONArray("users");
             }
-
             if (jsonArray != null)
                 // looping through All users
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -382,13 +365,67 @@ public class DAOUsers {
                             c.getString("picture"),
                             mLocation
                     ));
-            }
+                }
+
         } catch (JSONException e) {
             e.printStackTrace();
+        } catch (InterruptedException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        } catch (ExecutionException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
         }
+
         return mNearUsersList;
 
     }
+
+    /**
+     * Async Task to get and send data to My Sql database through JSON response.
+     **/
+    private class nearUsersPosition extends AsyncTask<User, Void, JSONObject> {
+
+        private ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // activity.finish();
+            pDialog = new ProgressDialog(context);
+            pDialog.setTitle("Contacting Servers");
+            pDialog.setMessage("Logging in ...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(User... mUser) {
+            Log.d("Near users location", "background");
+            // url to get near user's location
+            String url_near_users_location = "http://s459655320.mialojamiento.es/index.php/nearUserLocation";
+            Log.d("Near users location", "background");
+            // Building Parameters
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("email", mUser[0].getmEmail()));
+            params.add(new BasicNameValuePair("locationx", Double.toString(mUser[0].getmLocation().getLatitude())));
+            params.add(new BasicNameValuePair("locationy", Double.toString(mUser[0].getmLocation().getLatitude())));
+
+            Log.d("Near users location", "background2");
+            JSONParser jsonParser = new JSONParser();
+            JSONObject json = jsonParser.makeHttpRequest(url_near_users_location, "POST", params);
+
+            Log.d("Near users location", "background3");
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject json) {
+            pDialog.dismiss();
+        }
+    }
+
 
     // Update user's share bit, receives a user a a share bit (0|1)
     public boolean updateShareBit(User mUser, Integer share){

@@ -125,6 +125,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     // JSON parser class
     private JSONParser jsonParser;
     private ArrayList<Attraction> attractionsList;
+    private ArrayList<User> mUsersList;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -328,6 +329,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         // as you specify a parent activity in AndroidManifest.xml.
          int id = item.getItemId();
          Log.v("VERBOSE", "id menu"  + id + "id de busqueda " + R.id.action_search + "Personitas " + R.id.action_nearby_people);
+
         if (id == R.id.action_search) {
             Log.v("VERBOSE", "Entro dentro de la busqueda");
            /* searchView = (SearchView) findViewById(R.id.action_search);
@@ -345,7 +347,12 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             }
             return true;
         } else if (item.getItemId() == R.id.action_nearby_people) {
-            new TaskNearbyPeople().execute();
+        //    new TaskNearbyPeople().execute();
+            if(mUsersList!=null)
+                showNearbyPeopleList(mUsersList);
+            else{
+                Toast.makeText(this, "Activate your current position first!", Toast.LENGTH_LONG).show();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -420,7 +427,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
             pDialog = new ProgressDialog(MainActivity.this);
             pDialog.setTitle("Contacting Servers");
-            pDialog.setMessage("Looking for someone for you ;)");
+            pDialog.setMessage("Looking for someone nearby");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
@@ -428,7 +435,11 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
         @Override
         protected ArrayList<User> doInBackground(Void... params) {
-            return daoUsers.nearUsersPosition(mUser);
+            Log.v("VERBOSE users", "Nearby users background");
+            ArrayList<User> users = new ArrayList<User>();
+        //    users = daoUsers.nearUsersPosition(mUser);
+            Log.v("VERBOSE users", users.toString());
+            return users;
         }
 
         @Override
@@ -694,7 +705,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
                 personPhotoUrl = personPhotoUrl.substring(0, personPhotoUrl.length() - 2) + PROFILE_PIC_SIZE;
 
-                Log.e(TAG, "Name: " + mPersonName + ", plusProfile: " + personGooglePlusProfile + ", email: " + email + ", Image: " + personPhotoUrl);
+        //        Log.e(TAG, "Name: " + mPersonName + ", plusProfile: " + personGooglePlusProfile + ", email: " + email + ", Image: " + personPhotoUrl);
 
                 if(getImageBitmap(this, "profile_photo")!=null)
                     mImgProfilePic.setImageBitmap(getCroppedBitmap(getImageBitmap(this, "profile_photo")));
@@ -711,6 +722,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                     Toast.makeText(this, "User registered succesfully", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "User registered succesfully");
                 }
+        //        mUsersList = daoUsers.nearUsersPosition(mUser);
 
             } else {
                 Toast.makeText(this,
@@ -952,5 +964,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         mUserLocation = location;
         mUser.setmLocation(location);
     //    daoUsers.updateUserLocation(mUser);
+        if(mUsersList==null)
+            mUsersList = daoUsers.nearUsersPosition(mUser);
     }
 }

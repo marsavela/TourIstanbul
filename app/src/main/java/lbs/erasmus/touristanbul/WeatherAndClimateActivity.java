@@ -145,7 +145,15 @@ public class WeatherAndClimateActivity extends Activity {
             if(temperature!=null && description!=null) {
                 textView.setText(temperature + " ºC");
                 textView2.setText(description);
+            }else {
+                Toast toast1 = Toast.makeText(getApplicationContext(),"Error receiving data from server", Toast.LENGTH_SHORT);
+                toast1.show();
+                description =  _prefs.getString("description", "Sin datos");
+                temperature= _prefs.getString("temperature", "Sin datos");
+                textView.setText(temperature + " ºC");
+                textView2.setText(description);
             }
+
 
             Drawable icon = null;
             switch(weather) {

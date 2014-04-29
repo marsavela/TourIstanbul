@@ -8,7 +8,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/papiro">
 
         <ImageView
             android:id = "@+id/Item_image"
@@ -16,56 +17,66 @@
             android:layout_height = "wrap_content"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/population"
-            />
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp" />
         <TextView
             android:id = "@+id/Text1"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
-            />
+            android:textSize="35sp"
+            android:layout_gravity="center_horizontal" />
         <TextView
             android:id = "@+id/Text2"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <TextView
             android:id = "@+id/Text3"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
-            />
+            android:layout_margin="10dp" />
         <TextView
             android:id = "@+id/Text4"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <TextView
             android:id = "@+id/Text5"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <TextView
             android:id = "@+id/Text6"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <TextView
             android:id = "@+id/Text7"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <TextView
             android:id = "@+id/Text8"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <TextView
             android:id = "@+id/Text9"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <TextView
             android:id = "@+id/Text10"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <ImageView
             android:id = "@+id/Item_image3"
@@ -73,51 +84,61 @@
             android:layout_height = "wrap_content"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/historyimg1"
-            />
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp" />
         <TextView
             android:id = "@+id/Text11"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
         />
         <TextView
             android:id = "@+id/Text12"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <TextView
             android:id = "@+id/Text13"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <TextView
             android:id = "@+id/Text14"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <TextView
             android:id = "@+id/Text15"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <TextView
             android:id = "@+id/Text16"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <TextView
             android:id = "@+id/Text17"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <TextView
             android:id = "@+id/Text18"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <TextView
             android:id = "@+id/Text19"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:layout_margin="10dp"
             />
         <ImageView
             android:id = "@+id/Item_image2"
@@ -125,7 +146,8 @@
             android:layout_height = "wrap_content"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/historyimg2"
-            />
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp" />
 
 
 

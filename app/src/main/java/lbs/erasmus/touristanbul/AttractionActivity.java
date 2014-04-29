@@ -12,12 +12,14 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.support.v4.app.ShareCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,7 +48,11 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
     private Button mRateButton;
     private TextToSpeech mTTS;
     private boolean isPaying;
+    private DAOAttractions daoAttractions;
+    private RatingBar ratingBar;
+
     private final static int MY_DATA_CHECK_CODE = 0;
+
 
     /*
      * Define a request code to send to Google Play services
@@ -65,7 +71,6 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
                 .headerLayout(R.layout.activity_atraction_header)
                 .contentLayout(R.layout.activity_attraction_scrollview);
         setContentView(helper.createView(this));
-
         /*
          * Create a new location client, using the enclosing class to
          * handle callbacks.
@@ -75,12 +80,16 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
         Intent checkTTSIntent = new Intent();
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
+        daoAttractions = new DAOAttractions(this);
+        ratingBar = (RatingBar)findViewById(R.id.ratingBar);
 
         mAttraction = getIntent().getExtras().getParcelable("Attraction");
         /*mTitleView = (TextView) findViewById(R.id.title);
         mTitleView.setText(mAttraction.getTitle());*/
         mDescription = (TextView) findViewById(R.id.description);
-        mDescription.setText(mAttraction.getSubtitle());
+        TextView mOpen = (TextView) findViewById(R.id.open_time);
+        mDescription.setText(mAttraction.getDescription());
+        mOpen.setText(mAttraction.getOpeningTimes());
         mAttractionImageView = (ImageView) findViewById(R.id.image_header);
         mAttractionImageView.setImageURI(mAttraction.getImageUri());
         mPlayButton = (Button) findViewById(R.id.button2);
@@ -144,6 +153,14 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // send the users rate ...
+                        if (isConnectingToInternet()) {
+                            Log.v("VERBOSE", "Nombre" + mAttraction.getTitle());
+                            Log.v("VERBOSE","Numero estrellas" + ratingBar.getNumStars());
+
+                            daoAttractions.updateRatesAttractions(mAttraction.getTitle(),ratingBar.getNumStars());
+                        }else{
+                            Toast.makeText(getApplicationContext(),"Attraction not rated, you need internet connection", Toast.LENGTH_SHORT);
+                        }
                         if (isSignedIn()) {
                             Games.Achievements.unlock(getApiClient(), getResources().getString(R.string.achievement_attraction_rated));
                             Games.Achievements.increment(getApiClient(), getResources().getString(R.string.achievement_5attraction_rated), 1);
@@ -164,6 +181,7 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
     private boolean isUserInRange() {
         return false;
     }
+
 
 
     @Override
@@ -192,7 +210,7 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
 
     private void readDescription() {
         //speak straight away
-        mTTS.speak(mAttraction.getSubtitle(), TextToSpeech.QUEUE_FLUSH, null);
+        mTTS.speak(mAttraction.getDescription(), TextToSpeech.QUEUE_FLUSH, null);
     }
 
     @Override
@@ -274,19 +292,19 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
 
     public boolean checkOnlineState() {
 
-            ConnectivityManager connectivity = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (connectivity != null)
-            {
-                NetworkInfo[] info = connectivity.getAllNetworkInfo();
-                if (info != null)
-                    for (int i = 0; i < info.length; i++)
-                        if (info[i].getState() == NetworkInfo.State.CONNECTED)
-                        {
-                            return true;
-                        }
+        ConnectivityManager connectivity = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null)
+        {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null)
+                for (int i = 0; i < info.length; i++)
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED)
+                    {
+                        return true;
+                    }
 
-            }
-            return false;
+        }
+        return false;
 
     }
 
@@ -320,7 +338,7 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
     @Override
     public void onConnected(Bundle dataBundle) {
         // Display the connection status
-    //    Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+        //    Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -379,5 +397,20 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
     @Override
     public void onSignInSucceeded() {
 
+    }
+    public boolean isConnectingToInternet(){
+        ConnectivityManager connectivity = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null)
+        {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null)
+                for (int i = 0; i < info.length; i++)
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED)
+                    {
+                        return true;
+                    }
+
+        }
+        return false;
     }
 }

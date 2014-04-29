@@ -87,6 +87,8 @@
 
     <!-- Attraction Activity -->
     <string name="description">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</string>
+    <string name="open_time"></string>
+    <string name="open_time_tittle">Opening time</string>
     <string name="rate">Rating by the users</string>
     <string name="rate_button">Rate this place</string>
     <string name="description_listen_button">Listen to the description</string>

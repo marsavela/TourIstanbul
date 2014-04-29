@@ -10,8 +10,10 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -243,7 +245,7 @@ public class DAOAttractions {
         }
     }
 
-    public void downloadAndSaveData() {
+     public void downloadAndSaveData() {
 
         ArrayList<Attraction> attractionArrayList = new ArrayList<Attraction>();
 
@@ -349,6 +351,59 @@ public class DAOAttractions {
 
             insertAttractions(attractionArrayList);
     }
+
+    public void updateRatesAttractions(String name, int vote) {
+
+        ArrayList<Attraction> attractionArrayList = new ArrayList<Attraction>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Log.v("VERBOSE","No Existe db");
+        JSONArray jsonArray = null;
+
+        String url_vote = "http://s459655320.mialojamiento.es/index.php/rateAttraction";
+        Log.v("VERBOSE","URL " + url_vote);
+
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("name", name));
+        params.add(new BasicNameValuePair("rate", String.valueOf(vote)));
+        Log.v("VERBOSE","Values de params "+ name +" y " + String.valueOf(vote));
+        // getting JSON Object
+        // Note that check player url accepts POST method
+        JSONParser jsonParser = new JSONParser();
+        JSONObject json = jsonParser.makeHttpRequest(url_vote, "POST",
+                params);
+
+        try {
+            // Check your log cat for JSON reponse
+            //Log.d("All String: ", json.toString());
+
+            // Checking for SUCCESS TAG
+            boolean error = json.getBoolean("error");
+
+            if (!error) {
+                // products found
+                // Getting Array of attractions
+                jsonArray = json.getJSONArray("message");
+            }
+
+            if (jsonArray != null) {
+
+                String selectQuery = "UPDATE " + TAG_ATTRACTIONS + " SET rate = " + vote + " AND numRates = (SELECT (max(numRates)+1) FROM " + TAG_ATTRACTIONS + " WHERE name = '"
+                        + name + "') WHERE name = '" + name + "') ";
+                db.execSQL(selectQuery);
+            }
+            // looping through All attractions
+
+
+        }catch (SQLiteException e){
+            Toast.makeText(context,"Your rate not saved", Toast.LENGTH_SHORT);
+        } catch (Exception e){
+            Toast.makeText(context,"Attraction not rated, you need internett connection", Toast.LENGTH_SHORT);
+
+        }
+    }
+
 
     private void downloadImages() {
 

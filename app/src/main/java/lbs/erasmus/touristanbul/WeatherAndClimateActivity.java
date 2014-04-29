@@ -26,23 +26,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.JsonReader;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class WeatherAndClimateActivity extends Activity {
 
     EditText city;
+    private SharedPreferences _prefs;
+    private SharedPreferences.Editor _prefsEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class WeatherAndClimateActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminate(true);
         setContentView(R.layout.activity_weather_and_climate);
+        _prefs = this.getSharedPreferences("myPreferences", this.MODE_PRIVATE);
         getWeather(null);
     }
 
@@ -58,6 +61,7 @@ public class WeatherAndClimateActivity extends Activity {
             new WeatherTask().execute();
         }
         else {
+            new WeatherTask().execute();
             Toast.makeText(this, getResources().getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
         }
     }
@@ -77,55 +81,72 @@ public class WeatherAndClimateActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             // TODO Auto-generated method stub
-            try {
-                ArrayList<NameValuePair> list = new ArrayList<NameValuePair>();
-                list.add(new BasicNameValuePair("APPID", "12cad205e71e363f07afa9b738950c32"));
-                list.add(new BasicNameValuePair("mode", "json"));
-                list.add(new BasicNameValuePair("units", "metric"));
-                list.add(new BasicNameValuePair("q", "istambul"));
+            if(isConnected()){
+                try {
+                    ArrayList<NameValuePair> list = new ArrayList<NameValuePair>();
+                    list.add(new BasicNameValuePair("APPID", "12cad205e71e363f07afa9b738950c32"));
+                    list.add(new BasicNameValuePair("mode", "json"));
+                    list.add(new BasicNameValuePair("units", "metric"));
+                    list.add(new BasicNameValuePair("q", "istambul"));
 
 				/* This is just for GET/DELETE operation */
-                URL url = new URL("http://api.openweathermap.org/data/2.5/weather?" +
-                        URLEncodedUtils.format(list, "UTF-8"));
+                    URL url = new URL("http://api.openweathermap.org/data/2.5/weather?" +
+                            URLEncodedUtils.format(list, "UTF-8"));
 
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                //Json
-                StringBuffer buffer = new StringBuffer();
-                String s;
-                while ((s = reader.readLine()) != null) {
-                    buffer.append(s);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    //Json
+                    StringBuffer buffer = new StringBuffer();
+                    String s;
+                    while ((s = reader.readLine()) != null) {
+                        buffer.append(s);
+                    }
+                    reader.close();
+                    JSONObject object = new JSONObject(buffer.toString());
+                    JSONObject mainObject = object.getJSONObject("main");
+                    temperature = String.valueOf(mainObject.getDouble("temp"));
+                    JSONArray jsonList = object.getJSONArray("weather");
+                    object = jsonList.getJSONObject(0);
+                    description = object.getString("description");
+                    weather = object.getInt("id");
+
+                    savepref(temperature, description);
+
+                    connection.disconnect();
+
+                } catch (MalformedURLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
-                reader.close();
-                JSONObject object = new JSONObject(buffer.toString());
-                JSONObject mainObject = object.getJSONObject("main");
-                temperature = String.valueOf(mainObject.getDouble("temp"));
-                JSONArray jsonList = object.getJSONArray("weather");
-                object = jsonList.getJSONObject(0);
-                description = object.getString("description");
-                weather = object.getInt("id");
-
-                connection.disconnect();
-
-            } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             }
+            else {
+                description =  _prefs.getString("description", "Sin datos");
+                temperature= _prefs.getString("temperature", "Sin datos");
+            }
+
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
+
             // TODO Auto-generated method stub
-            ((TextView) findViewById(R.id.tvWeatherTemperature)).setText(temperature + " ·C");
-            ((TextView) findViewById(R.id.tvWeatherDescription)).setText(description);
+
+            TextView textView=((TextView) findViewById(R.id.tvWeatherTemperature));
+            TextView textView2=((TextView) findViewById(R.id.tvWeatherDescription));
+
+            if(temperature!=null && description!=null) {
+                textView.setText(temperature + " ºC");
+                textView2.setText(description);
+            }
+
             Drawable icon = null;
             switch(weather) {
                 case 200:
@@ -190,8 +211,10 @@ public class WeatherAndClimateActivity extends Activity {
                     icon = getResources().getDrawable(R.drawable.w04d);
                     break;
             }
-            ((ImageView) findViewById(R.id.ivWeatherIcon)).setImageDrawable(icon);
-
+            ImageView imageView=((ImageView) findViewById(R.id.ivWeatherIcon));
+            if(icon!=null) {
+                imageView.setImageDrawable(icon);
+            }
             setProgressBarIndeterminateVisibility(false);
         }
 
@@ -201,5 +224,14 @@ public class WeatherAndClimateActivity extends Activity {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo info = manager.getActiveNetworkInfo();
         return ((info != null) && (info.isConnected()));
+    }
+    private void savepref( String temp, String desc){
+        if(_prefs==null) return;
+        _prefsEditor = _prefs.edit();
+        if(_prefsEditor==null) return;
+
+        _prefsEditor.putString("temperature", temp);
+        _prefsEditor.putString("description", desc);
+        _prefsEditor.commit();
     }
 }

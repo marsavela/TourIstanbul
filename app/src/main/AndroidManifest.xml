@@ -130,7 +130,6 @@
         <activity
             android:name="lbs.erasmus.touristanbul.WeatherAndClimateActivity"
             android:label="@string/weather"
-            android:screenOrientation="portrait"
             android:parentActivityName="lbs.erasmus.touristanbul.MainActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />

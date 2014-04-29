@@ -92,7 +92,6 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
         mOpen.setText(mAttraction.getOpeningTimes());
         mAttractionImageView = (ImageView) findViewById(R.id.image_header);
         mAttractionImageView.setImageURI(mAttraction.getImageUri());
-        mPlayButton = (Button) findViewById(R.id.button2);
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

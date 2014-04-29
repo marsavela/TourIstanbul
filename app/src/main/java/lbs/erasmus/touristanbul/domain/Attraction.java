@@ -27,8 +27,8 @@ public class Attraction implements Parcelable {
      * Public enum to control the attraction category
      */
     public enum Category {
-        AIRPORT("Airport"), HOSPITAL("Hospital"), HOTEL("Hotel"), MALL("Mall"), MOSQUES("Mosques"),
-        MUSEUMS("Museums"), RESTAURANTS("Restaurant"), WIFI("Wifi"),MONUMENTS("Monuments"), UNKNOWN("Unknown");
+        AIRPORT("Airports"), HOSPITAL("Hospitals"), HOTEL("Hotels"), MALL("Malls"), MOSQUES("Mosques"),
+        MUSEUMS("Museums"), RESTAURANTS("Restaurants"), WIFI("Wifi Spots"),MONUMENTS("Monuments"), UNKNOWN("Unknown");
 
         private String mType;
 

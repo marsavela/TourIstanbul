@@ -77,6 +77,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
     private static final int RC_SIGN_IN = 0;
     private static final String TAG = "MainActivity";
+    private static final String CURRENT_FRAGMENT = "current_fragment";
 
     // Profile pic image size in pixels
     private static final int PROFILE_PIC_SIZE = 400;
@@ -133,11 +134,12 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
      */
 
     private CharSequence mTitle;
-
     /**
      * Used to find others nearby users
      */
     private Location mUserLocation;
+
+    private int mCurrentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,13 +200,18 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         if (!mDbReady || !mapFile.exists())
             new TaskAttractions().execute();
         //mAttractionsList = daoAttractions.getAttractions();
-        filterAttractions();
+        //filterAttractions();
 
         daoUsers = new DAOUsers(this);
 
         jsonParser = new JSONParser();
         attractionsList = null;
 
+        if(savedInstanceState != null) {
+             mCurrentFragment = savedInstanceState.getInt(CURRENT_FRAGMENT);
+        }else {
+            mCurrentFragment = 0;
+        }
     }
 
     @Override
@@ -226,7 +233,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPref.edit();
         if (sharedPref.getBoolean("update", false)) {
-            filterAttractions();
+            //filterAttractions();
             editor.putBoolean("update", false);
             editor.commit();
         }
@@ -241,9 +248,16 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_FRAGMENT, 0);
+    }
+
+    @Override
     public void onNavigationDrawerItemSelected(int position) {
         // Update the main content by replacing fragments
         Log.v("VERBOSE", "Enrtro een el navigation drawer " + position );
+        mCurrentFragment = position;
         switch (position + 1) {
             case 1:
                 Log.v("VERBOSE", "Enrtro en map");
@@ -264,6 +278,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 if (mToolsFragment == null)
                     mToolsFragment = new ToolsFragment();
                 replaceFragment(mToolsFragment, getString(R.string.title_tools));
+
                 break;
             case 4:
                 Log.v("VERBOSE", "Enrtro en information");
@@ -281,6 +296,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                     show_achievements=true;
                     reconnectClient();
                 }
+
                 break;
         }
     }
@@ -301,7 +317,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.v("VERBOSE", "Entrando en el create menu");
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        if (!mNavigationDrawerFragment.isDrawerOpen() && (mCurrentFragment == 0 || mCurrentFragment == 1)) {
             MenuItem m = null;
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
@@ -398,7 +414,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         SettingsManager settingsManager = new SettingsManager(this);
         for (Attraction a : daoAttractions.getAttractions()) {
             //if (interests.contains(a.getCategory()) || interests.contains(a.getInterest()))
-            if (settingsManager.checkAttractionCategory(a) || settingsManager.checkAttractionInterest(a))
+            if (settingsManager.checkAttractionCategory(a) && settingsManager.checkAttractionInterest(a))
                 mAttractionsList.add(a);
         }
 
@@ -474,7 +490,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         protected Void doInBackground(Void... params) {
             if (!mDbReady) {
                 daoAttractions.downloadAndSaveData();
-                filterAttractions();
+                //filterAttractions();
                 mDbReady = daoAttractions.checkDataBase();
             }
 
@@ -924,7 +940,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             JSONObject jsonAttraction = null;
             try {
                 Log.v("VERBOSE", "Valor del args " + args[0]);
-                String url = "http://s459655320.mialojamiento.es/index.php/attraction/" + args[0];
+                String url = "http://s459655320.mialojamiento.es/index.php/attraction/" + args[0].trim();
                 Log.v("VERBOSE", "url " + url);
                 JSONObject json = jsonParser.makeHttpRequest(
                         url, "GET", null);

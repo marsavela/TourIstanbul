@@ -20,6 +20,7 @@ import java.util.List;
 import lbs.erasmus.touristanbul.AttractionActivity;
 import lbs.erasmus.touristanbul.DAOAttractions;
 import lbs.erasmus.touristanbul.R;
+import lbs.erasmus.touristanbul.SettingsManager;
 import lbs.erasmus.touristanbul.domain.Attraction;
 
 /**
@@ -28,7 +29,7 @@ import lbs.erasmus.touristanbul.domain.Attraction;
 public class AttractionsFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private AttractionsAdapter attractionsAdapter;
-    private ArrayList<Attraction> attractionArrayList;
+    private ArrayList<Attraction> mAttractionsList;
     private GridView gridView;
     private DAOAttractions daoAttractions;
 
@@ -44,25 +45,41 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
         // Find the {@link GridView} that was already defined in the XML layout
         gridView = (GridView) rootView.findViewById(R.id.grid);
 
-        Bundle extras = getArguments();
+        //Bundle extras = getArguments();
         daoAttractions = new DAOAttractions(this.getActivity());
-        //attractionArrayList = new ArrayList<Attraction>();
-        Log.v("VERBOSE", "VAlor de los extras " + extras.toString() + extras.size());
-        if (extras != null) {
+        Log.v("VERBOSE", "VAlor de los extras " + mAttractionsList.toString() + mAttractionsList.size());
+        /*
+        if (mAttractionsList != null) {
             Log.v("VERBOSE", "Hay extras");
-             attractionArrayList = extras.getParcelableArrayList("Attractions");
-           // attractionArrayList = daoAttractions.getAttractions();
+             //mAttractionsList = extras.getParcelableArrayList("Attractions");
+           // mAttractionsList = daoAttractions.getAttractions();
             // Initialize the adapter with all the attractions. Set the adapter on the {@link GridView}.
             //gridView.setAdapter(new AttractionsAdapter(inflater, createAllAttractions()));
-            attractionsAdapter = new AttractionsAdapter(inflater, attractionArrayList);
-            gridView.setAdapter(attractionsAdapter);
+            attractionsAdapter = new AttractionsAdapter(inflater, mAttractionsList);
+            //gridView.setAdapter(attractionsAdapter);
 
             // Set a click listener for each attraction in the grid
             gridView.setOnItemClickListener(this);
 
-        }
+        }*/
+
+        attractionsAdapter = new AttractionsAdapter(inflater, mAttractionsList);
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SettingsManager settingsManager = new SettingsManager(getActivity());
+        mAttractionsList.clear();
+        for (Attraction a : daoAttractions.getAttractions()) {
+            //if (interests.contains(a.getCategory()) || interests.contains(a.getInterest()))
+            if (settingsManager.checkAttractionCategory(a) && settingsManager.checkAttractionInterest(a))
+                mAttractionsList.add(a);
+        }
+        gridView.setAdapter(attractionsAdapter);
+
     }
 
     /**
@@ -92,9 +109,9 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
 
     public void setAttractions(ArrayList<Attraction> mAttractionsList) {
         //Log.v("VERBOSE", "datos del primer name del resultado 2: " + mAttractionsList.get(0).getTitle());
-        attractionArrayList = mAttractionsList;
-        //Log.v("VERBOSE", "datos del primer name del resultado 3: " + attractionArrayList.get(0).getTitle());
-        updateAdapter(attractionArrayList);
+        this.mAttractionsList = mAttractionsList;
+        //Log.v("VERBOSE", "datos del primer name del resultado 3: " + mAttractionsList.get(0).getTitle());
+        updateAdapter(this.mAttractionsList);
     }
 
     public void updateAdapter(ArrayList<Attraction> list) {

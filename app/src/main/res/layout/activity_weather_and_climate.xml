@@ -9,11 +9,14 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
- >
+    android:background="@drawable/clouds">
     <FrameLayout
         android:id="@+id/WeatherIcon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
         <ImageView
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
@@ -21,36 +24,51 @@
            android:scaleType="fitXY"
            android:src="@drawable/istanbulclimate" />
     </FrameLayout>
-    <TextView
-        android:id="@+id/WeatherIcon2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/WeatherIcon"
-        android:text="CURRENT WEATHER:"/>
-    <ImageView
-        android:id="@+id/ivWeatherIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/WeatherIcon2"
-         />
 
-    <TextView
-        android:id="@+id/tvWeatherTemperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvWeatherDescription"
-        android:layout_centerHorizontal="true"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TextView
-        android:id="@+id/tvWeatherDescription"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivWeatherIcon"
-        android:layout_centerHorizontal="true"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_above="@+id/WeatherIcon"
+        android:layout_alignRight="@+id/WeatherIcon"
+        android:layout_alignEnd="@+id/WeatherIcon"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="40dp">
+
+        <TextView
+            android:id="@+id/WeatherIcon2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="CURRENT WEATHER:"/>
+        <ImageView
+            android:id="@+id/ivWeatherIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/WeatherIcon2"
+            />
+
+        <TextView
+            android:id="@+id/tvWeatherTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvWeatherDescription"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/tvWeatherDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivWeatherIcon"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>

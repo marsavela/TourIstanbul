@@ -35,7 +35,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
             if (mUser == null)
-            findPreference(SHARE_LOCATION).setEnabled(false);
+                findPreference(SHARE_LOCATION).setEnabled(false);
         }
     }
 
@@ -61,17 +61,18 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         //TODO No refresca las attractions
 
-        String INTERESTS_PARENTS = "interest1";
-        String INTERESTS_BACKPACKERS = "interest2";
-        String INTERESTS_BUSINESS = "interest3";
-        String ATTRACTIONS_AIRPORTS = "interest4";
-        String ATTRACTIONS_HOSPITALS = "interest5";
-        String ATTRACTIONS_HOTELS = "interest6";
-        String ATTRACTIONS_MALLS = "interest7";
-        String ATTRACTIONS_MOSQUES = "interest8";
-        String ATTRACTIONS_MUSEUMS = "interest9";
-        String ATTRACTIONS_RESTAURANTS = "interest10";
-        String ATTRACTIONS_WIFI = "interest11";
+        String INTERESTS_PARENTS = "Parents";
+        String INTERESTS_BACKPACKERS = "Backpackers";
+        String INTERESTS_BUSINESS = "Business Travelers";
+        String ATTRACTIONS_AIRPORTS = "Airports";
+        String ATTRACTIONS_HOSPITALS = "Hospitals";
+        String ATTRACTIONS_HOTELS = "Hotels";
+        String ATTRACTIONS_MALLS = "Malls";
+        String ATTRACTIONS_MOSQUES = "Mosques";
+        String ATTRACTIONS_MUSEUMS = "Museums";
+        String ATTRACTIONS_RESTAURANTS = "Restaurants";
+        String ATTRACTIONS_WIFI = "Wifi Spots";
+        String ATTRACTIONS_MONUMENTS = "Monuments";
 
 
         if (key.equals(INTERESTS_PARENTS) || key.equals(INTERESTS_BACKPACKERS) ||
@@ -79,7 +80,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 key.equals(ATTRACTIONS_HOSPITALS) || key.equals(ATTRACTIONS_HOTELS) ||
                 key.equals(ATTRACTIONS_MALLS) || key.equals(ATTRACTIONS_MOSQUES) ||
                 key.equals(ATTRACTIONS_MUSEUMS) ||
-                key.equals(ATTRACTIONS_RESTAURANTS) || key.equals(ATTRACTIONS_WIFI)) {
+                key.equals(ATTRACTIONS_RESTAURANTS) || key.equals(ATTRACTIONS_WIFI)
+                || key.equals(ATTRACTIONS_MONUMENTS)) {
 
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPref.edit();

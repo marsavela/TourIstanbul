@@ -343,7 +343,7 @@ public class MapFragment extends Fragment {
             // Check all attractions on list
             if (zoomLevel >= MIN_OBJECT_ZOOM) {
                 for (Attraction attraction : mAttractionList) {
-                    if (settingsManager.checkAttractionCategory(attraction) || settingsManager.checkAttractionInterest(attraction)) {
+                    if (settingsManager.checkAttractionCategory(attraction) && settingsManager.checkAttractionInterest(attraction)) {
                         location = attraction.getLocation();
                         //distance = location.distanceTo(currentLocation);
 

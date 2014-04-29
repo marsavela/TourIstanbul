@@ -24,7 +24,7 @@ public class SettingsManager {
     private final static String ATTRACTIONS_MOSQUES = "Mosques";
     private final static String ATTRACTIONS_MUSEUMS = "Museums";
     private final static String ATTRACTIONS_RESTAURANTS = "Restaurants";
-    private final static String ATTRACTIONS_WIFI = "Wifi Spots";
+    private final static String ATTRACTIONS_WIFI = "Wifi_Spots";
     private final static String ATTRACTIONS_MONUMENTS = "Monuments";
     private final static String LOCATION = "share_location";
 
@@ -150,12 +150,20 @@ public class SettingsManager {
      * @return boolean
      */
     public boolean checkAttractionInterest(Attraction attraction) {
+        boolean checkParents = getParentsInterest();
+        boolean checkBackpackers = getBackpackersInterest();
+        boolean checkBusiness = getBusinessInterest();
+
+        if (!(checkParents && checkBackpackers && checkBusiness)){
+            return true;
+        }
+
         if (attraction.getInterest().equals("Parents"))
             return getParentsInterest();
         else if (attraction.getInterest().equals("Backpackers"))
             return getBackpackersInterest();
         else if (attraction.getInterest().equals("Business Travelers"))
             return getBusinessInterest();
-        else return false;
+        else return true;
     }
 }

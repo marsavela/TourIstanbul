@@ -14,17 +14,18 @@ public class SettingsManager {
 
     private final static String DISTANCE_UNITS = "distance_units";
     private final static String TEMPERATURE_SCALE = "temperature_scale";
-    private final static String INTERESTS_PARENTS = "interest1";
-    private final static String INTERESTS_BACKPACKERS = "interest2";
-    private final static String INTERESTS_BUSINESS = "interest3";
-    private final static String ATTRACTIONS_AIRPORTS = "interest4";
-    private final static String ATTRACTIONS_HOSPITALS = "interest5";
-    private final static String ATTRACTIONS_HOTELS = "interest6";
-    private final static String ATTRACTIONS_MALLS = "interest7";
-    private final static String ATTRACTIONS_MOSQUES = "interest8";
-    private final static String ATTRACTIONS_MUSEUMS = "interest9";
-    private final static String ATTRACTIONS_RESTAURANTS = "interest10";
-    private final static String ATTRACTIONS_WIFI = "interest11";
+    private final static String INTERESTS_PARENTS = "Parents";
+    private final static String INTERESTS_BACKPACKERS = "Backpackers";
+    private final static String INTERESTS_BUSINESS = "Business Travelers";
+    private final static String ATTRACTIONS_AIRPORTS = "Airports";
+    private final static String ATTRACTIONS_HOSPITALS = "Hospitals";
+    private final static String ATTRACTIONS_HOTELS = "Hotels";
+    private final static String ATTRACTIONS_MALLS = "Malls";
+    private final static String ATTRACTIONS_MOSQUES = "Mosques";
+    private final static String ATTRACTIONS_MUSEUMS = "Museums";
+    private final static String ATTRACTIONS_RESTAURANTS = "Restaurants";
+    private final static String ATTRACTIONS_WIFI = "Wifi Spots";
+    private final static String ATTRACTIONS_MONUMENTS = "Monuments";
     private final static String LOCATION = "share_location";
 
     private SharedPreferences mPrefs;
@@ -88,6 +89,10 @@ public class SettingsManager {
         return mPrefs.getBoolean(ATTRACTIONS_WIFI, true);
     }
 
+    public boolean getMonumentsAttractions() {
+        return mPrefs.getBoolean(ATTRACTIONS_MONUMENTS, true);
+    }
+
     public boolean getShareLocation() {
         return mPrefs.getBoolean(LOCATION, true);
     }
@@ -118,22 +123,24 @@ public class SettingsManager {
             default:
                 return true;
         }*/
-        if (attraction.getCategory().equals("Airport"))
+        if (attraction.getCategory().equals("Airports"))
             return getAirportAttractions();
-        else if (attraction.getCategory().equals("Hospital"))
+        else if (attraction.getCategory().equals("Hospitals"))
             return getHospitalAttractions();
-        else if (attraction.getCategory().equals("Hotel"))
+        else if (attraction.getCategory().equals("Hotels"))
             return getHotelsAttractions();
-        else if (attraction.getCategory().equals("Mall"))
+        else if (attraction.getCategory().equals("Malls"))
             return getMallsAttractions();
         else if (attraction.getCategory().equals("Mosques"))
             return getMosquesAttractions();
         else if (attraction.getCategory().equals("Museums"))
             return getMuseumsAttractions();
-        else if (attraction.getCategory().equals("Restaurant"))
+        else if (attraction.getCategory().equals("Restaurants"))
             return getRestaurantsAttractions();
-        else if (attraction.getCategory().equals("Wifi"))
+        else if (attraction.getCategory().equals("Wifi Spots"))
             return getWifiAttractions();
+        else if (attraction.getCategory().equals("Monuments"))
+            return getMonumentsAttractions();
         else return false;
     }
 

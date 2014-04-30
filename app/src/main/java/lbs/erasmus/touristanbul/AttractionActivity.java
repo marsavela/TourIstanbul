@@ -264,6 +264,11 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
         }
     }
 
+    private void updateRateText(int rate){
+        rateText = (TextView)findViewById(R.id.rateText);
+        rateText.setText(""+rate);
+    }
+
     private void shareAttraction() {
         // Create share intent
         Intent shareIntent = ShareCompat.IntentBuilder.from(this)
@@ -493,11 +498,10 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
                     Log.v("VERBOSE", "titulo de la attraction " + mAttraction.getTitle());
 
                     if (rateActual != 0) {
-                        //rateText = (TextView)findViewById(R.id.rateText);
                         daoAttractions.updateRatesAttractions(mAttraction.getTitle(),rateActual);
-                        //rateText.setText(""+rateActual);
 
-                        //Toast.makeText(getApplicationContext(), "Rated successful", Toast.LENGTH_LONG).show();
+                    //updateRateText(rateActual);
+
                     }
                 }
 
@@ -506,6 +510,7 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
                 e.printStackTrace();
             }
             return "";
+           // return ""+rateActual;
         }
 
         protected void onPostExecute(String file_url) {

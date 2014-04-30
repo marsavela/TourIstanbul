@@ -48,7 +48,7 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
 
         //Bundle extras = getArguments();
         daoAttractions = new DAOAttractions(this.getActivity());
-
+        mAttractionsList = new ArrayList<Attraction>();
 
         if (mAttractionsList != null) {
             Log.v("VERBOSE", "Hay extras");

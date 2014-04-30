@@ -77,11 +77,15 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
     private static final int RC_SIGN_IN = 0;
     private static final String TAG = "MainActivity";
-    private static final String CURRENT_FRAGMENT = "current_fragment";
+    private static final String CURRENT_FRAGMENT_KEY = "current_fragment";
+    public static final String LOCATION_KEY = "location";
 
     // Profile pic image size in pixels
     private static final int PROFILE_PIC_SIZE = 400;
     private static final int REQUEST_ACHIEVEMENTS = 1;
+
+    // Minimum distance to refresh user location on the server
+    private static final int MIN_LOCATION_DISTANCE = 50;
 
     // Google client to interact with Google API
     private GoogleApiClient mGoogleApiClient;
@@ -208,7 +212,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         attractionsList = null;
 
         if(savedInstanceState != null) {
-             mCurrentFragment = savedInstanceState.getInt(CURRENT_FRAGMENT);
+             mCurrentFragment = savedInstanceState.getInt(CURRENT_FRAGMENT_KEY);
         }else {
             mCurrentFragment = 0;
         }
@@ -250,7 +254,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(CURRENT_FRAGMENT, 0);
+        outState.putInt(CURRENT_FRAGMENT_KEY, 0);
     }
 
     @Override
@@ -978,10 +982,22 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
      */
     @Override
     public void setUserLocation(Location location) {
-        mUserLocation = location;
-        mUser.setmLocation(location);
-    //    daoUsers.updateUserLocation(mUser);
-        if(mUsersList==null)
-            mUsersList = daoUsers.nearUsersPosition(mUser);
+        if (location != null) {
+            Log.v("UserLocation", "Location updated");
+            //mUser.setmLocation(location);
+            // Save position in server at first time or when distance is bigger than 50 meters
+            if (mUserLocation == null) {
+                mUserLocation = location;
+            } else if (mUserLocation.distanceTo(location) > MIN_LOCATION_DISTANCE) {
+                mUserLocation = location;
+                if (Utils.checkWifiConection(getApplicationContext()))
+                    daoUsers.updateUserLocation(mUser);
+                Toast.makeText(this, "Position changed", Toast.LENGTH_SHORT).show();
+                Log.v("UserLocation", "New location is enough far away");
+            }
+        }
+
+        //if(mUsersList==null)
+            //mUsersList = daoUsers.nearUsersPosition(mUser);
     }
 }

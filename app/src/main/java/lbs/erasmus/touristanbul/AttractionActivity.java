@@ -258,7 +258,10 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
                 shareAttraction();
                 return true;
             case R.id.menu_item_point:
-                Toast.makeText(this,"This should show you this attraction on the map.",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, MainActivity.class);
+                Bundle bundle = new Bundle();
+                //bundle.put(MainActivity.LOCATION_KEY, mAttraction.getLocation());
+                //mIntent.putExtras(mBundle);
             default:
                 return super.onOptionsItemSelected(item);
         }

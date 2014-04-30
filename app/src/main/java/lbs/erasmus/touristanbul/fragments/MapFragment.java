@@ -44,8 +44,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 
+import lbs.erasmus.touristanbul.DAOAttractions;
 import lbs.erasmus.touristanbul.R;
 import lbs.erasmus.touristanbul.SettingsManager;
 import lbs.erasmus.touristanbul.domain.Attraction;
@@ -72,7 +74,6 @@ public class MapFragment extends Fragment {
     private static final String KEY_ZOOM_LEVEL = "zoomLevel";
     private static final String PREFERENCES_FILE = "MapActivity";
 
-    private static final int MIN_OBJECT_ZOOM = 13;
     private static final int REFRESH_DISTANCE = 5000;
 
     private FileMapDownloader mFileMapDownloader;
@@ -81,7 +82,8 @@ public class MapFragment extends Fragment {
     private ListOverlay mPathOverlay;
     private ToggleButton mRouteButton;
     private ToggleButton mSnapToLocation;
-    private UserLocation mLocationOverlay;
+    //private UserLocation mLocationOverlay;
+    private MyLocationOverlay mLocationOverlay;
 
     private GraphHopperAPI mHopper;
     private volatile boolean prepareInProgress = true;
@@ -117,7 +119,7 @@ public class MapFragment extends Fragment {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 int eventAction = motionEvent.getAction();
                 if (eventAction == MotionEvent.ACTION_UP) {
-                    showAttractions();
+                    //showAttractions();
                 }
                 return false;
             }
@@ -191,6 +193,20 @@ public class MapFragment extends Fragment {
             initializeMapView();
             showAttractions();
         }
+
+        // Get attractions from database and filter
+        DAOAttractions daoAttractions = new DAOAttractions(this.getActivity());
+        SettingsManager settingsManager = new SettingsManager(getActivity());
+
+        mAttractionList = new ArrayList<Attraction>();
+        mAttractionList.clear();
+        for (Attraction a : daoAttractions.getAttractions()) {
+            //if (interests.contains(a.getCategory()) || interests.contains(a.getInterest()))
+            if (settingsManager.checkAttractionCategory(a) && settingsManager.checkAttractionInterest(a))
+                mAttractionList.add(a);
+        }
+
+        mAttractionList = daoAttractions.getAttractions();
     }
 
     @Override
@@ -315,7 +331,8 @@ public class MapFragment extends Fragment {
     private void showCurrentPosition() {
         Drawable drawable = getResources().getDrawable(android.R.drawable.ic_menu_compass);
         drawable = Marker.boundCenter(drawable);
-        mLocationOverlay = new UserLocation(getActivity(), mMapView, drawable);
+        //mLocationOverlay = new UserLocation(getActivity(), mMapView, drawable);
+        mLocationOverlay = new MyLocationOverlay(getActivity(), mMapView, drawable);
         mLocationOverlay.enableMyLocation(true);
     }
 
@@ -323,7 +340,7 @@ public class MapFragment extends Fragment {
      * Called from MainActivity to put the new attractions on the map
      */
     public void showAttractions() {
-        mAttractionList = mCallback.getAttractionList();
+        //mAttractionList = mCallback.getAttractionList();
         SettingsManager settingsManager = new SettingsManager(getActivity().getApplicationContext());
 
         mPathOverlay.getOverlayItems().clear();
@@ -341,7 +358,7 @@ public class MapFragment extends Fragment {
             int zoomLevel = mMapView.getMapViewPosition().getZoomLevel();
             //float distance;
             // Check all attractions on list
-            if (zoomLevel >= MIN_OBJECT_ZOOM) {
+            //if (zoomLevel >= MIN_OBJECT_ZOOM) {
                 for (Attraction attraction : mAttractionList) {
                     if (settingsManager.checkAttractionCategory(attraction) && settingsManager.checkAttractionInterest(attraction)) {
                         location = attraction.getLocation();
@@ -353,7 +370,7 @@ public class MapFragment extends Fragment {
                         mPathOverlay.getOverlayItems().add(marker);
                     }
                 }
-            }
+            //}
         }
 
         if (mRouteResponse != null) {
@@ -593,8 +610,8 @@ public class MapFragment extends Fragment {
 
         @Override
         public void onLocationChanged(Location location) {
-            super.onLocationChanged(location);
             mCallback.setUserLocation(location);
+            super.onLocationChanged(location);
         }
     }
 }

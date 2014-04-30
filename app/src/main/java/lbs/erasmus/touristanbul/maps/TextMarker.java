@@ -18,6 +18,7 @@ import org.mapsforge.core.util.MercatorProjection;
  */
 public class TextMarker extends Marker implements OverlayItem {
 
+    private static final int MIN_OBJECT_ZOOM = 13;
     private final static int MIN_ZOOM_LEVEL = 16;
 
     private String mText;
@@ -56,18 +57,20 @@ public class TextMarker extends Marker implements OverlayItem {
             return false;
         }
 
-        getDrawable().setBounds(left, top, right, bottom);
-        getDrawable().draw(canvas);
-        getDrawable().setBounds(drawableBounds);
+        if (zoomLevel >= MIN_OBJECT_ZOOM) {
+            getDrawable().setBounds(left, top, right, bottom);
+            getDrawable().draw(canvas);
+            getDrawable().setBounds(drawableBounds);
 
-        if (zoomLevel >= MIN_ZOOM_LEVEL) {
-            //DisplayMetrics metrics = getDisplayMetrics();
-            float textSize = 20f;
-            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            paint.setTextAlign(Paint.Align.CENTER);
-            paint.setTextSize(textSize);
-            //canvas.drawText(mText, pixelX, pixelY - 15, paint);
-            canvas.drawText(mText, pixelX, bottom + textSize + (2 * mDensity), paint);
+            if (zoomLevel >= MIN_ZOOM_LEVEL) {
+                //DisplayMetrics metrics = getDisplayMetrics();
+                float textSize = 20f;
+                Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                paint.setTextAlign(Paint.Align.CENTER);
+                paint.setTextSize(textSize);
+                canvas.drawText(mText, pixelX, pixelY - 15, paint);
+                //canvas.drawText(mText, pixelX, bottom + textSize + (2 * mDensity), paint);
+            }
         }
         return true;
     }

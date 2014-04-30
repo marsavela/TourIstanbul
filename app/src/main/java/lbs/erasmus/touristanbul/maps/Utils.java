@@ -188,23 +188,25 @@ public final class Utils {
     }
 
     public static int getCategoryDrawableId(String category) {
-    /*    if (category.equals("Airport"))
-            return R.drawable.ic_airport;
-        else if (category.equals("Hospital"))
-            return R.drawable.ic_hospital;
-        else if (category.equals("Hotel"))
-            return R.drawable.ic_hotel;
-        else if (category.equals("Mall"))
-            return R.drawable.ic_mall;
+        if (category.equals("Airports"))
+            return R.drawable.ic_airports;
+        else if (category.equals("Hospitals"))
+            return R.drawable.ic_hospitals;
+        else if (category.equals("Hotels"))
+            return R.drawable.ic_hotels;
+        else if (category.equals("Malls"))
+            return R.drawable.ic_malls;
         else if (category.equals("Mosques"))
-            return R.drawable.ic_mosque;
+            return R.drawable.ic_mosques;
         else if (category.equals("Museums"))
-            return R.drawable.ic_museum;
-        else if (category.equals("Restaurant"))
-            return R.drawable.ic_restaurant;
-        else if (category.equals("Wifi"))
-            return R.drawable.ic_wifi;
-        else */ return R.drawable.flag_green;
+            return R.drawable.ic_museums;
+        else if (category.equals("Restaurants"))
+            return R.drawable.ic_restaurants;
+        else if (category.equals("Wifi Spots"))
+            return R.drawable.ic_wifis;
+        else if (category.equals("Monuments"))
+            return R.drawable.ic_monuments;
+        else return R.drawable.flag_green;
     }
 
     public static File createFileFromInputStream(InputStream inputStream, String filename) {

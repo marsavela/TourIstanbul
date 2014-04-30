@@ -120,7 +120,10 @@ public class MapFragment extends Fragment {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 int eventAction = motionEvent.getAction();
                 if (eventAction == MotionEvent.ACTION_UP) {
-                    //showAttractions();
+                    //
+                    if (getArguments() != null) {
+                        getArguments().clear();
+                    }
                 }
                 return false;
             }
@@ -269,11 +272,12 @@ public class MapFragment extends Fragment {
         loadGraphStorage();
 
         Bundle bundle =  getArguments();
-        if (bundle != null) {
+        if (bundle != null && bundle.size() > 0) {
             Location location = (Location) bundle.get(MainActivity.LOCATION_KEY);
             GeoPoint position = new GeoPoint(location.getLatitude(),location.getLongitude());
             mMapView.getMapViewPosition().setCenter(position);
             mMapView.getMapViewPosition().setZoomLevel((byte) 18);
+            //getArguments().clear();
         } else {
             restoreMapView(mMapView);
         }

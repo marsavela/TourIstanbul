@@ -261,12 +261,22 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     public void onNavigationDrawerItemSelected(int position) {
         // Update the main content by replacing fragments
         Log.v("VERBOSE", "Enrtro een el navigation drawer " + position );
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            position = 0;
+        }
         mCurrentFragment = position;
         switch (position + 1) {
             case 1:
                 Log.v("VERBOSE", "Enrtro en map");
                 if (mMapFragment == null)
                     mMapFragment = new MapFragment();
+                if (bundle != null) {
+                    mMapFragment.setArguments(bundle);
+                    Bundle clearBundle = null;
+                    getIntent().replaceExtras(clearBundle);
+                }
                 replaceFragment(mMapFragment, getString(R.string.title_map));
                 break;
             case 2:

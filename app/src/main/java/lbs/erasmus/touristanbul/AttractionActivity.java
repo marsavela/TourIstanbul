@@ -259,9 +259,9 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
                 return true;
             case R.id.menu_item_point:
                 Intent intent = new Intent(this, MainActivity.class);
-                Bundle bundle = new Bundle();
-                //bundle.put(MainActivity.LOCATION_KEY, mAttraction.getLocation());
-                //mIntent.putExtras(mBundle);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra(MainActivity.LOCATION_KEY, mAttraction.getLocation());
+                startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lbs.erasmus.touristanbul.DAOAttractions;
+import lbs.erasmus.touristanbul.MainActivity;
 import lbs.erasmus.touristanbul.R;
 import lbs.erasmus.touristanbul.SettingsManager;
 import lbs.erasmus.touristanbul.domain.Attraction;
@@ -267,7 +268,15 @@ public class MapFragment extends Fragment {
 
         loadGraphStorage();
 
-        restoreMapView(mMapView);
+        Bundle bundle =  getArguments();
+        if (bundle != null) {
+            Location location = (Location) bundle.get(MainActivity.LOCATION_KEY);
+            GeoPoint position = new GeoPoint(location.getLatitude(),location.getLongitude());
+            mMapView.getMapViewPosition().setCenter(position);
+            mMapView.getMapViewPosition().setZoomLevel((byte) 18);
+        } else {
+            restoreMapView(mMapView);
+        }
     }
 
     /**

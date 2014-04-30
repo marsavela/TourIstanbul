@@ -1,8 +1,5 @@
 package lbs.erasmus.touristanbul;
 
-
-
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -39,16 +36,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import lbs.erasmus.touristanbul.SettingsManager;
 public class WeatherAndClimateActivity extends Activity {
 
     EditText city;
     private SharedPreferences _prefs;
     private SharedPreferences.Editor _prefsEditor;
+    SettingsManager settingsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        settingsManager= new SettingsManager(this);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminate(true);
         setContentView(R.layout.activity_weather_and_climate);
@@ -71,6 +70,7 @@ public class WeatherAndClimateActivity extends Activity {
         String temperature;
         String description;
         int weather;
+
 
         @Override
         protected void onPreExecute() {
@@ -131,6 +131,14 @@ public class WeatherAndClimateActivity extends Activity {
                 temperature= _prefs.getString("temperature", "Sin datos");
             }
 
+            if(temperature!=null) {
+                Integer unidades = 0;
+                unidades = settingsManager.getTemperatureScale();
+                if (unidades == 1) {
+                    Double aux = (Double.parseDouble(temperature) * (1.8)) + 32;
+                    temperature = Double.toString(aux);
+                }
+            }
             return null;
         }
 
@@ -142,15 +150,22 @@ public class WeatherAndClimateActivity extends Activity {
             TextView textView=((TextView) findViewById(R.id.tvWeatherTemperature));
             TextView textView2=((TextView) findViewById(R.id.tvWeatherDescription));
 
+            int unidades = settingsManager.getTemperatureScale();
+            String un;
+
+            if (unidades == 1) {
+                 un="ºF";
+            }else un="ºC";
+
             if(temperature!=null && description!=null) {
-                textView.setText(temperature + " ºC");
+                textView.setText(temperature + un);
                 textView2.setText(description);
             }else {
                 Toast toast1 = Toast.makeText(getApplicationContext(),"Error receiving data from server", Toast.LENGTH_SHORT);
                 toast1.show();
                 description =  _prefs.getString("description", "Sin datos");
                 temperature= _prefs.getString("temperature", "Sin datos");
-                textView.setText(temperature + " ºC");
+                textView.setText(temperature + un);
                 textView2.setText(description);
             }
 

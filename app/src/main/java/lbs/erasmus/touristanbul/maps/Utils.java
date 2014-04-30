@@ -188,7 +188,7 @@ public final class Utils {
     }
 
     public static int getCategoryDrawableId(String category) {
-        if (category.equals("Airport"))
+    /*    if (category.equals("Airport"))
             return R.drawable.ic_airport;
         else if (category.equals("Hospital"))
             return R.drawable.ic_hospital;
@@ -204,7 +204,7 @@ public final class Utils {
             return R.drawable.ic_restaurant;
         else if (category.equals("Wifi"))
             return R.drawable.ic_wifi;
-        else return R.drawable.flag_green;
+        else */ return R.drawable.flag_green;
     }
 
     public static File createFileFromInputStream(InputStream inputStream, String filename) {

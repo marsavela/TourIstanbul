@@ -92,6 +92,7 @@
     <string name="rate">Rating by the users</string>
     <string name="rate_button">Rate this place</string>
     <string name="description_listen_button">Listen to the description</string>
+    <string name="openingTimes">Opening Times</string>
     
     <!-- Tools Activity -->
     <string name="currency_converter">Currency Converter</string>

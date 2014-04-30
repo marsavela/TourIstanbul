@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
@@ -29,6 +30,13 @@ import com.google.android.gms.games.Games;
 import com.google.android.gms.location.LocationClient;
 import com.google.example.games.basegameutils.BaseGameActivity;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import lbs.erasmus.touristanbul.domain.Attraction;
@@ -42,12 +50,13 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
     // Global constants
     private Attraction mAttraction;
     //TextView mTitleView;
-    private TextView mDescription;
+    private TextView mDescription, rateText, openingTimes;
     private ImageView mAttractionImageView;
     private Button mPlayButton;
     private Button mRateButton;
     private TextToSpeech mTTS;
     private boolean isPaying;
+    private int ratingStars;
     private DAOAttractions daoAttractions;
     private RatingBar ratingBar;
 
@@ -76,22 +85,26 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
          * handle callbacks.
          */
         mLocationClient = new LocationClient(this, this, this);
+        ratingStars = 0;
+        rateText = (TextView)findViewById(R.id.rateText);
+        openingTimes = (TextView)findViewById(R.id.openingTimes);
+        ratingBar = (RatingBar)findViewById(R.id.ratingBar);
+
 
         Intent checkTTSIntent = new Intent();
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
-        daoAttractions = new DAOAttractions(this);
-        ratingBar = (RatingBar)findViewById(R.id.ratingBar);
 
         mAttraction = getIntent().getExtras().getParcelable("Attraction");
         /*mTitleView = (TextView) findViewById(R.id.title);
         mTitleView.setText(mAttraction.getTitle());*/
         mDescription = (TextView) findViewById(R.id.description);
-        TextView mOpen = (TextView) findViewById(R.id.open_time);
+        rateText.setText("" + mAttraction.getRate());
         mDescription.setText(mAttraction.getDescription());
-        mOpen.setText(mAttraction.getOpeningTimes());
+        openingTimes.setText( mAttraction.getOpeningTimes());
         mAttractionImageView = (ImageView) findViewById(R.id.image_header);
         mAttractionImageView.setImageURI(mAttraction.getImageUri());
+        mPlayButton = (Button) findViewById(R.id.button2);
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,14 +151,30 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
         helper.initActionBar(this);
     }
 
+    public void addListenerOnRatingBar(View view) {
+
+        ratingBar = (RatingBar)view.findViewById(R.id.ratingBar);
+
+        //if rating value is changed,
+        //display the current rating value in the result (textview) automatically
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                Log.v("VERBOSE", "Valor de las estrellitas " + rating);
+                ratingStars = Integer.parseInt(String.valueOf(rating));
+            }
+        });
+    }
+
     private void rateDialog() {
         AlertDialog.Builder builderRateDialog = new AlertDialog.Builder(this);
         // Get the layout inflater
-        LayoutInflater inflater = this.getLayoutInflater();
+        final LayoutInflater inflater = this.getLayoutInflater();
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builderRateDialog.setView(inflater.inflate(R.layout.activity_attraction_rate_dialog, null))
+        final View viewRateDialog = inflater.inflate(R.layout.activity_attraction_rate_dialog, null);
+        builderRateDialog.setView(viewRateDialog)
                 .setTitle("try")
                         // Add action buttons
                 .setPositiveButton("Send", new DialogInterface.OnClickListener() {
@@ -153,12 +182,16 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
                     public void onClick(DialogInterface dialog, int id) {
                         // send the users rate ...
                         if (isConnectingToInternet()) {
-                            Log.v("VERBOSE", "Nombre" + mAttraction.getTitle());
-                            Log.v("VERBOSE","Numero estrellas" + ratingBar.getNumStars());
-
-                            daoAttractions.updateRatesAttractions(mAttraction.getTitle(),ratingBar.getNumStars());
+                            Log.v("VERBOSE", "rate dialog, tengo conexion");
+                            daoAttractions = new DAOAttractions(getApplicationContext());
+                            Log.v("VERBOSE", "rate dialog, creo el objeto DAO");
+                            addListenerOnRatingBar(viewRateDialog);
+                            Log.v("VERBOSE", "rate dialog,creo el listener");
+                            new AttemptRate().execute(""+ratingBar.getRating());
+                            Log.v("VERBOSE", "rate dialog, he lanzado el attempt con un valor " + ratingBar.getRating());
+                            //daoAttractions.updateRatesAttractions(mAttraction.getTitle(),Integer.parseInt(String.valueOf(ratingBar.getRating())));
                         }else{
-                            Toast.makeText(getApplicationContext(),"Attraction not rated, you need internet connection", Toast.LENGTH_SHORT);
+                            Toast.makeText(getApplicationContext(),"Attraction not rated, you need internet connection", Toast.LENGTH_SHORT).show();
                         }
                         if (isSignedIn()) {
                             Games.Achievements.unlock(getApiClient(), getResources().getString(R.string.achievement_attraction_rated));
@@ -180,7 +213,6 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
     private boolean isUserInRange() {
         return false;
     }
-
 
 
     @Override
@@ -337,7 +369,7 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
     @Override
     public void onConnected(Bundle dataBundle) {
         // Display the connection status
-        //    Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -411,5 +443,79 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
 
         }
         return false;
+    }
+
+    class AttemptRate extends AsyncTask<String, String, String> {
+        List<NameValuePair> params =  new ArrayList<NameValuePair>();
+        // Progress Dialog
+        //private ProgressDialog pDialog;
+        /**
+         * Before starting background thread Show Progress Dialog
+         * */
+        boolean failure = false;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+       /*     pDialog = new ProgressDialog(getApplicationContext());
+            pDialog.setMessage("Rating attraction...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+     */   }
+
+        @Override
+        protected String doInBackground(String... args) {
+            // TODO Auto-generated method stub
+            // Check for success tag
+
+            int rateActual = 0;
+
+            String url_vote = "http://s459655320.mialojamiento.es/index.php/rateAttraction";
+
+            // Building Parameters
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+            params.add(new BasicNameValuePair("name", mAttraction.getTitle()));
+            params.add(new BasicNameValuePair("rate", args[0]));
+            // getting JSON Object
+            // Note that check player url accepts POST method
+            JSONParser jsonParser = new JSONParser();
+            JSONObject json = jsonParser.makeHttpRequest(url_vote, "POST",
+                    params);
+
+            try {
+                String error = json.getString("error");
+
+                if ("false".equals(error)) {
+                    rateActual = json.getInt("message");
+                    Log.v("VERBOSE", "mensaje del json " + rateActual);
+                    Log.v("VERBOSE", "titulo de la attraction " + mAttraction.getTitle());
+
+                    if (rateActual != 0) {
+                        //rateText = (TextView)findViewById(R.id.rateText);
+                        daoAttractions.updateRatesAttractions(mAttraction.getTitle(),rateActual);
+                        //rateText.setText(""+rateActual);
+
+                        //Toast.makeText(getApplicationContext(), "Rated successful", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return "";
+        }
+
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog once product deleted
+            //  pDialog.dismiss();
+            if (file_url != null){
+                Toast.makeText(getApplicationContext(), "Rated successful", Toast.LENGTH_LONG).show();
+            }
+
+        }
+
     }
 }

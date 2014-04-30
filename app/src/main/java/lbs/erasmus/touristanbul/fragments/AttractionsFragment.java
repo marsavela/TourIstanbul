@@ -44,11 +44,12 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
 
         // Find the {@link GridView} that was already defined in the XML layout
         gridView = (GridView) rootView.findViewById(R.id.grid);
+        Log.v("VERBOSE", "Entro fragment attraction ");
 
         //Bundle extras = getArguments();
         daoAttractions = new DAOAttractions(this.getActivity());
-        Log.v("VERBOSE", "VAlor de los extras " + mAttractionsList.toString() + mAttractionsList.size());
-        /*
+
+
         if (mAttractionsList != null) {
             Log.v("VERBOSE", "Hay extras");
              //mAttractionsList = extras.getParcelableArrayList("Attractions");
@@ -61,7 +62,7 @@ public class AttractionsFragment extends Fragment implements AdapterView.OnItemC
             // Set a click listener for each attraction in the grid
             gridView.setOnItemClickListener(this);
 
-        }*/
+        }
 
         attractionsAdapter = new AttractionsAdapter(inflater, mAttractionsList);
 

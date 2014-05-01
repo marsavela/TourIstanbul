@@ -66,7 +66,7 @@
     <string name="user_email">User Email</string>
     <string name="user_name">User Name</string>
 
-    <!-- Preferences -->
+    <!-- Settings -->
     <string name="title_preferences">Preferences</string>
     <string name="interest_title">INTERESTS</string>
     <string name="parents_summary">Places to go with the whole family</string>
@@ -84,6 +84,11 @@
     <string name="wifi_spots_summary">Wifi Spots</string>
     <string name="share_location_title">LOCATION</string>
     <string name="share_location_summary">Let other people see your location</string>
+    <string name="sync_app">SYNC</string>
+    <string name="sync_app_title">Synchronize data</string>
+    <string name="sync_app_summary">Clear databases and sync with the server</string>
+    <string name="settings_updated">Settings updated successfully.</string>
+    <string name="settings_updated_error">Error while updating your settings. Please, try again later.</string>
 
     <!-- Attraction Activity -->
     <string name="description">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</string>
@@ -130,7 +135,7 @@
     <!--<item>Chinese</item>-->
     </string-array>
 
-<!-- Phrasebook Activity -->
+    <!-- Phrasebook Activity -->
     <string name="phrasebook1_basic_greetings">Basic Greetings</string>
     <string name="phrasebook1_basic_greetings_child1_en">&lt;b>EN &lt;/b>Hi!</string>
     <string name="phrasebook1_basic_greetings_child1_tr">&lt;b>TR &lt;/b>&lt;i>Merhaba!&lt;/i></string>
@@ -404,7 +409,7 @@
 
     <string name="mapfragment_route_info_title">Route details</string>
     <string name="mapfragment_route_info_distance">Distance:</string>
-    <string name="mapfragment_route_info_time">Estimated time:</string>
+    <string name="mapfragment_route_info_time">Estimated time by car:</string>
     <string name="mapfragment_route_info_calculated">Calculated in:</string>
     <string name="mapfragment_route_error_title">Route error</string>
     <string name="mapfragment_route_error_text">There has been an error calculating routes</string>
@@ -446,6 +451,8 @@
     <string name="http_action">Weather (HTTP)</string>
     <string name="not_connected">"The device is not connected to the network!"</string>
     <string name="title_activity_http">HTTPActivity</string>
+    <string name="contact_servers">Contacting Servers</string>
+    <string name="magic">Magic ...</string>
 
 
 </resources>

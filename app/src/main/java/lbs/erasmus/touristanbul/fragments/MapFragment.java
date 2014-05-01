@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -224,6 +225,21 @@ public class MapFragment extends Fragment {
         // Calls download thread if it is running
         if (mFileMapDownloader != null && mFileMapDownloader.getStatus() == AsyncTask.Status.RUNNING) {
             mFileMapDownloader.cancel(true);
+        }
+
+        // Disallow location button
+        if (mLocationOverlay != null && mCallback != null && mSnapToLocation != null) {
+            mLocationOverlay.disableMyLocation();
+            mCallback.setUserLocation(null);
+            mSnapToLocation.setChecked(false);
+        }
+
+        // Disallow route button
+        if (mRouteButton != null) {
+            mRouteResponse = null;
+            mStartPoint = null;
+            mEndPoint = null;
+            mRouteButton.setChecked(false);
         }
     }
 
@@ -464,6 +480,8 @@ public class MapFragment extends Fragment {
                 if (!resp.hasErrors()) {
                     Utils.showRouteInfo(getActivity(), resp, time);;
                     mRouteResponse = resp;
+                    mMapView.getMapViewPosition().setCenter(mStartPoint);
+                    mMapView.getMapViewPosition().setZoomLevel((byte)18);
                     showAttractions();
                 } else {
                     mRouteButton.setChecked(false);
@@ -587,11 +605,26 @@ public class MapFragment extends Fragment {
         final Spinner from = (Spinner) view.findViewById(R.id.mapfragment_route_spinner_from);
         final Spinner to = (Spinner) view.findViewById(R.id.mapfragment_route_spinner_to);
 
-        ArrayAdapter<Attraction> attractionAdapter = new ArrayAdapter<Attraction>(getActivity(),android.R.layout.simple_spinner_item, mAttractionList);
-        attractionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        List<Attraction> fromAttractions;
+        if (mSnapToLocation.isChecked()) {
+            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            Attraction mylocation = new Attraction("My location", "",
+                    locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER), "");
+            fromAttractions = new ArrayList<Attraction>();
+            fromAttractions.add(mylocation);
+            fromAttractions.addAll(mAttractionList);
+        } else {
+            fromAttractions = mAttractionList;
+        }
 
-        from.setAdapter(attractionAdapter);
-        to.setAdapter(attractionAdapter);
+        ArrayAdapter<Attraction> attractionFromAdapter = new ArrayAdapter<Attraction>(getActivity(),android.R.layout.simple_spinner_item, fromAttractions);
+        attractionFromAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        ArrayAdapter<Attraction> attractionToAdapter = new ArrayAdapter<Attraction>(getActivity(),android.R.layout.simple_spinner_item, mAttractionList);
+        attractionToAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        from.setAdapter(attractionFromAdapter);
+        to.setAdapter(attractionToAdapter);
 
         alertDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override

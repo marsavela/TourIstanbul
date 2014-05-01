@@ -14,5 +14,7 @@
     <color name="buttonfocus">#f2edf2</color>
     <color name="buttonpressed">#f2f2f2</color>
 
+    <color name="turkish_design">#cd380e</color>
+
     <color name="gray_color">#808080</color>
 </resources>

@@ -391,6 +391,7 @@ public class DAOUsers {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
             // activity.finish();
             pDialog = new ProgressDialog(context);
             pDialog.setTitle("Contacting Servers");
@@ -402,21 +403,18 @@ public class DAOUsers {
 
         @Override
         protected JSONObject doInBackground(User... mUser) {
-            Log.d("Near users location", "background");
+
             // url to get near user's location
             String url_near_users_location = "http://s459655320.mialojamiento.es/index.php/nearUserLocation";
-            Log.d("Near users location", "background");
             // Building Parameters
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("email", mUser[0].getmEmail()));
             params.add(new BasicNameValuePair("locationx", Double.toString(mUser[0].getmLocation().getLatitude())));
             params.add(new BasicNameValuePair("locationy", Double.toString(mUser[0].getmLocation().getLatitude())));
 
-            Log.d("Near users location", "background2");
             JSONParser jsonParser = new JSONParser();
             JSONObject json = jsonParser.makeHttpRequest(url_near_users_location, "POST", params);
 
-            Log.d("Near users location", "background3");
             return json;
         }
 

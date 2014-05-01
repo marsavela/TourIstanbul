@@ -258,7 +258,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             case 2:
                 Log.v("VERBOSE", "Enrtro en attractions");
                 extras.putParcelableArrayList("Attractions", mAttractionsList);
-                if (mAttractionsFragment == null)
+               // if (mAttractionsFragment == null)
                     mAttractionsFragment = new AttractionsFragment();
                 mAttractionsFragment.setArguments(extras);
                 replaceFragment(mAttractionsFragment, getString(R.string.title_attractions));

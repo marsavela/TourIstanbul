@@ -72,6 +72,8 @@ public class ParentLevelAdapter extends BaseExpandableListAdapter implements
 
         if (s.startsWith("<b>Do ")) {
             imageView.setImageResource(R.drawable.yes);
+        } else if(s.startsWith("<b>Don")){
+            imageView.setImageResource(R.drawable.no);
         } else if (s.startsWith("+") || s.startsWith("1") || s.startsWith("2")|| s.startsWith("3")|| s.startsWith("4")|| s.startsWith("5")|| s.startsWith("6")|| s.startsWith("7")|| s.startsWith("8")|| s.startsWith("9")|| s.startsWith("0") ){
             imageView.setImageResource(R.drawable.phone);
             Linkify.TransformFilter filter = new Linkify.TransformFilter() {

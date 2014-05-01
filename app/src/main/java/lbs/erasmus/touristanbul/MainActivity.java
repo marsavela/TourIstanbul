@@ -316,9 +316,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main, menu);
-        //    Log.v("VERBOSE", "Creando manejador de settings");
             SettingsManager settingsManager = new SettingsManager(this);
-        //    Log.v("VERBOSE", "creando view search");
             m = menu.findItem(R.id.action_search);
             searchView = (SearchView) m.getActionView();
             searchView.setQueryHint("Enter attraction");

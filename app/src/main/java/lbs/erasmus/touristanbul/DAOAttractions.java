@@ -381,10 +381,6 @@ public class DAOAttractions {
             insertAttractions(attractionArrayList);
     }
 
-    private void downloadImages() {
-
-    }
-
     private void generateDirectories() {
         File f = new File(getLocalFolder());
         if (!f.isDirectory()) {

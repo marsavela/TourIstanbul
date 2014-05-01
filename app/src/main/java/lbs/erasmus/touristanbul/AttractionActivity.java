@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.support.v4.app.ShareCompat;
@@ -35,6 +37,13 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -61,6 +70,8 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
     private RatingBar ratingBar;
 
     private final static int MY_DATA_CHECK_CODE = 0;
+    private static final String APP_FOLDER = "touristanbul";
+    private static final String IMG_FOLDER = "images";
 
 
     /*
@@ -274,12 +285,17 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
 
     private void shareAttraction() {
         // Create share intent
-        Intent shareIntent = ShareCompat.IntentBuilder.from(this)
-                .setText("Hey, I'm at " + mAttraction.getTitle() + "!!")
-                .setType("image/jpeg")
-                .setStream(mAttraction.getImageUri())
-                .setChooserTitle("Where do you want to share?")
-                .createChooserIntent();
+        Intent shareIntent = null;
+        try {
+            shareIntent = ShareCompat.IntentBuilder.from(this)
+                    .setText("Hey, I'm at " + mAttraction.getTitle() + "!!")
+                    .setType("image/jpeg")
+                    .setStream(copy(mAttraction.getImageUri()))
+                    .setChooserTitle("Where do you want to share?")
+                    .createChooserIntent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         startActivity(shareIntent);
         if (isSignedIn()) {
             Games.Achievements.unlock(getApiClient(), getResources().getString(R.string.achievement_attraction_shared));
@@ -513,7 +529,6 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
                 e.printStackTrace();
             }
             return "";
-           // return ""+rateActual;
         }
 
         protected void onPostExecute(String file_url) {
@@ -525,5 +540,29 @@ public class AttractionActivity extends BaseGameActivity implements OnInitListen
 
         }
 
+    }
+
+    public Uri copy(Uri src) throws IOException {
+
+        File dst = new File(getImagePath() + "share_" + mAttraction.getTitle());
+
+        InputStream in = new FileInputStream(new File(src.getPath()));
+        OutputStream out = new FileOutputStream(dst);
+
+        // Transfer bytes from in to out
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        in.close();
+        out.close();
+
+        return Uri.fromFile(dst);
+    }
+
+    public String getImagePath() {
+        return Environment.getExternalStorageDirectory() + File.separator + APP_FOLDER
+                + File.separator + IMG_FOLDER + File.separator;
     }
 }

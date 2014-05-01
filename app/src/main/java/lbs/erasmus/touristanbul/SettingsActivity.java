@@ -1,8 +1,11 @@
 package lbs.erasmus.touristanbul;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -62,10 +65,14 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         private void update() {
 
-            daoAttractions = new DAOAttractions(getActivity());
+            if (checkOnlineState()) {
+                daoAttractions = new DAOAttractions(getActivity());
 
-            daoAttractions.clearDB();
-            new TaskAttractions().execute();
+                daoAttractions.clearDB();
+                new TaskAttractions().execute();
+            } else
+                Toast.makeText(getActivity(), getString(R.string.settings_updated_error), Toast.LENGTH_LONG).show();
+
         }
 
 
@@ -100,6 +107,27 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 pDialog.dismiss();
                 super.onPostExecute(aVoid);
             }
+        }
+
+
+
+        public boolean checkOnlineState() {
+
+            ConnectivityManager connectivity =
+                    (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectivity != null)
+            {
+                NetworkInfo[] info = connectivity.getAllNetworkInfo();
+                if (info != null)
+                    for (int i = 0; i < info.length; i++)
+                        if (info[i].getState() == NetworkInfo.State.CONNECTED)
+                        {
+                            return true;
+                        }
+
+            }
+            return false;
+
         }
 
     }

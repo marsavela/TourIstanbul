@@ -84,8 +84,8 @@ public class MapFragment extends Fragment {
     private ListOverlay mPathOverlay;
     private ToggleButton mRouteButton;
     private ToggleButton mSnapToLocation;
-    //private UserLocation mLocationOverlay;
-    private MyLocationOverlay mLocationOverlay;
+    private UserLocation mLocationOverlay;
+    //private MyLocationOverlay mLocationOverlay;
 
     private GraphHopperAPI mHopper;
     private volatile boolean prepareInProgress = true;
@@ -160,7 +160,7 @@ public class MapFragment extends Fragment {
                     showCurrentPosition();
                 } else {
                     mLocationOverlay.disableMyLocation();
-                    mCallback.setUserLocation(null);
+                    //mCallback.setUserLocation(null);
                 }
             }
         });
@@ -191,6 +191,9 @@ public class MapFragment extends Fragment {
         if (mMapView != null) {
             mMapView.onResume();
         }
+
+        DAOAttractions daoAttractions = new DAOAttractions(this.getActivity());
+        mAttractionList = daoAttractions.getAttractions();
         // if there is not downloading the file,
         File mapFile = getMapFile();
         if (mapFile.exists() && (mFileMapDownloader == null
@@ -200,7 +203,6 @@ public class MapFragment extends Fragment {
         }
 
         // Get attractions from database and filter
-        DAOAttractions daoAttractions = new DAOAttractions(this.getActivity());
         SettingsManager settingsManager = new SettingsManager(getActivity());
 
         mAttractionList = new ArrayList<Attraction>();
@@ -210,8 +212,6 @@ public class MapFragment extends Fragment {
             if (settingsManager.checkAttractionCategory(a) && settingsManager.checkAttractionInterest(a))
                 mAttractionList.add(a);
         }
-
-        mAttractionList = daoAttractions.getAttractions();
     }
 
     @Override
@@ -230,7 +230,7 @@ public class MapFragment extends Fragment {
         // Disallow location button
         if (mLocationOverlay != null && mCallback != null && mSnapToLocation != null) {
             mLocationOverlay.disableMyLocation();
-            mCallback.setUserLocation(null);
+            //mCallback.setUserLocation(null);
             mSnapToLocation.setChecked(false);
         }
 
@@ -360,8 +360,8 @@ public class MapFragment extends Fragment {
     private void showCurrentPosition() {
         Drawable drawable = getResources().getDrawable(android.R.drawable.ic_menu_compass);
         drawable = Marker.boundCenter(drawable);
-        //mLocationOverlay = new UserLocation(getActivity(), mMapView, drawable);
-        mLocationOverlay = new MyLocationOverlay(getActivity(), mMapView, drawable);
+        mLocationOverlay = new UserLocation(getActivity(), mMapView, drawable);
+        //mLocationOverlay = new MyLocationOverlay(getActivity(), mMapView, drawable);
         mLocationOverlay.enableMyLocation(true);
     }
 
@@ -656,8 +656,18 @@ public class MapFragment extends Fragment {
 
         @Override
         public void onLocationChanged(Location location) {
-            mCallback.setUserLocation(location);
-            super.onLocationChanged(location);
+            //mCallback.setUserLocation(location);
+            GeoPoint userLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
+            mMapView.getMapViewPosition().setCenter(userLocation);
+            mMapView.getMapViewPosition().setZoomLevel((byte) 18);
+
+            Marker marker = Utils.createMarker(getActivity(), userLocation, R.drawable.ic_location);
+            mPathOverlay.getOverlayItems().clear();
+            showAttractions();
+            mPathOverlay.getOverlayItems().add(marker);
+            mMapView.redraw();
+
+            //super.onLocationChanged(location);
         }
     }
 }

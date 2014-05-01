@@ -144,6 +144,8 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
      */
     private Location mUserLocation;
 
+    private int mCurrentFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -163,6 +165,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
         mNavigationDrawerFragment.setRetainInstance(true);
 
         // Set up the Google+ buttons
@@ -202,13 +205,19 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         mDbReady = daoAttractions.checkDataBase();
         if (!mDbReady || !mapFile.exists())
             new TaskAttractions().execute();
-        filterAttractions();
+        //mAttractionsList = daoAttractions.getAttractions();
+        //filterAttractions();
 
         daoUsers = new DAOUsers(this);
 
         jsonParser = new JSONParser();
         attractionsList = null;
 
+        if(savedInstanceState != null) {
+             mCurrentFragment = savedInstanceState.getInt(CURRENT_FRAGMENT_KEY);
+        }else {
+            mCurrentFragment = 0;
+        }
     }
 
     @Override
@@ -230,7 +239,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPref.edit();
         if (sharedPref.getBoolean("update", false)) {
-            filterAttractions();
+            //filterAttractions();
             editor.putBoolean("update", false);
             editor.commit();
         }
@@ -245,21 +254,38 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_FRAGMENT_KEY, 0);
+    }
+
+    @Override
     public void onNavigationDrawerItemSelected(int position) {
         // Update the main content by replacing fragments
         Log.v("VERBOSE", "Enrtro een el navigation drawer " + position );
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            position = 0;
+        }
+        mCurrentFragment = position;
         switch (position + 1) {
             case 1:
                 Log.v("VERBOSE", "Enrtro en map");
                 if (mMapFragment == null)
                     mMapFragment = new MapFragment();
+                if (bundle != null) {
+                    mMapFragment.setArguments(bundle);
+                    Bundle clearBundle = null;
+                    getIntent().replaceExtras(clearBundle);
+                }
                 replaceFragment(mMapFragment, getString(R.string.title_map));
                 break;
             case 2:
                 Log.v("VERBOSE", "Enrtro en attractions");
                 extras.putParcelableArrayList("Attractions", mAttractionsList);
                // if (mAttractionsFragment == null)
-                    mAttractionsFragment = new AttractionsFragment();
+                mAttractionsFragment = new AttractionsFragment();
                 mAttractionsFragment.setArguments(extras);
                 replaceFragment(mAttractionsFragment, getString(R.string.title_attractions));
                 mAttractionsFragment.setAttractions(mAttractionsList);
@@ -269,6 +295,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 if (mToolsFragment == null)
                     mToolsFragment = new ToolsFragment();
                 replaceFragment(mToolsFragment, getString(R.string.title_tools));
+
                 break;
             case 4:
                 Log.v("VERBOSE", "Enrtro en information");
@@ -310,7 +337,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.v("VERBOSE", "Entrando en el create menu");
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        if (!mNavigationDrawerFragment.isDrawerOpen() && (mCurrentFragment == 0 || mCurrentFragment == 1)) {
             MenuItem m = null;
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
@@ -322,10 +349,10 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             searchView.setQueryHint("Enter attraction");
             searchView.setOnQueryTextListener(this);
 
-            if (mUser == null) {
+            //if (mUser == null) {
                 m = menu.findItem(R.id.action_nearby_people);
                 m.setVisible(false);
-            }
+            //}
 
             restoreActionBar();
             return true;
@@ -405,7 +432,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         SettingsManager settingsManager = new SettingsManager(this);
         for (Attraction a : daoAttractions.getAttractions()) {
             //if (interests.contains(a.getCategory()) || interests.contains(a.getInterest()))
-            if (settingsManager.checkAttractionCategory(a) || settingsManager.checkAttractionInterest(a))
+            if (settingsManager.checkAttractionCategory(a) && settingsManager.checkAttractionInterest(a))
                 mAttractionsList.add(a);
         }
 
@@ -481,7 +508,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         protected Void doInBackground(Void... params) {
             if (!mDbReady) {
                 daoAttractions.downloadAndSaveData();
-                filterAttractions();
+                //filterAttractions();
                 mDbReady = daoAttractions.checkDataBase();
             }
 
@@ -980,13 +1007,23 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
      */
     @Override
     public void setUserLocation(Location location) {
-        mUserLocation = location;
-        Log.e(TAG, Double.toString(location.getLatitude()) + " " + Double.toString(location.getLongitude()));
-        mUser.setmLocation(location);
-        daoUsers.updateUserLocation(mUser);
+        if (location != null) {
+            Log.v("UserLocation", "Location updated");
+            //mUser.setmLocation(location);
+            // Save position in server at first time or when distance is bigger than 50 meters
+            if (mUserLocation == null) {
+                mUserLocation = location;
+            } else if (mUserLocation.distanceTo(location) > MIN_LOCATION_DISTANCE) {
+                mUserLocation = location;
+                if (Utils.checkWifiConection(getApplicationContext()))
+                    daoUsers.updateUserLocation(mUser);
+                Toast.makeText(this, "Position changed", Toast.LENGTH_SHORT).show();
+                Log.v("UserLocation", "New location is enough far away");
+            }
+        }
 
-   /*     if(mUsersList==null) {
-            mUsersList = daoUsers.nearUsersPosition(mUser);
-        }*/
+        //if(mUsersList==null)
+            //mUsersList = daoUsers.nearUsersPosition(mUser);
+
     }
 }

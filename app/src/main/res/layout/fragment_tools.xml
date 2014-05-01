@@ -24,14 +24,14 @@
             <Button
                 android:id="@+id/button_currency_converter"
                 style="@style/dashboard_button"
-                android:drawableTop="@drawable/currency_converter"
+                android:drawableTop="@drawable/tools_currency_selector"
                 android:onClick="clicked"
                 android:text="@string/currency_converter" />
 
             <Button
                 android:id="@+id/button_transports"
                 style="@style/dashboard_button"
-                android:drawableTop="@drawable/transports"
+                android:drawableTop="@drawable/tools_transports_selector"
                 android:onClick="clicked"
                 android:text="@string/transports" />
         </LinearLayout>
@@ -46,14 +46,14 @@
             <Button
                 android:id="@+id/button_translator"
                 style="@style/dashboard_button"
-                android:drawableTop="@drawable/translator"
+                android:drawableTop="@drawable/tools_translator_selector"
                 android:onClick="clicked"
                 android:text="@string/translator" />
 
             <Button
                 android:id="@+id/button_phrasebook"
                 style="@style/dashboard_button"
-                android:drawableTop="@drawable/phrasebook"
+                android:drawableTop="@drawable/tools_phrasebook_selector"
                 android:onClick="clicked"
                 android:text="@string/phrasebook" />
         </LinearLayout>

@@ -15,6 +15,7 @@
     <color name="buttonpressed">#f2f2f2</color>
 
     <color name="turkish_design">#cd380e</color>
+    <color name="transparent">#00ffffff</color>
 
     <color name="gray_color">#808080</color>
 </resources>

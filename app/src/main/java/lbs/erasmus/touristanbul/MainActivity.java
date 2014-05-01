@@ -7,7 +7,6 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -115,6 +114,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     private DAOAttractions daoAttractions;
     private ArrayList<Attraction> mAttractionsList;
 
+
     /**
      * Fragments for each section of the application.
      */
@@ -138,12 +138,11 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
      */
 
     private CharSequence mTitle;
+
     /**
      * Used to find others nearby users
      */
     private Location mUserLocation;
-
-    private int mCurrentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,19 +202,13 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         mDbReady = daoAttractions.checkDataBase();
         if (!mDbReady || !mapFile.exists())
             new TaskAttractions().execute();
-        //mAttractionsList = daoAttractions.getAttractions();
-        //filterAttractions();
+        filterAttractions();
 
         daoUsers = new DAOUsers(this);
 
         jsonParser = new JSONParser();
         attractionsList = null;
 
-        if(savedInstanceState != null) {
-             mCurrentFragment = savedInstanceState.getInt(CURRENT_FRAGMENT_KEY);
-        }else {
-            mCurrentFragment = 0;
-        }
     }
 
     @Override
@@ -237,7 +230,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPref.edit();
         if (sharedPref.getBoolean("update", false)) {
-            //filterAttractions();
+            filterAttractions();
             editor.putBoolean("update", false);
             editor.commit();
         }
@@ -252,31 +245,14 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(CURRENT_FRAGMENT_KEY, 0);
-    }
-
-    @Override
     public void onNavigationDrawerItemSelected(int position) {
         // Update the main content by replacing fragments
         Log.v("VERBOSE", "Enrtro een el navigation drawer " + position );
-
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            position = 0;
-        }
-        mCurrentFragment = position;
         switch (position + 1) {
             case 1:
                 Log.v("VERBOSE", "Enrtro en map");
                 if (mMapFragment == null)
                     mMapFragment = new MapFragment();
-                if (bundle != null) {
-                    mMapFragment.setArguments(bundle);
-                    Bundle clearBundle = null;
-                    getIntent().replaceExtras(clearBundle);
-                }
                 replaceFragment(mMapFragment, getString(R.string.title_map));
                 break;
             case 2:
@@ -293,7 +269,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 if (mToolsFragment == null)
                     mToolsFragment = new ToolsFragment();
                 replaceFragment(mToolsFragment, getString(R.string.title_tools));
-
                 break;
             case 4:
                 Log.v("VERBOSE", "Enrtro en information");
@@ -307,11 +282,13 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                     Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_login));
                     startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), REQUEST_ACHIEVEMENTS);
                 }
-                else {
+                else if (isConnectedToInternet()){
                     show_achievements=true;
                     reconnectClient();
                 }
-
+                else{
+                    Toast.makeText(this, "You need an Internet connection to use this feature.", Toast.LENGTH_LONG).show();
+                }
                 break;
         }
     }
@@ -333,15 +310,15 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.v("VERBOSE", "Entrando en el create menu");
-        if (!mNavigationDrawerFragment.isDrawerOpen() && (mCurrentFragment == 0 || mCurrentFragment == 1)) {
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
             MenuItem m = null;
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main, menu);
-            Log.v("VERBOSE", "Creando manejador de settings");
+        //    Log.v("VERBOSE", "Creando manejador de settings");
             SettingsManager settingsManager = new SettingsManager(this);
-            Log.v("VERBOSE", "creando view search");
+        //    Log.v("VERBOSE", "creando view search");
             m = menu.findItem(R.id.action_search);
             searchView = (SearchView) m.getActionView();
             searchView.setQueryHint("Enter attraction");
@@ -430,7 +407,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         SettingsManager settingsManager = new SettingsManager(this);
         for (Attraction a : daoAttractions.getAttractions()) {
             //if (interests.contains(a.getCategory()) || interests.contains(a.getInterest()))
-            if (settingsManager.checkAttractionCategory(a) && settingsManager.checkAttractionInterest(a))
+            if (settingsManager.checkAttractionCategory(a) || settingsManager.checkAttractionInterest(a))
                 mAttractionsList.add(a);
         }
 
@@ -506,7 +483,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         protected Void doInBackground(Void... params) {
             if (!mDbReady) {
                 daoAttractions.downloadAndSaveData();
-                //filterAttractions();
+                filterAttractions();
                 mDbReady = daoAttractions.checkDataBase();
             }
 
@@ -564,8 +541,13 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.btn_sign_in:
                 // Sign in button clicked
-                signInWithGplus();
-                beginUserInitiatedSignIn();
+                if(isConnectedToInternet()) {
+                    signInWithGplus();
+                    beginUserInitiatedSignIn();
+                }
+                else{
+                    Toast.makeText(this, "You need an Internet connection to log in", Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.user_profile_photo:
                 // Open Profile
@@ -595,10 +577,10 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     }
 
     private void openUserProfile() {
-        Intent i = new Intent(this, ProfileActivity.class);
-        i.putExtra("User", mUser);
-        startActivity(i);
-        mNavigationDrawerFragment.closeDrawer();
+            Intent i = new Intent(this, ProfileActivity.class);
+            i.putExtra("User", mUser);
+            startActivity(i);
+            mNavigationDrawerFragment.closeDrawer();
 
     }
 
@@ -619,7 +601,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 // The user has already clicked 'sign-in' so we attempt to
                 // resolve all
                 // errors until the user is signed in, or they cancel.
-                resolveSignInError();
+        //        resolveSignInError();
             }
         }
     }
@@ -649,6 +631,9 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
         // Update the UI after signing in with google+ and downloading the profile picture
         updateUI(true);
+
+        if (isSignedIn())
+            Games.Achievements.unlock(getApiClient(),  getResources().getString(R.string.achievement_login));
 
     }
 
@@ -684,14 +669,14 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     private void signInWithGplus() {
         if (!mGoogleApiClient.isConnecting()) {
             mSignInClicked = true;
-            resolveSignInError();
+        //    resolveSignInError();
         }
     }
 
     /**
      * Method to resolve any sign in errors
      * */
-    private void resolveSignInError() {
+/*    private void resolveSignInError() {
         if (mConnectionResult.hasResolution()) {
             try {
                 mIntentInProgress = true;
@@ -701,7 +686,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 mGoogleApiClient.connect();
             }
         }
-    }
+    }*/
 
 
     /**
@@ -758,10 +743,16 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                 mUser = new User(email, mPersonName, personPhotoUrl, personGooglePlusProfile, mUserLocation);
                 mUser.setmPhoto(mImgProfilePic.getDrawingCache());
 
-                if(daoUsers.newUserRegistration(mUser)){
+                if(isConnectedToInternet() && daoUsers.newUserRegistration(mUser)){
                     Toast.makeText(this, "User registered succesfully", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "User registered succesfully");
                 }
+                else{
+    //                Toast.makeText(this, "You need an Internet connection to log in", Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "User not registered");
+                }
+
+                // For the nearby users feature
         //        mUsersList = daoUsers.nearUsersPosition(mUser);
 
             } else {
@@ -885,13 +876,13 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
         ArrayList<Attraction> attractions = new ArrayList<Attraction>();
         boolean isFound = false;
-        if(isConnectingToInternet()){
-            Log.v("VERBOSE", "LLamando al aystask: ");
+        if(isConnectedToInternet()){
             //AttemptAttractions attemptAttractions = new AttemptAttractions(queryStr, null, attractions);
             mAttractionsList = new ArrayList<Attraction>();
              new AttemptAttractions().execute(queryStr);
              attractions = mAttractionsList;
-                if(attractions.size() == 0){ Log.v("VERBOSE", "Por base de datos fallo en el servidor: ");attractions = daoAttractions.getAttractionsByName(queryStr);}
+                if(attractions.size() == 0){
+                    attractions = daoAttractions.getAttractionsByName(queryStr);}
             extras.putParcelableArrayList("Attractions", mAttractionsList);
         } else {
             attractions = daoAttractions.getAttractionsByName(queryStr);
@@ -921,7 +912,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
         }
     }
 
-    public boolean isConnectingToInternet(){
+    public boolean isConnectedToInternet(){
         ConnectivityManager connectivity = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null)
         {
@@ -955,9 +946,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
             HttpURLConnection con = null;
             JSONObject jsonAttraction = null;
             try {
-                Log.v("VERBOSE", "Valor del args " + args[0]);
-                String url = "http://s459655320.mialojamiento.es/index.php/attraction/" + args[0].trim();
-                Log.v("VERBOSE", "url " + url);
+                String url = "http://s459655320.mialojamiento.es/index.php/attraction/" + args[0];
                 JSONObject json = jsonParser.makeHttpRequest(
                         url, "GET", null);
                 if(json.getString("error").equals(false)){
@@ -969,7 +958,6 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
                         l.setLongitude(jsonAttraction.getDouble("longitude"));
                         Attraction attraction = new Attraction(jsonAttraction.getString("name"),jsonAttraction.getString("subtitle"), jsonAttraction.getString("description"),  jsonAttraction.getString("address"), l, jsonAttraction.getString("category"),jsonAttraction.getString("interest"), jsonAttraction.getDouble("rate"), jsonAttraction.getInt("numRates"), jsonAttraction.getString("openingTime"), jsonAttraction.getString("nameImage"));
                         mAttractionsList.add(attraction);
-                        Log.v("VERBOSE", "Numero de elmentos " + mAttractionsList.size());
                     }
                 } else {
                     //Toast.makeText(getApplicationContext(), "Attraction introduced is not valid, please try again", Toast.LENGTH_SHORT);
@@ -994,22 +982,13 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
      */
     @Override
     public void setUserLocation(Location location) {
-        if (location != null) {
-            Log.v("UserLocation", "Location updated");
-            //mUser.setmLocation(location);
-            // Save position in server at first time or when distance is bigger than 50 meters
-            if (mUserLocation == null) {
-                mUserLocation = location;
-            } else if (mUserLocation.distanceTo(location) > MIN_LOCATION_DISTANCE) {
-                mUserLocation = location;
-                if (Utils.checkWifiConection(getApplicationContext()))
-                    daoUsers.updateUserLocation(mUser);
-                Toast.makeText(this, "Position changed", Toast.LENGTH_SHORT).show();
-                Log.v("UserLocation", "New location is enough far away");
-            }
-        }
+        mUserLocation = location;
+        Log.e(TAG, Double.toString(location.getLatitude()) + " " + Double.toString(location.getLongitude()));
+        mUser.setmLocation(location);
+        daoUsers.updateUserLocation(mUser);
 
-        //if(mUsersList==null)
-            //mUsersList = daoUsers.nearUsersPosition(mUser);
+   /*     if(mUsersList==null) {
+            mUsersList = daoUsers.nearUsersPosition(mUser);
+        }*/
     }
 }

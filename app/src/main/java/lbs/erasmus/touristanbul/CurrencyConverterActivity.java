@@ -77,12 +77,12 @@ public class CurrencyConverterActivity extends BaseGameActivity implements Adapt
 
             adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
             currencyOri.setAdapter(adapter);
-            Log.v("VERBOSE", "Paso: " + currencyOri.getCount());
+        //    Log.v("VERBOSE", "Paso: " + currencyOri.getCount());
 
 
 
             currencyOri.setOnItemSelectedListener(this);
-            Log.v("VERBOSE", "Paso: " + changeCurrency);
+        //    Log.v("VERBOSE", "Paso: " + changeCurrency);
 
             //Call WebServices
             getAllCurrency();

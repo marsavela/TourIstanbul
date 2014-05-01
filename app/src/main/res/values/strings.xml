@@ -111,7 +111,7 @@
     <string name="to">To</string>
     <string name="converter">Converter</string>
     <string name="change_currency">Switch From To</string>
-    <string name="currencyExchange">Your currency exchange equivalent to</string>
+    <string name="currencyExchange">Your currency exchange is equivalent to: </string>
 
     <!-- Transports Activity -->
     <string name="bus">Bus</string>
@@ -394,8 +394,10 @@
     <string name="when_shopping_at_a_bazaar_child2">&lt;b>Don’t&lt;/b> start to bargain if you’re not willing to buy the product in question. If the merchant gives you a price and you tell him yours in return, you have automatically entered into a business transaction.</string>
     <string name="when_shopping_at_a_bazaar_child3">&lt;b>Don’t&lt;/b> buy stones or fossils. They are considered cultural artefacts and it’s illegal to export them. You could be forced to pay a fine or even end up in jail if caught going through customs with stones or fossils in your luggage.</string>
 
-    <string name="when_taking_photos_child1">&lt;b>Don’t&lt;/b> take pictures of people without asking permission. Older people, in particular, are afraid of the camera and consider it “the evil eye”.</string>
+    <string name="when_taking_photos_child1">&lt;b>Don’t&lt;/b> take pictures of people without asking permission.</string>
     <string name="when_taking_photos_child2">&lt;b>Don’t&lt;/b> take pictures of any woman wearing a veil, people praying, or any kind of military facility.</string>
+
+
     <string name="my_location">My location</string>
     <string name="rating_text">2.5</string>
 

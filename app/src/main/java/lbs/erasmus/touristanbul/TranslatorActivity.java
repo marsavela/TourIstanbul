@@ -1,7 +1,10 @@
 package lbs.erasmus.touristanbul;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
@@ -21,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -98,7 +102,7 @@ public class TranslatorActivity extends Activity implements OnInitListener {
                         } catch (Exception e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
-                            translatedText = e.toString();
+                            //translatedText = e.toString();
                         }
                         return null;
                     }
@@ -106,7 +110,10 @@ public class TranslatorActivity extends Activity implements OnInitListener {
                     @Override
                     protected void onPostExecute(Void result) {
                         // TODO Auto-generated method stub
-                        ((TextView) findViewById(R.id.outputText)).setText(translatedText);
+                        if(!checkOnlineState())
+                            showToast("Something went wrong. Do you have Internet connection?");
+                        else
+                            ((TextView) findViewById(R.id.outputText)).setText(translatedText);
                         super.onPostExecute(result);
                     }
 
@@ -168,6 +175,28 @@ public class TranslatorActivity extends Activity implements OnInitListener {
             mTts.shutdown();
         }
         super.onDestroy();
+    }
+
+    public boolean checkOnlineState() {
+
+        ConnectivityManager connectivity = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null)
+        {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null)
+                for (int i = 0; i < info.length; i++)
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED)
+                    {
+                        return true;
+                    }
+
+        }
+        return false;
+
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
 }

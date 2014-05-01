@@ -1,14 +1,23 @@
 package lbs.erasmus.touristanbul;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.InputStream;
+
 import lbs.erasmus.touristanbul.domain.User;
+import lbs.erasmus.touristanbul.fragments.MapFragment;
+import lbs.erasmus.touristanbul.maps.Utils;
 
 /**
  * Created by patmonsi on 20/03/14.
@@ -16,8 +25,8 @@ import lbs.erasmus.touristanbul.domain.User;
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static User mUser;
-    public final static String PREFERENCES_FILE = "lbs.erasmus.touristanbul_preferences";
     public final static String SHARE_LOCATION = "share_location";
+    public final static String SYNC_APP = "sync_app";
 
     @Override
     protected void onCreate(final Bundle savedInstanceState)
@@ -25,10 +34,15 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         super.onCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
         mUser = getIntent().getExtras().getParcelable("User");
+
     }
 
     public static class MyPreferenceFragment extends PreferenceFragment
     {
+
+        private DAOAttractions daoAttractions;
+        private boolean mDbReady;
+
         @Override
         public void onCreate(final Bundle savedInstanceState)
         {
@@ -36,7 +50,58 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             addPreferencesFromResource(R.xml.preferences);
             if (mUser == null)
                 findPreference(SHARE_LOCATION).setEnabled(false);
+
+            Preference myPref = findPreference(SYNC_APP);
+            myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+                    update();
+                    return true;
+                }
+            });
         }
+
+        private void update() {
+
+            daoAttractions = new DAOAttractions(getActivity());
+
+            daoAttractions.clearDB();
+            new TaskAttractions().execute();
+        }
+
+
+        private class TaskAttractions extends AsyncTask<Void, Void, Void> {
+
+            private ProgressDialog pDialog;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+                pDialog = new ProgressDialog(getActivity());
+                pDialog.setTitle(getString(R.string.contact_servers));
+                pDialog.setMessage(getString(R.string.magic));
+                pDialog.setIndeterminate(false);
+                pDialog.setCancelable(false);
+                pDialog.show();
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                if (!mDbReady) {
+                    daoAttractions.downloadAndSaveData();
+                    mDbReady = daoAttractions.checkDataBase();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                pDialog.dismiss();
+                super.onPostExecute(aVoid);
+            }
+        }
+
     }
 
     @Override
@@ -57,7 +122,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
 
         //TODO No refresca las attractions
 
@@ -106,9 +170,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         @Override
         protected void onPostExecute(Boolean success) {
             if (success) {
-                showToast("Settings updated successfully.");
+                showToast(getString(R.string.settings_updated));
             } else {
-                showToast("Error while updating your settings. Please, try again later.");
+                showToast(getString(R.string.settings_updated_error));
             }
         }
     }

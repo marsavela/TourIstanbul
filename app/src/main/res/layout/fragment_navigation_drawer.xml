@@ -3,7 +3,7 @@
     android:id="@+id/relative_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#cccc"
+    android:background="#cccccc"
     tools:context="lbs.erasmus.touristanbul.NavigationDrawerFragment">
 
     <ListView
@@ -40,12 +40,12 @@
                 android:contentDescription="@string/content_description" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/title_settings"
                 android:id="@+id/action_settings_text"
-                android:textColor="#ffffff" />
+                android:textColor="@color/turkish_design" />
 
         </LinearLayout>
 

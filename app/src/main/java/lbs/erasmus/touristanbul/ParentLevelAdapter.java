@@ -54,6 +54,7 @@ public class ParentLevelAdapter extends BaseExpandableListAdapter implements
 
     public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         tempChild = (ArrayList<String>) Childtem.get(groupPosition);
+        String s = tempChild.get(childPosition);
         TextView text = null;
         if (convertView == null) {
             convertView = minflater.inflate(R.layout.childrow, null);
@@ -68,7 +69,6 @@ public class ParentLevelAdapter extends BaseExpandableListAdapter implements
         });
         // Change the icon Do\'s and Don\'ts, phones and phrasebook buttons
         ImageView imageView = (ImageView) convertView.findViewById(R.id.childImage);
-        String s = tempChild.get(childPosition);
 
         if (s.startsWith("<b>Do ")) {
             imageView.setImageResource(R.drawable.yes);
@@ -86,10 +86,17 @@ public class ParentLevelAdapter extends BaseExpandableListAdapter implements
         } else if (s.startsWith("<b>EN")) {
             imageView.setImageResource(R.drawable.en_button);
         } else if (s.startsWith("<b>TR")) {
-        imageView.setImageResource(R.drawable.tr_button);
+         imageView.setImageResource(R.drawable.tr_button);
+
+         //convertView.setPadding(0,0,0,25);
         }
-        else {
-            imageView.setImageResource(R.drawable.no);
+        else if (s.startsWith("<br/>")) {
+            imageView.setImageResource(R.drawable.transparent);
+            //convertView.setPadding(0,0,0,-70);
+        }
+        else{
+            imageView.setImageResource(R.drawable.transparent);
+
         }
         return convertView;
     }

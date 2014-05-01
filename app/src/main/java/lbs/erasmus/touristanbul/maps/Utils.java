@@ -25,6 +25,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Chronometer;
@@ -115,12 +116,13 @@ public final class Utils {
         alertDialog.setView(view);
 
         TextView distanceText = (TextView) view.findViewById(R.id.mapfragment_info_distance);
-        Chronometer timeChrono = (Chronometer) view.findViewById(R.id.mapfragment_info_time);
-        TextView calculatedText = (TextView) view.findViewById(R.id.mapfragment_info_calculated);
+        TextView timeChrono = (TextView) view.findViewById(R.id.mapfragment_info_time);
+        //TextView calculatedText = (TextView) view.findViewById(R.id.mapfragment_info_calculated);
 
-        distanceText.setText(((int) (response.getDistance() / 100) / 10f) + " Km");
-        timeChrono.setBase(response.getMillis()/1000);
-        calculatedText.setText(time + " sec");
+        distanceText.setText(String.format("%.2f Km",((int) (response.getDistance() / 100) / 10f)));
+        //timeChrono.setBase(SystemClock.elapsedRealtime() - response.getMillis());
+        timeChrono.setText(String.format("%.2f min",(double) (response.getMillis()/1000)/60));
+        //calculatedText.setText(time + " sec");
 
         alertDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override

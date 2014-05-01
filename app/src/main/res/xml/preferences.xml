@@ -112,4 +112,12 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/sync_app">
+
+        <Preference android:title="@string/sync_app_title"
+            android:summary="@string/sync_app_summary"
+            android:key="sync_app" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

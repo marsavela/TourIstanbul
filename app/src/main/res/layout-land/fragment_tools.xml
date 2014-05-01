@@ -3,7 +3,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fillViewport="true" >
+    android:fillViewport="true">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,21 +18,25 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingLeft="20sp"
+            android:paddingRight="20sp">
 
             <Button
                 android:id="@+id/button_currency_converter"
                 style="@style/dashboard_button"
-                android:drawableTop="@drawable/currency_converter"
+                android:drawableLeft="@drawable/currency_converter"
                 android:onClick="clicked"
-                android:text="@string/currency_converter" />
+                android:text="@string/currency_converter"
+                android:layout_marginRight="30sp"/>
 
             <Button
                 android:id="@+id/button_transports"
                 style="@style/dashboard_button"
-                android:drawableTop="@drawable/transports"
+                android:drawableLeft="@drawable/transports"
                 android:onClick="clicked"
-                android:text="@string/transports" />
+                android:text="@string/transports"
+                android:layout_marginLeft="30sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -41,21 +45,24 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal"
-            android:layout_marginBottom="20sp">
+            android:paddingLeft="20sp"
+            android:paddingRight="20sp">
 
             <Button
                 android:id="@+id/button_translator"
                 style="@style/dashboard_button"
-                android:drawableTop="@drawable/translator"
+                android:drawableLeft="@drawable/translator"
                 android:onClick="clicked"
-                android:text="@string/translator" />
+                android:text="@string/translator"
+                android:layout_marginRight="30sp"/>
 
             <Button
                 android:id="@+id/button_phrasebook"
                 style="@style/dashboard_button"
-                android:drawableTop="@drawable/phrasebook"
+                android:drawableLeft="@drawable/phrasebook"
                 android:onClick="clicked"
-                android:text="@string/phrasebook" />
+                android:text="@string/phrasebook"
+                android:layout_marginLeft="30sp" />
         </LinearLayout>
 
     </LinearLayout>

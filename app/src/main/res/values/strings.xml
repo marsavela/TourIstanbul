@@ -136,6 +136,7 @@
     </string-array>
 
     <!-- Phrasebook Activity -->
+    <string name="phrasebook_empty">&lt;br/></string>
     <string name="phrasebook1_basic_greetings">Basic Greetings</string>
     <string name="phrasebook1_basic_greetings_child1_en">&lt;b>EN &lt;/b>Hi!</string>
     <string name="phrasebook1_basic_greetings_child1_tr">&lt;b>TR &lt;/b>&lt;i>Merhaba!&lt;/i></string>

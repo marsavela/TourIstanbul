@@ -5,9 +5,11 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical">
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <TabHost
             android:id="@+id/tabhost"
             android:layout_width="match_parent"
@@ -19,27 +21,24 @@
                 <TabWidget
                     android:id="@android:id/tabs"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    </TabWidget>
+                    android:layout_height="wrap_content"></TabWidget>
                 <FrameLayout
                     android:id="@android:id/tabcontent"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp">
+                    android:layout_height="match_parent">
                     <LinearLayout
                         android:id="@+id/bus"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:baselineAligned="false">
-                        <ScrollView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-                            <TableLayout
-                                android:id="@+id/busTable"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:stretchColumns="*"></TableLayout>
-                        </ScrollView>
+                        <WebView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/busImage"
+                            android:layout_gravity="center"
+                            android:layout_centerInParent="true"
+                            android:layout_alignParentTop="true"
+                            android:clickable="true"/>
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/tram"
@@ -47,16 +46,14 @@
                         android:layout_height="match_parent"
                         android:baselineAligned="false"
                         android:focusable="false">
-                        <ScrollView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-                            <TableLayout
-                                android:id="@+id/tramTable"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:stretchColumns="*"></TableLayout>
-                        </ScrollView>
+                        <WebView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/tramImage"
+                            android:layout_gravity="center"
+                            android:layout_centerInParent="true"
+                            android:layout_alignParentTop="true"
+                            android:clickable="true"/>
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/ferry"
@@ -64,16 +61,14 @@
                         android:layout_height="match_parent"
                         android:baselineAligned="false"
                         android:focusable="false">
-                        <ScrollView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-                            <TableLayout
-                                android:id="@+id/ferryTable"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:stretchColumns="*"></TableLayout>
-                        </ScrollView>
+                        <WebView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/ferryImage"
+                            android:layout_gravity="center"
+                            android:layout_centerInParent="true"
+                            android:layout_alignParentTop="true"
+                            android:clickable="true"/>
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>

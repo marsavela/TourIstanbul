@@ -84,7 +84,7 @@ public class PhrasebookActivity extends ExpandableListActivity implements Expand
         child.add(getResources().getString(R.string.phrasebook_empty));
         child.add(getResources().getString(R.string.phrasebook1_basic_greetings_child11_en));
         child.add(getResources().getString(R.string.phrasebook1_basic_greetings_child11_tr));
-
+        child.add(getResources().getString(R.string.phrasebook_empty));
         child.add(getResources().getString(R.string.phrasebook1_basic_greetings_child12_en));
         child.add(getResources().getString(R.string.phrasebook1_basic_greetings_child12_tr));
         child.add(getResources().getString(R.string.phrasebook_empty));
@@ -102,6 +102,7 @@ public class PhrasebookActivity extends ExpandableListActivity implements Expand
         child.add(getResources().getString(R.string.phrasebook_empty));
         child.add(getResources().getString(R.string.phrasebook1_basic_greetings_child17_en));
         child.add(getResources().getString(R.string.phrasebook1_basic_greetings_child17_tr));
+        child.add(getResources().getString(R.string.phrasebook_empty));
         childItem.add(child);
 
         /**
@@ -218,6 +219,7 @@ public class PhrasebookActivity extends ExpandableListActivity implements Expand
         child.add(getResources().getString(R.string.phrasebook_empty));
         child.add(getResources().getString(R.string.phrasebook3_how_to_introduce_yourself_child23_en));
         child.add(getResources().getString(R.string.phrasebook3_how_to_introduce_yourself_child23_tr));
+        child.add(getResources().getString(R.string.phrasebook_empty));
         childItem.add(child);
 
         /**
@@ -253,6 +255,7 @@ public class PhrasebookActivity extends ExpandableListActivity implements Expand
         child.add(getResources().getString(R.string.phrasebook_empty));
         child.add(getResources().getString(R.string.phrasebook4_wish_someone_something_child10_en));
         child.add(getResources().getString(R.string.phrasebook4_wish_someone_something_child10_tr));
+        child.add(getResources().getString(R.string.phrasebook_empty));
         childItem.add(child);
 
         /**
@@ -306,6 +309,7 @@ public class PhrasebookActivity extends ExpandableListActivity implements Expand
         child.add(getResources().getString(R.string.phrasebook_empty));
         child.add(getResources().getString(R.string.phrasebook5_solving_a_misunderstanding_child16_en));
         child.add(getResources().getString(R.string.phrasebook5_solving_a_misunderstanding_child16_tr));
+        child.add(getResources().getString(R.string.phrasebook_empty));
         childItem.add(child);
 
         /**
@@ -380,6 +384,7 @@ public class PhrasebookActivity extends ExpandableListActivity implements Expand
         child.add(getResources().getString(R.string.phrasebook_empty));
         child.add(getResources().getString(R.string.phrasebook6_expressions_and_words_child23_en));
         child.add(getResources().getString(R.string.phrasebook6_expressions_and_words_child23_tr));
+        child.add(getResources().getString(R.string.phrasebook_empty));
         childItem.add(child);
     }
 

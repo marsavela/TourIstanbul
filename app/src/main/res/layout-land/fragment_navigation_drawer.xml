@@ -75,7 +75,7 @@
                 android:id="@+id/user_profile_name"
                 android:layout_gravity="bottom"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/white"
+                android:textColor="@color/turkish_design"
                 android:visibility="gone"
                 android:paddingBottom="@dimen/android_spaces"/>
 

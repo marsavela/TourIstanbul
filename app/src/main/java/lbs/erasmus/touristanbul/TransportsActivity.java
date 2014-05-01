@@ -2,18 +2,22 @@ package lbs.erasmus.touristanbul;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.webkit.WebView;
 import android.widget.TabHost;
 
 /**
  * Created by HP on 03/04/2014.
  */
 public class TransportsActivity extends Activity {
+
+    private WebView tabBus = null;
+    private WebView tabTram = null;
+    private WebView tabFerry = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transports);
 
-        // Control TabHost
         TabHost host = (TabHost) findViewById(R.id.tabhost);
         host.setup();
 
@@ -33,6 +37,22 @@ public class TransportsActivity extends Activity {
         host.addTab(spec);
 
         host.setCurrentTabByTag("BUS");
+
+        WebView tabBus = (WebView)findViewById(R.id.busImage);
+        WebView tabTram = (WebView)findViewById(R.id.tramImage);
+        WebView tabFerry = (WebView)findViewById(R.id.ferryImage);
+
+        tabBus.loadUrl("file:///android_asset/bus.html");
+        tabBus.getSettings().setBuiltInZoomControls(true);
+        tabBus.getSettings().setDisplayZoomControls(true);
+
+        tabTram.loadUrl("file:///android_asset/tram.html");
+        tabTram.getSettings().setBuiltInZoomControls(true);
+        tabTram.getSettings().setDisplayZoomControls(true);
+
+        tabFerry.loadUrl("file:///android_asset/ferry.html");
+        tabFerry.getSettings().setBuiltInZoomControls(true);
+        tabFerry.getSettings().setDisplayZoomControls(true);
 
     }
 }

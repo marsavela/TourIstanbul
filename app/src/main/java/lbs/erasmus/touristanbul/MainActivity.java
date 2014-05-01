@@ -76,10 +76,15 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
 
     private static final int RC_SIGN_IN = 0;
     private static final String TAG = "MainActivity";
+    private static final String CURRENT_FRAGMENT_KEY = "current_fragment";
+    public static final String LOCATION_KEY = "location";
 
     // Profile pic image size in pixels
     private static final int PROFILE_PIC_SIZE = 400;
     private static final int REQUEST_ACHIEVEMENTS = 1;
+
+    // Minimum distance to refresh user location on the server
+    private static final int MIN_LOCATION_DISTANCE = 50;
 
     // Google client to interact with Google API
     private GoogleApiClient mGoogleApiClient;
@@ -91,6 +96,7 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
      */
     private boolean mIntentInProgress;
     private boolean mSignInClicked;
+    private boolean isSearch;
     private boolean mDbReady;
     private ConnectionResult mConnectionResult;
     private SignInButton mBtnSignIn;
@@ -743,6 +749,8 @@ public class MainActivity extends BaseGameActivity implements View.OnClickListen
     //                Toast.makeText(this, "You need an Internet connection to log in", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "User not registered");
                 }
+
+                // For the nearby users feature
         //        mUsersList = daoUsers.nearUsersPosition(mUser);
 
             } else {
